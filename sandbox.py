@@ -1,25 +1,31 @@
-from gql import gql, Client
-from gql.transport.websockets import WebsocketsTransport
-from gql.transport.aiohttp import AIOHTTPTransport
-
-from src.navability.entities.Variable import Variable
-from src.navability.entities.Factor import Factor, FactorPrior
-from src.navability.entities.StatusMessage import StatusMessage
-from src.navability.services.NavAbilityClient import NavAbilityClient
+import time
+from navability.entities.Variable import Variable
+from navability.entities.Factor import Factor, FactorPrior
+from navability.entities.StatusMessage import StatusMessage
+from navability.services.NavAbilityClient import NavAbilityClient
+from pprint import pprint
 
 navi = NavAbilityClient()
 result = navi.addVariable(Variable("x0", "Pose2"))
+time.sleep(1)
 statuses = navi.getStatusMessages(result['addVariable'])
+pprint(statuses)
 result = navi.addVariable(Variable("x1", "Pose2"))
+time.sleep(1)
 statuses = navi.getStatusMessages(result['addVariable'])
+pprint(statuses)
 
 # Add a prior
 result = navi.addFactor(FactorPrior("x0f1", "PriorPose2", ["x0"]))
+time.sleep(1)
 statuses = navi.getStatusMessages(result['addFactor'])
+pprint(statuses)
 
 # Add a factor
 result = navi.addFactor(Factor("x0x1f1", "Pose2Pose2", ["x0", "x1"]))
+time.sleep(1)
 statuses = navi.getStatusMessages(result['addFactor'])
+pprint(statuses)
 
 # WIP
 result = navi.solveSession()

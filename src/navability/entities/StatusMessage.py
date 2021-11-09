@@ -4,24 +4,27 @@ from pprint import pprint
 from marshmallow import Schema, fields, INCLUDE
 from src.navability.entities.Client import Client, ClientSchema
 
+
 class StatusMessageSchema(Schema):
-    requestId = fields.String(required=True)  
+    requestId = fields.String(required=True)
     action = fields.String(required=True)
     state = fields.String(required=True)
     timestamp = fields.DateTime(required=True)
     client = fields.Nested(ClientSchema, required=True)
 
+
 class StatusMessage:
     schema: StatusMessageSchema = StatusMessageSchema()
 
-    def __init__(self,
-            requestId: str,
-            action: str,
-            state: str, 
-            timestamp: datetime, 
-            client: Client, 
-            ):
-        self.requestId = requestId 
+    def __init__(
+        self,
+        requestId: str,
+        action: str,
+        state: str,
+        timestamp: datetime,
+        client: Client,
+    ):
+        self.requestId = requestId
         self.action = action
         self.state = state
         self.timestamp = timestamp

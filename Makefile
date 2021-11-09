@@ -1,7 +1,7 @@
 .PHONY: help install test lint linting clean locales update-requirements
 
 PYTHON_VERSION?=python3
-VIRTUAL_ENV_DIR?=venv
+VIRTUAL_ENV_DIR?=venv_test
 
 install: $(VIRTUAL_ENV_DIR)
 # use a separate target to ensure that 'make install; make install' works

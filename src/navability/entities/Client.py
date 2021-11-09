@@ -3,8 +3,9 @@ from datetime import datetime
 from pprint import pprint
 from marshmallow import Schema, fields, INCLUDE
 
+
 class ClientSchema(Schema):
-    userId = fields.String(required=True)  
+    userId = fields.String(required=True)
     robotId = fields.String(required=True)
     sessionId = fields.String(required=True)
 
@@ -15,12 +16,8 @@ class ClientSchema(Schema):
 class Client:
     schema: ClientSchema = ClientSchema()
 
-    def __init__(self,
-            userId: str,
-            robotId: str,
-            sessionId: str 
-            ):
-        self.userId = userId 
+    def __init__(self, userId: str, robotId: str, sessionId: str):
+        self.userId = userId
         self.robotId = robotId
         self.sessionId = sessionId
 

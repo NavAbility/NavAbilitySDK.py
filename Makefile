@@ -10,11 +10,10 @@ $(VIRTUAL_ENV_DIR):
 
 # typically, phony make targets are imperatives.
 lint: install
-	$(VIRTUAL_ENV_DIR)/bin/black src setup.py
-	$(VIRTUAL_ENV_DIR)/bin/flake8 src setup.py
+	tox -e lint
 
 test: install
-	$(VIRtUAL_ENV_DIR)/bin/pytest tests
+	tox
 
 clean:
 	rm -rf $(TESTING_CONFIG_DIR)

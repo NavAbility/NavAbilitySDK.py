@@ -1,8 +1,9 @@
-from typing import List, Dict
 from datetime import datetime
 from pprint import pprint
-from marshmallow import Schema, fields, INCLUDE
+from typing import Dict, List
+
 import numpy
+from marshmallow import INCLUDE, Schema, fields
 
 
 class VariableNodeDataSchema(Schema):

@@ -1,13 +1,8 @@
 from gql import gql
 
+from navability.common.queries import gql_getStatusMessages
+from navability.entities.NavAbilityClient import NavAbilityClient, QueryOptions
 from navability.entities.StatusMessage import StatusMessageSchema
-from navability.common.queries import (
-    gql_getStatusMessages,
-)
-from navability.entities.NavAbilityClient import (
-    NavAbilityClient,
-    QueryOptions,
-)
 
 
 def getStatusMessages(navAbilityClient: NavAbilityClient, id: str):

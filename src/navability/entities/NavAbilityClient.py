@@ -1,6 +1,6 @@
 from gql import Client as GQLCLient
-from gql.transport.websockets import WebsocketsTransport
 from gql.transport.aiohttp import AIOHTTPTransport
+from gql.transport.websockets import WebsocketsTransport
 
 
 class QueryOptions:

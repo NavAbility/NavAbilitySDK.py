@@ -1,33 +1,29 @@
 from typing import List
+
 from gql import gql
 
-from src.navability.entities.Variable.Variable import Variable
-from navability.entities.Client import Client
 from navability.common.queries import (
     gql_addVariable,
     gql_list,
     gql_list_fields_default,
     gql_list_fields_variable,
-    gql_list_fields_variable_summary,
     gql_list_fields_variable_skeleton,
+    gql_list_fields_variable_summary,
 )
+from navability.entities.Client import Client
 from navability.entities.NavAbilityClient import (
-    NavAbilityClient,
     MutationOptions,
+    NavAbilityClient,
     QueryOptions,
 )
+from src.navability.entities.Variable.Variable import Variable
 
 
 def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
     return navAbilityClient.mutate(
         MutationOptions(
             gql(gql_addVariable),
-            {
-                "variable": {
-                    "client": client.dump(),
-                    "packedData": v.dumps(),
-                }
-            },
+            {"variable": {"client": client.dump(), "packedData": v.dumps()}},
         )
     )
 

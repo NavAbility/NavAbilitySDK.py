@@ -1,8 +1,10 @@
-from typing import List
+import json
 from datetime import datetime
 from pprint import pprint
+from typing import List
+
 from marshmallow import Schema, fields
-import json
+
 from navability.common.payload_version import payload_version
 
 

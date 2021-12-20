@@ -1,7 +1,8 @@
-from typing import List
 from datetime import datetime
 from pprint import pprint
-from marshmallow import Schema, fields, INCLUDE
+from typing import List
+
+from marshmallow import INCLUDE, Schema, fields
 
 
 class ClientSchema(Schema):

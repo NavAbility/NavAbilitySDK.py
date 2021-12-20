@@ -17,12 +17,12 @@ gql_list = """
     query list(\$userId: ID!, \$robotId: ID!, \$sessionId: ID!, label_regex: String, tags: String[], solvable: Int) {
       __TYPE__(filter: {
             session: {
-              id: \$sessionId, 
+              id: \$sessionId,
               robot: {
-                id: \$robotId, 
+                id: \$robotId,
                 user: {
                   id: \$userId
-                }}}, 
+                }}},
             $(tags != [] ? "tags_contains: [\"" * join(String.(tags), "\", \"") * "\"]," : "")
             $(regexFilter !== nothing ? "label_regexp: \""*replace(regexFilter.pattern, "\\" => "\\\\")*"\"," : "")
             $(solvable > 0 ? "solvable_gte: "*string(solvable) : "")
@@ -53,7 +53,7 @@ gql_list_fields_variable = """
       mean
       lastUpdatedTimestamp {formatted}
     }
-    solverData 
+    solverData
     {
       solveKey
       BayesNetOutVertIDs

@@ -1,16 +1,17 @@
-from typing import List, Dict
+import json
 from datetime import datetime
 from pprint import pprint
-from marshmallow import Schema, fields, INCLUDE
-import numpy
-import json
+from typing import Dict, List
 
+import numpy
+from marshmallow import INCLUDE, Schema, fields
+
+from navability.common.payload_version import payload_version
 from navability.entities.Variable.PPE import PPE, PPESchema
 from navability.entities.Variable.VariableNodeData import (
     VariableNodeData,
     VariableNodeDataSchema,
 )
-from navability.common.payload_version import payload_version
 
 
 class VariableSkeletonSchema(Schema):

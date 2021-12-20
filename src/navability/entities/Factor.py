@@ -3,6 +3,7 @@ from datetime import datetime
 from pprint import pprint
 from marshmallow import Schema, fields
 import json
+from navability.common.payload_version import payload_version
 
 
 class FactorSchema(Schema):
@@ -52,7 +53,7 @@ class Factor:
         self.nstime = "0"
         self.fnctype = fncType
         self.solvable = 1
-        self._version = "0.16.2"
+        self._version = payload_version
 
     def __repr__(self):
         return f"<Factor(label={self.label})>"

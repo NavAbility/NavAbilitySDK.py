@@ -1,5 +1,5 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from typing import ClassVar, Dict, List
 
@@ -85,14 +85,14 @@ class PackedVariableSchema(Schema):
 class VariableSkeleton:
     schema: ClassVar[VariableSkeletonSchema] = VariableSkeletonSchema()
     label: str
-    tags: List[str] = ["VARIABLE"]
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
 
 
 @dataclass()
 class VariableSummary(VariableSkeleton):
-    schema: ClassVar[VariableSummarySchema] = VariableSummarySchema()
     variableType: str = "Pose2"
-    ppeDict: Dict[str, PPE] = {}
+    schema: ClassVar[VariableSummarySchema] = VariableSummarySchema()
+    ppeDict: Dict[str, PPE] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
 
@@ -103,9 +103,13 @@ class Variable(VariableSummary):
     packedSchema: ClassVar[PackedVariableSchema] = PackedVariableSchema()
     dataEntry: str = "{}"
     dataEntryType: str = "{}"
-    solverDataDict: Dict[str, VariableNodeData] = {"default": VariableNodeData(type)}
+    solverDataDict: Dict[str, VariableNodeData] = field(default_factory=lambda: {})
     smallData: str = "{}"
     solvable: str = 1
+
+    def __post_init__(self):
+        if self.solverDataDict == {}:
+            self.solverDataDict["default"] = VariableNodeData(type)
 
     def __repr__(self):
         return f"<Variable(label={self.label})>"

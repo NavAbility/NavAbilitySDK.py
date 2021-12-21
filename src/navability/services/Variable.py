@@ -21,7 +21,7 @@ def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable)
     return navAbilityClient.mutate(
         MutationOptions(
             gql(gql_addVariable),
-            {"variable": {"client": client.dump(), "packedData": v.dumps()}},
+            {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
         )
     )
 

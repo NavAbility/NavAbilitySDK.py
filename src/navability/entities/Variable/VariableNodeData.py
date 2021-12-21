@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import ClassVar, List
 
 import numpy
@@ -33,18 +33,18 @@ class VariableNodeDataSchema(Schema):
 class VariableNodeData:
     variableType: str
     schema: ClassVar[VariableNodeDataSchema] = VariableNodeDataSchema()
-    vecval: List[float] = list(numpy.zeros(3 * 100))
+    vecval: List[float] = field(default_factory=lambda: list(numpy.zeros(3 * 100)))
     dimval: int = 3
-    vecbw: List[float] = list(numpy.zeros(3))
+    vecbw: List[float] = field(default_factory=lambda: list(numpy.zeros(3)))
     dimbw: int = 3
-    BayesNetOutVertIDs: List[int] = []
-    dimIDs: List[int] = [0, 1, 2]
+    BayesNetOutVertIDs: List[int] = field(default_factory=list)
+    dimIDs: List[int] = field(default_factory=lambda: [0, 1, 2])
     dims: int = 3
     eliminated: bool = False
     BayesNetVertID: str = "_null"
-    separator: List[int] = []
+    separator: List[int] = field(default_factory=list)
     initialized: bool = False
-    infoPerCoord: List[int] = list(numpy.zeros(3))
+    infoPerCoord: List[int] = field(default_factory=lambda: list(numpy.zeros(3)))
     ismargin: bool = False
     dontmargin: bool = False
     solveInProgress: int = 0

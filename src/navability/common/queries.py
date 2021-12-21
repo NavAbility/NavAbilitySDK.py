@@ -17,14 +17,14 @@ mutation addFactor ($factor: FactorGraphInput!) {
 # TODO: Make the session/robot/user optional (get supersets)
 # TODO: Fix the filters to be parameters
 gql_list = """
-    query list(\$userId: ID!, \$robotId: ID!, \$sessionId: ID!, label_regex: String, tags: String[], solvable: Int) {
+    query list($userId: ID!, $robotId: ID!, $sessionId: ID!, label_regex: String, tags: String[], solvable: Int) {
       __TYPE__(filter: {
             session: {
-              id: \$sessionId,
+              id: $sessionId,
               robot: {
-                id: \$robotId,
+                id: $robotId,
                 user: {
-                  id: \$userId
+                  id: $userId
                 }}},
             $(tags != [] ? "tags_contains: [\"" * join(String.(tags), "\", \"") * "\"]," : "")
             $(regexFilter !== nothing ? "label_regexp: \""*replace(regexFilter.pattern, "\\" => "\\\\")*"\"," : "")

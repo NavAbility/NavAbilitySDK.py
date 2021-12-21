@@ -7,8 +7,6 @@ from navability.common.queries import (
     gql_list,
     gql_list_fields_default,
     gql_list_fields_variable,
-    gql_list_fields_variable_skeleton,
-    gql_list_fields_variable_summary,
 )
 from navability.entities.Client import Client
 from navability.entities.NavAbilityClient import (

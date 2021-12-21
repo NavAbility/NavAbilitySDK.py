@@ -1,17 +1,16 @@
 import json
+from dataclasses import dataclass
 from datetime import datetime
-from pprint import pprint
-from typing import Dict, List
+from typing import ClassVar, Dict, List
 
-import numpy
-from marshmallow import INCLUDE, Schema, fields
+from marshmallow import Schema, fields
 
-from navability.common.payload_version import payload_version
 from navability.entities.Variable.PPE import PPE, PPESchema
 from navability.entities.Variable.VariableNodeData import (
     VariableNodeData,
     VariableNodeDataSchema,
 )
+from src.navability.common.versions import payload_version
 
 
 class VariableSkeletonSchema(Schema):
@@ -82,49 +81,31 @@ class PackedVariableSchema(Schema):
         return ts
 
 
+@dataclass()
 class VariableSkeleton:
-    schema: VariableSkeletonSchema = VariableSkeletonSchema()
-
-    def __init__(self, label: str, tags: List[str] = ["VARIABLE"]):
-        self.label = label
-        self.tags = tags
+    schema: ClassVar[VariableSkeletonSchema] = VariableSkeletonSchema()
+    label: str
+    tags: List[str] = ["VARIABLE"]
 
 
+@dataclass()
 class VariableSummary(VariableSkeleton):
-    schema: VariableSummarySchema = VariableSummarySchema()
-
-    def __init__(
-        self,
-        label: str,
-        type: str,
-        tags: List[str] = ["VARIABLE"],
-        timestamp: datetime = datetime.utcnow(),
-    ):
-        super().__init__(label, tags)
-        self.timestamp = timestamp
-        self.ppeDict = {}  # Dict{str, PPE}
-        self.variableType = type
-        self._version = payload_version
+    schema: ClassVar[VariableSummarySchema] = VariableSummarySchema()
+    variableType: str = "Pose2"
+    ppeDict: Dict[str, PPE] = {}
+    timestamp: datetime = datetime.utcnow()
+    _version: str = payload_version
 
 
-class Variable:
-    schema: VariableSchema = VariableSchema()
-    packedSchema: PackedVariableSchema = PackedVariableSchema()
-
-    def __init__(
-        self,
-        label: str,
-        type: str,
-        tags: List[str] = ["VARIABLE"],
-        timestamp: datetime = datetime.utcnow(),
-    ):
-        super().__init__(label, type, tags, timestamp)
-        self.dataEntry = "{}"
-        self.variableType = type
-        self.dataEntryType = "{}"
-        self.solverDataDict = {"default": VariableNodeData(type)}
-        self.smallData = "{}"
-        self.solvable = 1
+@dataclass()
+class Variable(VariableSummary):
+    schema: ClassVar[VariableSchema] = VariableSchema()
+    packedSchema: ClassVar[PackedVariableSchema] = PackedVariableSchema()
+    dataEntry: str = "{}"
+    dataEntryType: str = "{}"
+    solverDataDict: Dict[str, VariableNodeData] = {"default": VariableNodeData(type)}
+    smallData: str = "{}"
+    solvable: str = 1
 
     def __repr__(self):
         return f"<Variable(label={self.label})>"
@@ -138,5 +119,5 @@ class Variable:
     def dumps(self):
         return Variable.schema.dumps(self)
 
-    def dumpPacked(self):
+    def dumpsPacked(self):
         return Variable.packedSchema.dumps(self)

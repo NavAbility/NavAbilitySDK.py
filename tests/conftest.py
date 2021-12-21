@@ -1,7 +1,5 @@
 import logging
 import os
-import time
-import urllib.request
 from uuid import uuid4
 
 import pytest

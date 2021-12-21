@@ -1,8 +1,7 @@
-from datetime import datetime
-from pprint import pprint
-from typing import List
+from dataclasses import dataclass
+from typing import ClassVar
 
-from marshmallow import INCLUDE, Schema, fields
+from marshmallow import Schema, fields
 
 
 class ClientSchema(Schema):
@@ -14,16 +13,15 @@ class ClientSchema(Schema):
         ordered = True
 
 
+@dataclass()
 class Client:
-    schema: ClientSchema = ClientSchema()
-
-    def __init__(self, userId: str, robotId: str, sessionId: str):
-        self.userId = userId
-        self.robotId = robotId
-        self.sessionId = sessionId
+    schema: ClassVar[ClientSchema] = ClientSchema()
+    userId: str
+    robotId: str
+    sessionId: str
 
     def __repr__(self):
-        return f"<Client(userId={self.userId}, robotId={self.robotId}, sessionId={self.sessionId})>"
+        return f"<Client(userId={self.userId}, robotId={self.robotId}, sessionId={self.sessionId})>"  # noqa: E501, B950
 
     def dump(self):
         return Client.schema.dump(self)

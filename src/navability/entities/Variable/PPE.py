@@ -1,8 +1,8 @@
+from dataclasses import dataclass
 from datetime import datetime
-from pprint import pprint
-from typing import List
+from typing import ClassVar, List
 
-from marshmallow import INCLUDE, Schema, fields
+from marshmallow import Schema, fields
 
 
 class PPESchema(Schema):
@@ -23,22 +23,14 @@ class PPESchema(Schema):
         return ts
 
 
+@dataclass()
 class PPE:
-    schema: PPESchema = PPESchema()
-
-    def __init__(
-        self,
-        solveKey: str = "default",
-        suggested: List[float] = [0, 0, 0],
-        max: List[float] = [0, 0, 0],
-        mean: List[float] = [0, 0, 0],
-        lastUpdatedTimestamp: datetime = datetime.utcnow(),
-    ):
-        self.solveKey = solveKey
-        self.suggested = suggested
-        self.max = max
-        self.mean = mean
-        self.lastUpdatedTimestamp = lastUpdatedTimestamp
+    solveKey: str
+    suggested: List[float]
+    max: List[float]
+    mean: List[float]
+    schema: ClassVar[PPESchema] = PPESchema()
+    lastUpdatedTimestamp: datetime = datetime.utcnow()
 
     def __repr__(self):
         return f"<PPE(solveKey={self.solveKey}, suggested={self.suggested})>"

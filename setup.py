@@ -1,9 +1,7 @@
-import os
 import sys
 
 from setuptools import find_packages, setup
 
-# not all pip versions support python_requires, used below
 if sys.version_info < (3, 0):
     sys.exit(
         """

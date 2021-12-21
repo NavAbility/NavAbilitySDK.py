@@ -1,0 +1,16 @@
+[flake8]
+# Details:
+# https://pycodestyle.readthedocs.io/en/latest/intro.html#error-codes
+# http://flake8.pycqa.org/en/latest/user/error-codes.html
+#
+# E712 (comparison to True should be 'if cond is True') ignored because it interferes with
+# SQLAlchemy filters like `query.filter(IdentityProvider.searchable==True)`.
+# W503 instead of W504: black requires ignore of W503.
+# W601 ('.has_key()' is deprecated, use 'in') ignored because I'm not sure off the top of
+# my head how to rewrite the relevant SQLAlchemy queries. SQLAlchemy 1.4 still hasn't changed
+# this so using # noqa on those lines instead and re-enabling W601.
+#
+ignore = W503
+max-line-length = 88
+max-complexity = 18
+select = B,C,E,F,W,T4,B9

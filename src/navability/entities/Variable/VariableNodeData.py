@@ -1,9 +1,8 @@
-from datetime import datetime
-from pprint import pprint
-from typing import Dict, List
+from dataclasses import dataclass
+from typing import ClassVar, List
 
 import numpy
-from marshmallow import INCLUDE, Schema, fields
+from marshmallow import Schema, fields
 
 
 class VariableNodeDataSchema(Schema):
@@ -30,28 +29,27 @@ class VariableNodeDataSchema(Schema):
         ordered = True
 
 
+@dataclass()
 class VariableNodeData:
-    schema: VariableNodeDataSchema = VariableNodeDataSchema()
-
-    def __init__(self, type: str, solveKey: str = "default"):
-        self.vecval = list(numpy.zeros(3 * 100))
-        self.dimval = 3
-        self.vecbw = list(numpy.zeros(3))
-        self.dimbw = 3
-        self.BayesNetOutVertIDs = []
-        self.dimIDs = [0, 1, 2]
-        self.dims = 3
-        self.eliminated = False
-        self.BayesNetVertID = "_null"
-        self.separator = []
-        self.variableType = type
-        self.initialized = False
-        self.infoPerCoord = list(numpy.zeros(3))
-        self.ismargin = False
-        self.dontmargin = False
-        self.solveInProgress = 0
-        self.solvedCount = 0
-        self.solveKey = solveKey
+    variableType: str
+    schema: ClassVar[VariableNodeDataSchema] = VariableNodeDataSchema()
+    vecval: List[float] = list(numpy.zeros(3 * 100))
+    dimval: int = 3
+    vecbw: List[float] = list(numpy.zeros(3))
+    dimbw: int = 3
+    BayesNetOutVertIDs: List[int] = []
+    dimIDs: List[int] = [0, 1, 2]
+    dims: int = 3
+    eliminated: bool = False
+    BayesNetVertID: str = "_null"
+    separator: List[int] = []
+    initialized: bool = False
+    infoPerCoord: List[int] = list(numpy.zeros(3))
+    ismargin: bool = False
+    dontmargin: bool = False
+    solveInProgress: int = 0
+    solvedCount: int = 0
+    solveKey: str = "default"
 
     def __repr__(self):
         return f"<VariableNodeData(solveKey={self.solveKey})>"

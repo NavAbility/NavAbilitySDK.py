@@ -1,8 +1,6 @@
 from datetime import datetime
-from pprint import pprint
-from typing import List
 
-from marshmallow import INCLUDE, Schema, fields
+from marshmallow import Schema, fields
 
 from navability.entities.Client import Client, ClientSchema
 

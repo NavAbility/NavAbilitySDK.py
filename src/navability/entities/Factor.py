@@ -1,11 +1,11 @@
 import json
+from dataclasses import dataclass
 from datetime import datetime
-from pprint import pprint
-from typing import List
+from typing import ClassVar, List
 
 from marshmallow import Schema, fields
 
-from navability.common.payload_version import payload_version
+from src.navability.common.versions import payload_version
 
 
 class FactorSchema(Schema):
@@ -34,28 +34,18 @@ class FactorSchema(Schema):
         return ts
 
 
+@dataclass()
 class Factor:
-    schema: FactorSchema = FactorSchema()
-
-    def __init__(
-        self,
-        label: str,
-        fncType: str,
-        variableOrderSymbols: List[str],
-        tags: List[str] = ["FACTOR"],
-        # Why is this datastr and the prior is str?
-        data: str = '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}',
-        timestamp: str = datetime.utcnow(),
-    ):
-        self.label = label
-        self.variableOrderSymbols = variableOrderSymbols
-        self.data = data
-        self.tags = tags
-        self.timestamp = timestamp
-        self.nstime = "0"
-        self.fnctype = fncType
-        self.solvable = 1
-        self._version = payload_version
+    schema: ClassVar[FactorSchema] = FactorSchema()
+    label: str
+    fnctype: str
+    variableOrderSymbols: List[str]
+    tags: List[str] = ["FACTOR"]
+    data: str = '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
+    timestamp: str = datetime.utcnow()
+    # nstime: str = "0"
+    solvable: str = 1
+    _version: str = payload_version
 
     def __repr__(self):
         return f"<Factor(label={self.label})>"
@@ -67,15 +57,6 @@ class Factor:
         return Factor.schema.dumps(self)
 
 
+@dataclass()
 class FactorPrior(Factor):
-    def __init__(
-        self,
-        label: str,
-        fncType: str,
-        variableOrderSymbols: List[str],
-        tags: List[str] = ["FACTOR"],
-        # Why is this datastr and the prior is str?
-        data: str = '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"str":"FullNormal(\\ndim: 3\\nμ: [0.0, 0.0, 0.0]\\nΣ: [0.01 0.0 0.0; 0.0 0.01 0.0; 0.0 0.0 0.01]\\n)\\n"},"multihypo":[],"certainhypo":[1],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}',
-        timestamp: str = datetime.utcnow(),
-    ):
-        super().__init__(label, fncType, variableOrderSymbols, tags, data, timestamp)
+    data: str = '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950

@@ -1,3 +1,6 @@
+# This will become common across all SDKs so we can't assume it's going to flake cleanly.
+# flake8: noqa
+
 gql_addVariable = """
 mutation addVariable ($variable: FactorGraphInput!) {
     addVariable(variable: $variable)

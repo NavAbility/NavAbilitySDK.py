@@ -153,7 +153,7 @@ gql_getStatusMessages = """
 
 gql_getStatusLatest = """
 query getStatusLatest($id: ID!) {
-  statusLatest(id: "$id") {
+  statusLatest(id: $id) {
     requestId,
     action,
     state,

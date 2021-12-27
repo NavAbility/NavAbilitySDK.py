@@ -14,25 +14,25 @@ mutation addFactor ($factor: FactorGraphInput!) {
 """
 
 # Replace __TYPE__ and __FIELDS__
-# TODO: Make the session/robot/user optional (get supersets)
-# TODO: Fix the filters to be parameters
+# Note that you can request across robots and sessions as these are optional parameters.
 gql_list = """
-    query list($userId: ID!, $robotId: ID!, $sessionId: ID!, label_regex: String, tags: String[], solvable: Int) {
-      __TYPE__(filter: {
-            session: {
-              id: $sessionId,
-              robot: {
-                id: $robotId,
-                user: {
-                  id: $userId
-                }}},
-            $(tags != [] ? "tags_contains: [\"" * join(String.(tags), "\", \"") * "\"]," : "")
-            $(regexFilter !== nothing ? "label_regexp: \""*replace(regexFilter.pattern, "\\" => "\\\\")*"\"," : "")
-            $(solvable > 0 ? "solvable_gte: "*string(solvable) : "")
-            }) {
-        __FIELDS__
-      }
-    }
+query list($userId: ID!, $robotId: ID, $sessionId: ID, $labelExact: ID, $labelRegex: ID, $tags: [String!], $solvable: Int = 0) {
+  __TYPE__(filter: {
+        label: $labelExact,
+        session: {
+          id: $sessionId,
+          robot: {
+            id: $robotId,
+            user: {
+              id: $userId
+            }}},
+        tags_contains: $tags,
+        label_regexp: $labelRegex,
+        solvable_gte: $solvable})
+  {
+    __FIELDS__
+  }
+}
 """
 
 gql_list_fields_default = """
@@ -67,7 +67,7 @@ gql_list_fields_variable = """
       dimval
       dontmargin
       eliminated
-      inferdim
+      infoPerCoord
       initialized
       ismargin
       separator

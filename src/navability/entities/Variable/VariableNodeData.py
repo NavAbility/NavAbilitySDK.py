@@ -2,8 +2,42 @@ from dataclasses import dataclass, field
 from typing import ClassVar, List
 
 import numpy
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, EXCLUDE, post_load
+from src.navability.common.versions import payload_version
 
+@dataclass()
+class VariableNodeData:
+    variableType: str
+    vecval: List[float] = field(default_factory=lambda: list(numpy.zeros(3 * 100)))
+    dimval: int = 3
+    vecbw: List[float] = field(default_factory=lambda: list(numpy.zeros(3)))
+    dimbw: int = 3
+    BayesNetOutVertIDs: List[int] = field(default_factory=list)
+    dimIDs: List[int] = field(default_factory=lambda: [0, 1, 2])
+    dims: int = 3
+    eliminated: bool = False
+    BayesNetVertID: str = "_null"
+    separator: List[int] = field(default_factory=list)
+    initialized: bool = False
+    infoPerCoord: List[int] = field(default_factory=lambda: list(numpy.zeros(3)))
+    ismargin: bool = False
+    dontmargin: bool = False
+    solveInProgress: int = 0
+    solvedCount: int = 0
+    solveKey: str = "default"
+    _version: str = payload_version
+
+    def __repr__(self):
+        return f"<VariableNodeData(solveKey={self.solveKey})>"
+
+    def dump(self):
+        return VariableNodeDataSchema().dump(self)
+
+    def dumps(self):
+        return VariableNodeDataSchema().dumps(self)
+
+    def load(data):
+        return VariableNodeDataSchema().load(data)
 
 class VariableNodeDataSchema(Schema):
     vecval = fields.List(fields.Float(), required=True)  # numpy.zeros(3*100) # 300
@@ -24,38 +58,12 @@ class VariableNodeDataSchema(Schema):
     solveInProgress = fields.Integer(required=True)  # 0
     solvedCount = fields.Integer(required=True)  # 0
     solveKey = fields.Str(required=True)  # solveKey
+    _version: fields.Str(data_key="_version", required=False)
 
     class Meta:
         ordered = True
+        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
-
-@dataclass()
-class VariableNodeData:
-    variableType: str
-    schema: ClassVar[VariableNodeDataSchema] = VariableNodeDataSchema()
-    vecval: List[float] = field(default_factory=lambda: list(numpy.zeros(3 * 100)))
-    dimval: int = 3
-    vecbw: List[float] = field(default_factory=lambda: list(numpy.zeros(3)))
-    dimbw: int = 3
-    BayesNetOutVertIDs: List[int] = field(default_factory=list)
-    dimIDs: List[int] = field(default_factory=lambda: [0, 1, 2])
-    dims: int = 3
-    eliminated: bool = False
-    BayesNetVertID: str = "_null"
-    separator: List[int] = field(default_factory=list)
-    initialized: bool = False
-    infoPerCoord: List[int] = field(default_factory=lambda: list(numpy.zeros(3)))
-    ismargin: bool = False
-    dontmargin: bool = False
-    solveInProgress: int = 0
-    solvedCount: int = 0
-    solveKey: str = "default"
-
-    def __repr__(self):
-        return f"<VariableNodeData(solveKey={self.solveKey})>"
-
-    def dump(self):
-        return VariableNodeData.schema.dump(self)
-
-    def dumps(self):
-        return VariableNodeData.schema.dumps(self)
+    @post_load
+    def marshal(self, data, **kwargs):
+        return VariableNodeData(**data)

@@ -8,14 +8,14 @@ from gql.transport.websockets import WebsocketsTransport
 @dataclass(frozen=True)
 class QueryOptions:
     query: str
-    variable: any = None
+    variables: any = None
     fetchPolicy: any = None
 
 
 @dataclass(frozen=True)
 class MutationOptions:
     mutation: str
-    variable: any = None
+    variables: any = None
     fetchPolicy: any = None
 
 

@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
-from typing import ClassVar, List
+from typing import List
 
 import numpy
-from marshmallow import Schema, fields, EXCLUDE, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_load
+
 from src.navability.common.versions import payload_version
+
 
 @dataclass()
 class VariableNodeData:
@@ -36,8 +38,10 @@ class VariableNodeData:
     def dumps(self):
         return VariableNodeDataSchema().dumps(self)
 
+    @staticmethod
     def load(data):
         return VariableNodeDataSchema().load(data)
+
 
 class VariableNodeDataSchema(Schema):
     vecval = fields.List(fields.Float(), required=True)  # numpy.zeros(3*100) # 300

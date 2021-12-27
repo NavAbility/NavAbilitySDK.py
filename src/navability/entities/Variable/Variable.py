@@ -1,17 +1,18 @@
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import ClassVar, Dict, List
+from typing import Dict, List
 
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import EXCLUDE, Schema, fields, post_load
 
+from navability.common.timestamps import TS_FORMAT
+from navability.common.versions import payload_version
 from navability.entities.Variable.PPE import PPE, PPESchema
 from navability.entities.Variable.VariableNodeData import (
     VariableNodeData,
     VariableNodeDataSchema,
 )
-from navability.common.versions import payload_version
-from navability.common.timestamps import TS_FORMAT
+
 
 @dataclass()
 class VariableSkeleton:
@@ -27,6 +28,7 @@ class VariableSkeleton:
     def dumps(self):
         return VariableSkeletonSchema().dumps(self)
 
+    @staticmethod
     def load(data):
         return VariableSkeletonSchema().load(data)
 
@@ -61,6 +63,7 @@ class VariableSummary(VariableSkeleton):
     def dumps(self):
         return VariableSummarySchema().dumps(self)
 
+    @staticmethod
     def load(data):
         return VariableSummarySchema().load(data)
 
@@ -86,7 +89,7 @@ class VariableSummarySchema(Schema):
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj['formatted'], TS_FORMAT)
+        return datetime.strptime(obj["formatted"], TS_FORMAT)
 
     @post_load
     def load(self, data, **kwargs):
@@ -121,10 +124,11 @@ class Variable(VariableSummary):
     def dumpsPacked(self):
         return PackedVariableSchema().dumps(self)
 
+    @staticmethod
     def load(data):
         return VariableSchema().load(data)
 
-        
+
 class VariableSchema(Schema):
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
@@ -155,7 +159,7 @@ class VariableSchema(Schema):
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj['formatted'], TS_FORMAT)
+        return datetime.strptime(obj["formatted"], TS_FORMAT)
 
 
 class PackedVariableSchema(Schema):

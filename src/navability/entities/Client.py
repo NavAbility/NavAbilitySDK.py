@@ -1,7 +1,26 @@
 from dataclasses import dataclass
-from typing import ClassVar
 
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, post_load
+
+
+@dataclass()
+class Client:
+    userId: str
+    robotId: str
+    sessionId: str
+
+    def __repr__(self):
+        return f"<Client(userId={self.userId}, robotId={self.robotId}, sessionId={self.sessionId})>"  # noqa: E501, B950
+
+    def dump(self):
+        return ClientSchema().dump(self)
+
+    def dumps(self):
+        return ClientSchema().dumps(self)
+
+    @staticmethod
+    def load(data):
+        return ClientSchema().load(data)
 
 
 class ClientSchema(Schema):
@@ -12,19 +31,6 @@ class ClientSchema(Schema):
     class Meta:
         ordered = True
 
-
-@dataclass()
-class Client:
-    schema: ClassVar[ClientSchema] = ClientSchema()
-    userId: str
-    robotId: str
-    sessionId: str
-
-    def __repr__(self):
-        return f"<Client(userId={self.userId}, robotId={self.robotId}, sessionId={self.sessionId})>"  # noqa: E501, B950
-
-    def dump(self):
-        return Client.schema.dump(self)
-
-    def dumps(self):
-        return Client.schema.dumps(self)
+    @post_load
+    def marshal(self, data, **kwargs):
+        return Client(**data)

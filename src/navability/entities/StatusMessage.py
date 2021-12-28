@@ -14,9 +14,11 @@ class StatusMessage:
     client: Client
 
     def __repr__(self):
-        return f"<StatusMessage(requestId={self.requestId}, "\
-        f"timestamp={self.timestamp}, client={self.client}, "\
-        f"action={self.action}, state={self.state})>"
+        return (
+            f"<StatusMessage(requestId={self.requestId}, "
+            f"timestamp={self.timestamp}, client={self.client}, "
+            f"action={self.action}, state={self.state})>"
+        )
 
     def dump(self):
         return StatusMessage.schema.dump(self)

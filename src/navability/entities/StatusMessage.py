@@ -21,10 +21,10 @@ class StatusMessage:
         )
 
     def dump(self):
-        return StatusMessage.schema.dump(self)
+        return StatusMessage().dump(self)
 
     def dumps(self):
-        return StatusMessage.schema.dumps(self)
+        return StatusMessage().dumps(self)
 
     @staticmethod
     def load(data):

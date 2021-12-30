@@ -55,7 +55,7 @@ class VariableSummary(VariableSkeleton):
     _id: int = None
 
     def __repr__(self):
-        return f"<VariableSummary(label={self.label})>"
+        return f"<VariableSummary(label={self.label},variableType={self.variableType})>"
 
     def dump(self):
         return VariableSummarySchema().dump(self)
@@ -110,7 +110,7 @@ class Variable(VariableSummary):
         #     self.solverData["default"] = VariableNodeData(self.variableType)
 
     def __repr__(self):
-        return f"<Variable(label={self.label})>"
+        return f"<Variable(label={self.label},variableType={self.variableType})>"
 
     def dump(self):
         return VariableSchema().dump(self)

@@ -1,20 +1,22 @@
 from dataclasses import dataclass
-from marshmallow import Schema, fields, post_load, EXCLUDE
+
+from marshmallow import EXCLUDE, Schema, fields, post_load
+
 from navability.entities.Factor.distributions import Distribution
 
 
 @dataclass
 class InferenceType:
     """
-    Base type for all factor classes. 
+    Base type for all factor classes.
     """
+
     pass
 
 
 @dataclass
-class PriorPose2:
+class PriorPose2(InferenceType):
     z: Distribution
-    a: int = 5
 
     def __repr__(self):
         return f"<{self.__class__.__name__}(z={str(self.z)})>"
@@ -29,8 +31,7 @@ class PriorPose2:
 
 
 class PriorPose2Schema(Schema):
-    z: fields.Method("get_packed", "set_packed", attribute="str", required=True)
-    a: fields.Int
+    z = fields.Method("get_packed", "set_packed", data_key="str", required=True)
 
     class Meta:
         ordered = True
@@ -48,9 +49,8 @@ class PriorPose2Schema(Schema):
 
 
 @dataclass
-class Pose2Pose2:
-    z: Distribution
-    a: str = "hello"
+class Pose2Pose2(InferenceType):
+    z = Distribution
 
     def __repr__(self):
         return f"<{self.__class__.__name__}(z={str(self.z)})>"
@@ -65,7 +65,7 @@ class Pose2Pose2:
 
 
 class Pose2Pose2Schema(Schema):
-    z: fields.Method("get_packed", "set_packed", required=True, attribute="datastr")
+    z = fields.Method("get_packed", "set_packed", required=True, attribute="datastr")
     # datastr: fields.Method("get_packed", "set_packed", required=True)
     a: fields.Str()
 

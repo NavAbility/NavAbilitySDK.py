@@ -4,7 +4,7 @@ from gql import gql
 
 from navability.common.queries import gql_addFactor, gql_list, gql_list_fields_default
 from navability.entities.Client import Client
-from navability.entities.Factor import Factor
+from navability.entities.Factor.Factor import Factor
 from navability.entities.NavAbilityClient import (
     MutationOptions,
     NavAbilityClient,

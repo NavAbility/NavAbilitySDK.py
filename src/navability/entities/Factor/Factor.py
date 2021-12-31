@@ -3,26 +3,28 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List
 
-from marshmallow import Schema, fields, post_load, EXCLUDE
+from marshmallow import EXCLUDE, Schema, fields, post_load
 
+from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
 from navability.entities.Factor.inferencetypes import InferenceType
 
 
 @dataclass()
 class FactorData:
-    fnc: InferenceType #{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}
+    fnc: InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
     eliminated: bool = False
     potentialused: bool = False
     edgeIDs: List[int] = field(default_factory=lambda: [])
     multihypo: List[int] = field(default_factory=lambda: [])
-    certainhypo: List[int] = field(default_factory=lambda: [1,2])
+    certainhypo: List[int] = field(default_factory=lambda: [1, 2])
     nullhypo: float = 0
     solveInProgress: int = 0
     inflation: float = 5
 
     def dumps(self):
         return FactorDataSchema().dumps(self)
+
 
 class FactorDataSchema(Schema):
     fnc = fields.Method("get_fnc", "set_fnc", required=True)
@@ -53,7 +55,7 @@ class FactorDataSchema(Schema):
 class Factor:
     label: str
     fnctype: str
-    data: FactorData #'{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
+    data: FactorData  # '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
     variableOrderSymbols: List[str]
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: str = datetime.utcnow()
@@ -61,15 +63,25 @@ class Factor:
     solvable: str = 1
     _version: str = payload_version
 
-    def __init__(self, label:str, data:FactorData, variableOrderSymbols: List[str], fnctype:str=None):
+    def __init__(
+        self,
+        label: str,
+        data: FactorData,
+        variableOrderSymbols: List[str],
+        fnctype: str = None,
+    ):
         self.label = label
         self.data = data
         self.variableOrderSymbols = variableOrderSymbols
         if fnctype is None:
-            self.fnctype=data.fnc.__class__.__name__
-        
+            self.fnctype = data.fnc.__class__.__name__
+
     def __repr__(self):
-        return f"<{self.__class__.__name__}(label={self.label}), variables={self.variableOrderSymbols}>"
+        return (
+            f"<{self.__class__.__name__}"
+            f"(label={self.label},"
+            f"variables={self.variableOrderSymbols})>"
+        )
 
     def dump(self):
         return FactorSchema().dump(self)

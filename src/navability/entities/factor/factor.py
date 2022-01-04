@@ -1,18 +1,18 @@
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List
+from typing import List, Dict
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
-from navability.entities.Factor.inferencetypes import InferenceType
+from navability.entities.factor.inferencetypes import InferenceType
 
 
 @dataclass()
 class FactorData:
-    fnc: InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
+    fnc: Dict # InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
     eliminated: bool = False
     potentialused: bool = False
     edgeIDs: List[int] = field(default_factory=lambda: [])
@@ -25,9 +25,12 @@ class FactorData:
     def dumps(self):
         return FactorDataSchema().dumps(self)
 
+    def dump(self):
+        return FactorDataSchema().dump(self)
+
 
 class FactorDataSchema(Schema):
-    fnc = fields.Method("get_fnc", "set_fnc", required=True)
+    fnc = fields.Dict(required=True) #fields.Method("get_fnc", "set_fnc", required=True)
     eliminated = fields.Bool(required=True)
     edgeIDs = fields.List(fields.Int(), required=True)
     multihypo = fields.List(fields.Int(), required=True)
@@ -39,12 +42,12 @@ class FactorDataSchema(Schema):
     class Meta:
         ordered = True
 
-    def get_fnc(self, obj):
-        # TODO: Switch this out to a real embedded object, no need for strings.
-        return obj.fnc.dumps()
+    # def get_fnc(self, obj):
+    #     # TODO: Switch this out to a real embedded object, no need for strings.
+    #     return obj.fnc.dump()
 
-    def set_fnc(self, ob):
-        raise Exception("Deserialization not supported yet.")
+    # def set_fnc(self, ob):
+    #     raise Exception("Deserialization not supported yet.")
 
     @post_load
     def load(self, data, **kwargs):
@@ -88,11 +91,6 @@ class Factor:
 
     def dumps(self):
         return FactorSchema().dumps(self)
-
-
-# @dataclass()
-# class FactorPrior(Factor):
-#     data: str = '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
 
 
 class FactorSchema(Schema):

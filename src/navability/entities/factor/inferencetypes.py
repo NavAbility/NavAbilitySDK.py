@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
-from navability.entities.Factor.distributions import Distribution
+from navability.entities.factor.distributions import Distribution
 
 
 @dataclass
@@ -35,7 +35,6 @@ class PriorPose2Schema(Schema):
 
     class Meta:
         ordered = True
-        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     def get_packed(self, obj):
         return obj.z.dumpsPacked()
@@ -50,7 +49,7 @@ class PriorPose2Schema(Schema):
 
 @dataclass
 class Pose2Pose2(InferenceType):
-    z = Distribution
+    z: Distribution
 
     def __repr__(self):
         return f"<{self.__class__.__name__}(z={str(self.z)})>"
@@ -67,7 +66,6 @@ class Pose2Pose2(InferenceType):
 class Pose2Pose2Schema(Schema):
     z = fields.Method("get_packed", "set_packed", required=True, attribute="datastr")
     # datastr: fields.Method("get_packed", "set_packed", required=True)
-    a: fields.Str()
 
     def get_packed(self, obj):
         return obj.z.dumpsPacked()

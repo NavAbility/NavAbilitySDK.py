@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from marshmallow import EXCLUDE, Schema, fields, post_load
+from marshmallow import Schema, fields, post_load
 
 from navability.entities.factor.distributions import Distribution
 

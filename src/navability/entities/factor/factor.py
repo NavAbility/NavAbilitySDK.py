@@ -1,18 +1,17 @@
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Dict
+from typing import Dict, List
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
-from navability.entities.factor.inferencetypes import InferenceType
 
 
 @dataclass()
 class FactorData:
-    fnc: Dict # InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
+    fnc: Dict  # InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
     eliminated: bool = False
     potentialused: bool = False
     edgeIDs: List[int] = field(default_factory=lambda: [])
@@ -30,9 +29,12 @@ class FactorData:
 
 
 class FactorDataSchema(Schema):
-    fnc = fields.Dict(required=True) #fields.Method("get_fnc", "set_fnc", required=True)
     eliminated = fields.Bool(required=True)
+    potentialused = fields.Bool(required=True)
     edgeIDs = fields.List(fields.Int(), required=True)
+    fnc = fields.Dict(
+        required=True
+    )  # fields.Method("get_fnc", "set_fnc", required=True)
     multihypo = fields.List(fields.Int(), required=True)
     certainhypo = fields.List(fields.Int(), required=True)
     nullhypo = fields.Float(required=True)
@@ -70,14 +72,18 @@ class Factor:
         self,
         label: str,
         data: FactorData,
+        fnctype: str,
         variableOrderSymbols: List[str],
-        fnctype: str = None,
+        tags: List[str] = None,
     ):
         self.label = label
         self.data = data
         self.variableOrderSymbols = variableOrderSymbols
-        if fnctype is None:
-            self.fnctype = data.fnc.__class__.__name__
+        self.fnctype = fnctype
+        if tags is None:
+            self.tags = ["FACTOR"]
+        else:
+            self.tags = tags
 
     def __repr__(self):
         return (
@@ -95,6 +101,7 @@ class Factor:
 
 class FactorSchema(Schema):
     label = fields.Str(required=True)
+    _version = fields.Str(required=True)
     _variableOrderSymbols = fields.Method("get_variableOrderSymbols", required=True)
     data = fields.Method("get_data", "set_data", required=True)
     tags = fields.List(fields.Str(), required=True)
@@ -102,7 +109,6 @@ class FactorSchema(Schema):
     nstime = fields.Str(required=True)
     fnctype = fields.Str(required=True)
     solvable = fields.Int(required=True)
-    _version = fields.Str(required=True)
 
     class Meta:
         ordered = True

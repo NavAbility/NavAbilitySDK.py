@@ -105,9 +105,8 @@ class Variable(VariableSummary):
     solvable: str = 1
 
     def __post_init__(self):
-        pass
-        # if self.solverData == {}:
-        #     self.solverData["default"] = VariableNodeData(self.variableType)
+        if self.solverData == {}:
+            self.solverData["default"] = VariableNodeData(self.variableType)
 
     def __repr__(self):
         return f"<Variable(label={self.label},variableType={self.variableType})>"

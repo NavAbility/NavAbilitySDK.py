@@ -16,7 +16,7 @@ from navability.entities.NavAbilityClient import (
     NavAbilityWebsocketClient,
 )
 from navability.entities.Variable.Variable import Variable
-# from navability.services.Factor import addFactor
+from navability.services.factor import addFactor
 from navability.services.Status import getStatusLatest
 from navability.services.Variable import addVariable
 
@@ -61,7 +61,7 @@ def navability_https_client(env_config) -> NavAbilityClient:
 
 @pytest.fixture(scope="module")
 def client(env_config) -> Client:
-    return Client("Guest", "PySDKAutomation", str(uuid4())[0:8])
+    return Client("Guest", "PySDKAutomation", "Session_" + str(uuid4())[0:8])
 
 
 @pytest.fixture(scope="module")
@@ -79,6 +79,7 @@ def example_graph(navability_wss_client: NavAbilityClient, client: Client):
                     z=FullNormal(mean=np.zeros(3), covariance=np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
+            "PriorPose2",
             ["x0"],
         ),
         Factor(
@@ -90,6 +91,7 @@ def example_graph(navability_wss_client: NavAbilityClient, client: Client):
                     )
                 ).dump()  # This is a generator for a PriorPose2
             ),
+            "Pose2Pose2",
             ["x0", "x1"],
         ),
         Factor(
@@ -101,15 +103,16 @@ def example_graph(navability_wss_client: NavAbilityClient, client: Client):
                     )
                 ).dump()  # This is a generator for a PriorPose2
             ),
+            "Pose2Pose2",
             ["x1", "x2"],
         ),
     ]
     # Variables
     result_ids = [
         addVariable(navability_wss_client, client, v)["addVariable"] for v in variables
-    ]  # WIP[addFactor(navability_wss_client, client, f)["addFactor"] for f in factors]
+    ] + [addFactor(navability_wss_client, client, f)["addFactor"] for f in factors]
 
-    wait_time = 60
+    wait_time = 120
     while any(
         [
             getStatusLatest(navability_wss_client, res).state != "Complete"

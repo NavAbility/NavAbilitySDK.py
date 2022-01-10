@@ -1,13 +1,13 @@
 from gql import gql
 
-from navability.common.queries import gql_getStatusLatest, gql_getStatusMessages
+from navability.common.queries import GQL_GETSTATUSLATEST, GQL_GETSTATUSMESSAGES
 from navability.entities.NavAbilityClient import NavAbilityClient, QueryOptions
-from navability.entities.StatusMessage import StatusMessageSchema
+from navability.entities.statusmessage import StatusMessageSchema
 
 
 def getStatusMessages(navAbilityClient: NavAbilityClient, id: str):
     statusMessages = navAbilityClient.query(
-        QueryOptions(gql(gql_getStatusMessages), {"id": id})
+        QueryOptions(gql(GQL_GETSTATUSMESSAGES), {"id": id})
     )
     schema = StatusMessageSchema(many=True)
     return schema.load(statusMessages["statusMessages"])
@@ -15,7 +15,7 @@ def getStatusMessages(navAbilityClient: NavAbilityClient, id: str):
 
 def getStatusLatest(navAbilityClient: NavAbilityClient, id: str):
     statusMessages = navAbilityClient.query(
-        QueryOptions(gql(gql_getStatusLatest), {"id": id})
+        QueryOptions(gql(GQL_GETSTATUSLATEST), {"id": id})
     )
     schema = StatusMessageSchema()
     return schema.load(statusMessages["statusLatest"])

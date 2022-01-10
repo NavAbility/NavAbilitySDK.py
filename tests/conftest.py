@@ -17,8 +17,8 @@ from navability.entities.NavAbilityClient import (
 )
 from navability.entities.Variable.Variable import Variable
 from navability.services.factor import addFactor
-from navability.services.Status import getStatusLatest
-from navability.services.Variable import addVariable
+from navability.services.status import getStatusLatest
+from navability.services.variable import addVariable
 
 # setup basic logging to stderr
 logging.basicConfig(level=logging.INFO)

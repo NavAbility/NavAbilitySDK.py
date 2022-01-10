@@ -1,5 +1,5 @@
 from navability.entities.NavAbilityClient import NavAbilityWebsocketClient
-from navability.services.Variable import getVariable, ls
+from navability.services.variable import getVariable, ls
 
 
 def test_sample(navability_wss_client: NavAbilityWebsocketClient):

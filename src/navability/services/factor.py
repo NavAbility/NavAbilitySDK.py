@@ -4,6 +4,7 @@ from gql import gql
 
 from navability.common.queries import gql_addFactor, gql_list, gql_list_fields_default
 from navability.entities.Client import Client
+from navability.entities.QueryDetail import QueryDetail
 from navability.entities.factor.factor import Factor
 from navability.entities.NavAbilityClient import (
     MutationOptions,
@@ -16,7 +17,9 @@ def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
     return navAbilityClient.mutate(
         MutationOptions(
             gql(gql_addFactor),
-            {"factor": {"client": client.dump(), "packedData": f.dumps()}},
+            {"factor": {
+                "client": client.dump(), 
+                "packedData": f.dumps()}},
         )
     )
 
@@ -24,11 +27,12 @@ def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
 def lsf(
     navAbilityClient: NavAbilityClient,
     client: Client,
-    regexFilter: str = None,
-    tags: List[str] = None,
+    detail: QueryDetail = QueryDetail.SKELETON,
+    regexFilter: str = ".*",
+    tags: List[str] = ["FACTOR"],
     solvable: int = 0,
     fields: str = gql_list_fields_default,
-):
+) -> List[FactorSkeleton] : 
     ls = navAbilityClient.query(
         QueryOptions(
             gql(gql_list.replace("__TYPE__", "FACTOR").replace("__FIELDS__", fields)),

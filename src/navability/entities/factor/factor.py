@@ -11,25 +11,26 @@ from navability.common.versions import payload_version
 @dataclass()
 class FactorSkeleton:
     label: str
+    _variableOrderSymbols: List[str]
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
-    
 
     def __repr__(self):
-        return f"<VariableSkeleton(label={self.label})>"
+        return f"<FactorSkeleton(label={self.label})>"
 
     def dump(self):
-        return VariableSkeletonSchema().dump(self)
+        return FactorSkeletonSchema().dump(self)
 
     def dumps(self):
-        return VariableSkeletonSchema().dumps(self)
+        return FactorSkeletonSchema().dumps(self)
 
     @staticmethod
     def load(data):
-        return VariableSkeletonSchema().load(data)
+        return FactorSkeletonSchema().load(data)
 
 
-class VariableSkeletonSchema(Schema):
+class FactorSkeletonSchema(Schema):
     label = fields.Str(required=True)
+    _variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
     tags = fields.List(fields.Str(), required=True)
 
     class Meta:
@@ -38,39 +39,34 @@ class VariableSkeletonSchema(Schema):
 
     @post_load
     def load(self, data, **kwargs):
-        return VariableSkeleton(**data)
+        return FactorSkeleton(**data)
 
 
 @dataclass()
-class VariableSummary(VariableSkeleton):
-    variableType: str = "Pose2"
-    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+class FactorSummary(FactorSkeleton):
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
-    _id: int = None
 
     def __repr__(self):
-        return f"<VariableSummary(label={self.label},variableType={self.variableType})>"
+        return f"<FactorSummary(label={self.label},_variableOrderSymbols={self._variableOrderSymbols})>"
 
     def dump(self):
-        return VariableSummarySchema().dump(self)
+        return FactorSummarySchema().dump(self)
 
     def dumps(self):
-        return VariableSummarySchema().dumps(self)
+        return FactorSummarySchema().dumps(self)
 
     @staticmethod
     def load(data):
-        return VariableSummarySchema().load(data)
+        return FactorSummarySchema().load(data)
 
 
-class VariableSummarySchema(Schema):
+class FactorSummarySchema(Schema):
     label = fields.Str(required=True)
+    _variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
     tags = fields.List(fields.Str(), required=True)
-    ppes = fields.Nested(PPESchema, many=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
-    variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
-    _id: fields.Integer(data_key="_id", required=False)
 
     class Meta:
         ordered = True
@@ -88,7 +84,7 @@ class VariableSummarySchema(Schema):
 
     @post_load
     def load(self, data, **kwargs):
-        return VariableSummary(**data)
+        return FactorSummary(**data)
 
 
 @dataclass()
@@ -179,6 +175,10 @@ class Factor:
 
     def dumps(self):
         return FactorSchema().dumps(self)
+
+    @staticmethod
+    def load(data):
+        return FactorSchema().load(data)
 
 
 class FactorSchema(Schema):

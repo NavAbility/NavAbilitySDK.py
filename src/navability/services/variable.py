@@ -4,7 +4,8 @@ from typing import List
 from gql import gql
 
 from navability.common.queries import (
-    GQL_FINDVARIABLEFACTORS,
+    GQL_FRAGMENT_VARIABLES,
+    GQL_GETVARIABLES,
     GQL_GETVARIABLE,
 )
 from navability.common.mutations import (
@@ -54,28 +55,10 @@ def ls(
     tags: List[str] = ["VARIABLE"],
     solvable: int = 0,
 ) -> List[VariableSkeleton]:
-    """[summary]
-
-    Args:
-        navAbilityClient (NavAbilityClient): [description]
-        client (Client): [description]
-        detail (QueryDetail, optional): [description]. Defaults to QueryDetail.SKELETON.
-        regexFilter (str, optional): [description]. Defaults to ".*".
-        tags (List[str], optional): [description]. Defaults to ["VARIABLE"].
-        solvable (int, optional): [description]. Defaults to 0.
-
-    Raises:
-        Exception: [description]
-
-    Returns:
-        List[VariableSkeleton]: [description]
-    """
     params = {
         "userId": client.userId,
         "robotIds": [client.robotId],
         "sessionIds": [client.sessionId],
-        "variables": True,
-        "factors": False,
         "variable_label_regexp": regexFilter,
         "variable_tags": tags,
         "solvable": solvable,
@@ -84,19 +67,19 @@ def ls(
     }
     logger.debug(f"Query params: {params}")
     res = navAbilityClient.query(QueryOptions(
-        gql(GQL_FINDVARIABLEFACTORS), 
+        gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLES), 
         params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     schema = DETAIL_SCHEMA[detail]
-    if schema is None:
-        return res["VARIABLE"]
     # Using the hierarchy approach, we need to check that we have exactly one user/robot/session in it, otherwise error.
     if "USER" not in res or\
         len(res["USER"][0]["robots"]) != 1 or\
         len(res["USER"][0]["robots"][0]["sessions"]) != 1 or\
         "variables" not in res["USER"][0]["robots"][0]["sessions"][0]:
         raise Exception("Received an empty data structure, set logger to debug to see the resultant payload")
+    if schema is None:
+        return res["USER"][0]["robots"][0]["sessions"][0]["variables"]
     return [schema.load(l) for l in res["USER"][0]["robots"][0]["sessions"][0]["variables"]]
 
 
@@ -105,7 +88,7 @@ def getVariable(navAbilityClient: NavAbilityClient, client: Client, label: str):
     params["label"] = label
     logger.debug(f"Query params: {params}")
     res = navAbilityClient.query(QueryOptions(
-        gql(GQL_GETVARIABLE), 
+        gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLE), 
         params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors

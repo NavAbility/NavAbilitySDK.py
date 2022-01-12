@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from marshmallow import Schema, fields, post_load
 
-from navability.entities.Client import Client, ClientSchema
+from navability.entities.client import Client, ClientSchema
 
 
 @dataclass()
@@ -44,3 +44,29 @@ class StatusMessageSchema(Schema):
     @post_load
     def marshal(self, data, **kwargs):
         return StatusMessage(**data)
+
+
+@dataclass
+class MutationUpdate:
+    mutationUpdate: StatusMessage
+
+    def dump(self):
+        return MutationUpdate().dump(self)
+
+    def dumps(self):
+        return MutationUpdate().dumps(self)
+
+    @staticmethod
+    def load(data):
+        return MutationUpdate().load(data)
+
+
+class MutationUpdateSchema(Schema):
+    mutationUpdate = fields.Nested(StatusMessageSchema, required=True)
+
+    class Meta:
+        ordered = True
+
+    @post_load
+    def marshal(self, data, **kwargs):
+        return MutationUpdate(**data)

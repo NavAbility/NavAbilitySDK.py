@@ -1,7 +1,7 @@
 from gql import gql
 
 from navability.common.queries import GQL_GETSTATUSLATEST, GQL_GETSTATUSMESSAGES
-from navability.entities.NavAbilityClient import NavAbilityClient, QueryOptions
+from navability.entities.navabilityclient import NavAbilityClient, QueryOptions
 from navability.entities.statusmessage import StatusMessageSchema
 
 

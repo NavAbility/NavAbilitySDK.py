@@ -7,11 +7,17 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
-from navability.entities.Variable.PPE import PPE, PPESchema
-from navability.entities.Variable.VariableNodeData import (
+from navability.entities.variable.ppe import PPE, PPESchema
+from navability.entities.variable.variablenodedata import (
     VariableNodeData,
     VariableNodeDataSchema,
 )
+
+from enum import Enum
+
+class VariableType(Enum):
+    POINT2 = "RoME.Point2"
+    POSE2 = "RoME.Pose2"
 
 
 @dataclass()
@@ -48,7 +54,7 @@ class VariableSkeletonSchema(Schema):
 
 @dataclass()
 class VariableSummary(VariableSkeleton):
-    variableType: str = "Pose2"
+    variableType: VariableType = VariableType.POSE2
     ppes: Dict[str, PPE] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version

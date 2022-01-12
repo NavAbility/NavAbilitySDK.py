@@ -29,7 +29,7 @@ fragment solverdata_fields on SOLVERDATA {
   variableType
   vecbw
   vecval
-  _version  
+  _version
 }
 fragment variable_skeleton_fields on VARIABLE {
 	label
@@ -73,13 +73,13 @@ fragment factor_full_fields on FACTOR {
 
 GQL_GETVARIABLES = """
 query sdk_get_variables(
-  	$userId: ID!, 
-  	$robotIds: [ID!]!, 
-  	$sessionIds: [ID!]!, 
+  	$userId: ID!,
+  	$robotIds: [ID!]!,
+  	$sessionIds: [ID!]!,
     $variable_label_regexp: ID = ".*",
     $variable_tags: [String!] = ["VARIABLE"],
     $solvable: Int! = 0,
-  	$fields_summary: Boolean! = false, 
+  	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
 	USER(id: $userId) {
     name
@@ -88,8 +88,8 @@ query sdk_get_variables(
       sessions(filter:{id_in: $sessionIds}){
         name
         variables(filter:{
-            label_regexp: $variable_label_regexp, 
-          	tags_contains: $variable_tags, 
+            label_regexp: $variable_label_regexp,
+          	tags_contains: $variable_tags,
           	solvable_gte: $solvable}) {
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
@@ -102,13 +102,13 @@ query sdk_get_variables(
 
 GQL_GETFACTORS = """
 query sdk_get_factors(
-  	$userId: ID!, 
-  	$robotIds: [ID!]!, 
-  	$sessionIds: [ID!]!, 
+  	$userId: ID!,
+  	$robotIds: [ID!]!,
+  	$sessionIds: [ID!]!,
     $factor_label_regexp: ID = ".*",
     $factor_tags: [String!] = ["FACTOR"],
     $solvable: Int! = 0,
-  	$fields_summary: Boolean! = false, 
+  	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
 	USER(id: $userId) {
     name
@@ -117,8 +117,8 @@ query sdk_get_factors(
       sessions(filter:{id_in: $sessionIds}){
         name
         factors(filter:{
-            label_regexp: $factor_label_regexp, 
-          	tags_contains: $factor_tags, 
+            label_regexp: $factor_label_regexp,
+          	tags_contains: $factor_tags,
           	solvable_gte: $solvable}) {
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)
@@ -132,17 +132,17 @@ query sdk_get_factors(
 
 GQL_GETVARIABLESFACTORS = """
 query sdk_get_variablesfactors(
-  	$userId: ID!, 
-  	$robotIds: [ID!]!, 
-  	$sessionIds: [ID!]!, 
-  	$variables: Boolean! = true, 
-  	$factors: Boolean! = true, 
+  	$userId: ID!,
+  	$robotIds: [ID!]!,
+  	$sessionIds: [ID!]!,
+  	$variables: Boolean! = true,
+  	$factors: Boolean! = true,
     $variable_label_regexp: ID = ".*",
     $factor_label_regexp: ID = ".*",
     $variable_tags: [String!] = ["VARIABLE"],
     $factor_tags: [String!] = ["FACTOR"],
     $solvable: Int! = 0,
-  	$fields_summary: Boolean! = false, 
+  	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
 	USER(id: $userId) {
     name
@@ -151,16 +151,16 @@ query sdk_get_variablesfactors(
       sessions(filter:{id_in: $sessionIds}){
         name
         variables(filter:{
-            label_regexp: $variable_label_regexp, 
-          	tags_contains: $variable_tags, 
+            label_regexp: $variable_label_regexp,
+          	tags_contains: $variable_tags,
           	solvable_gte: 0}) @include(if: $variables){
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
           ...variable_full_fields @include(if: $fields_full)
         }
         factors(filter:{
-            label_regexp: $factor_label_regexp, 
-          	tags_contains: $factor_tags, 
+            label_regexp: $factor_label_regexp,
+          	tags_contains: $factor_tags,
           	solvable_gte: $solvable}) @include(if: $factors){
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)
@@ -174,8 +174,8 @@ query sdk_get_variablesfactors(
 
 GQL_GETVARIABLE = """
 query sdk_get_variable(
-  	$userId: ID!, 
-  	$robotId: ID!, 
+  	$userId: ID!,
+  	$robotId: ID!,
   	$sessionId: ID!,
     $label: ID!) {
 	USER(id: $userId) {
@@ -194,8 +194,8 @@ query sdk_get_variable(
 
 GQL_GETFACTOR = """
 query sdk_get_variable(
-  	$userId: ID!, 
-  	$robotId: ID!, 
+  	$userId: ID!,
+  	$robotId: ID!,
   	$sessionId: ID!,
     $label: ID!) {
 	USER(id: $userId) {

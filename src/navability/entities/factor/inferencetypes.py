@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+import numpy as np
 from marshmallow import Schema, fields, post_load
 
 from navability.entities.factor.distributions import Distribution
@@ -55,17 +56,16 @@ class Pose2Pose2(InferenceType):
         return f"<{self.__class__.__name__}(z={str(self.z)})>"
 
     def dump(self):
-        return PriorPose2Schema().dump(self)
+        return Pose2Pose2Schema().dump(self)
 
     def dumps(self):
-        return PriorPose2Schema().dumps(self)
+        return Pose2Pose2Schema().dumps(self)
 
     # TODO: Deserializing this.
 
 
 class Pose2Pose2Schema(Schema):
-    z = fields.Method("get_packed", "set_packed", required=True, attribute="datastr")
-    # datastr: fields.Method("get_packed", "set_packed", required=True)
+    datastr = fields.Method("get_packed", "set_packed", required=True)
 
     def get_packed(self, obj):
         return obj.z.dumpsPacked()
@@ -76,3 +76,39 @@ class Pose2Pose2Schema(Schema):
     @post_load
     def load(self, data, **kwargs):
         return PriorPose2(**data)
+
+
+@dataclass
+class Pose2AprilTag4Corners(InferenceType):
+    corners: np.ndarray
+    homography: np.ndarray
+    K: np.ndarray
+    taglength: float
+    id: int
+    mimeType: str = "/application/JuliaLang/PackedPose2AprilTag4Corners"
+
+    def dump(self):
+        return Pose2AprilTag4CornersSchema().dump(self)
+
+    def dumps(self):
+        return Pose2AprilTag4CornersSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+class Pose2AprilTag4CornersSchema(Schema):
+    corners = fields.List(fields.Float, required=True)
+    homography = fields.List(fields.Float, required=True)
+    K = fields.List(fields.Float, required=True)
+    taglength = fields.Float(required=True)
+    id = fields.Int(required=True)
+    mimeType = fields.String(
+        default="/application/JuliaLang/PackedPose2AprilTag4Corners"
+    )
+
+    class Meta:
+        ordered = True
+
+    @post_load
+    def load(self, data, **kwargs):
+        return Pose2AprilTag4Corners(**data)

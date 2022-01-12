@@ -8,6 +8,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
 
+
 @dataclass()
 class FactorSkeleton:
     label: str
@@ -48,7 +49,10 @@ class FactorSummary(FactorSkeleton):
     _version: str = payload_version
 
     def __repr__(self):
-        return f"<FactorSummary(label={self.label},_variableOrderSymbols={self._variableOrderSymbols})>"
+        return (
+            f"<FactorSummary(label={self.label},"
+            "_variableOrderSymbols={self._variableOrderSymbols})>"
+        )
 
     def dump(self):
         return FactorSummarySchema().dump(self)

@@ -6,16 +6,18 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from navability.entities.Client import Client
-from navability.entities.factor.distributions import FullNormal
-from navability.entities.factor.factor import Factor, FactorData
-from navability.entities.factor.inferencetypes import Pose2Pose2, PriorPose2
-from navability.entities.NavAbilityClient import (
+from navability.entities import (
+    Client,
+    Factor,
+    FactorData,
+    FullNormal,
     NavAbilityClient,
     NavAbilityHttpsClient,
     NavAbilityWebsocketClient,
+    Pose2Pose2,
+    PriorPose2,
+    Variable,
 )
-from navability.entities.Variable.Variable import Variable
 from navability.services.factor import addFactor
 from navability.services.status import getStatusLatest
 from navability.services.variable import addVariable
@@ -65,7 +67,7 @@ def client(env_config) -> Client:
 
 
 @pytest.fixture(scope="module")
-def example_graph(navability_wss_client: NavAbilityClient, client: Client):
+def example_graph(navability_https_client: NavAbilityClient, client: Client):
     variables = [
         Variable(label="x0", variableType="Pose2"),
         Variable(label="x1", variableType="Pose2"),
@@ -109,13 +111,14 @@ def example_graph(navability_wss_client: NavAbilityClient, client: Client):
     ]
     # Variables
     result_ids = [
-        addVariable(navability_wss_client, client, v)["addVariable"] for v in variables
-    ] + [addFactor(navability_wss_client, client, f)["addFactor"] for f in factors]
+        addVariable(navability_https_client, client, v)["addVariable"]
+        for v in variables
+    ] + [addFactor(navability_https_client, client, f)["addFactor"] for f in factors]
 
     wait_time = 120
     while any(
         [
-            getStatusLatest(navability_wss_client, res).state != "Complete"
+            getStatusLatest(navability_https_client, res).state != "Complete"
             for res in result_ids
         ]
     ):
@@ -124,4 +127,4 @@ def example_graph(navability_wss_client: NavAbilityClient, client: Client):
         if wait_time <= 0:
             raise Exception("Variable wasn't loaded in time")
 
-    return (navability_wss_client, client, variables, factors)
+    return (navability_https_client, client, variables, factors)

@@ -1,6 +1,11 @@
-from navability.entities import FullNormal
-from navability.entities import (PriorPose2, Pose2Pose2, Pose2AprilTag4Corners) 
 import numpy as np
+
+from navability.entities import (
+    FullNormal,
+    Pose2AprilTag4Corners,
+    Pose2Pose2,
+    PriorPose2,
+)
 
 
 def test_distribution_fullnormal():
@@ -16,9 +21,11 @@ def test_distribution_fullnormal():
 
 
 def test_factor_priorpose2():
-    pose = PriorPose2(z=FullNormal(
-        mean=np.asarray([0.0, 0.1, 0.2]), 
-        covariance=np.diag([0.2, 0.3, 0.4])))
+    pose = PriorPose2(
+        z=FullNormal(
+            mean=np.asarray([0.0, 0.1, 0.2]), covariance=np.diag([0.2, 0.3, 0.4])
+        )
+    )
     dumped = pose.dumps()
     assert (
         dumped
@@ -26,10 +33,13 @@ def test_factor_priorpose2():
     )
     # TODO: Implement and test deserialization/marshalling
 
+
 def test_factor_pose2pose2():
-    pose = Pose2Pose2(z=FullNormal(
-        mean=np.array([0.0, 0.1, 0.2]), 
-        covariance=np.diag([0.2, 0.3, 0.4])))
+    pose = Pose2Pose2(
+        z=FullNormal(
+            mean=np.array([0.0, 0.1, 0.2]), covariance=np.diag([0.2, 0.3, 0.4])
+        )
+    )
     dumped = pose.dumps()
     assert (
         dumped
@@ -37,13 +47,15 @@ def test_factor_pose2pose2():
     )
     # TODO: Implement and test deserialization/marshalling
 
+
 def test_factor_pose2apriltag4corners():
     pose = Pose2AprilTag4Corners(
         corners=np.zeros(8),
         homography=np.zeros(9),
-        K=[300.0,0.0,0.0,0.0,300.0,0.0,180.0,120.0,1.0],
+        K=[300.0, 0.0, 0.0, 0.0, 300.0, 0.0, 180.0, 120.0, 1.0],
         taglength=0.25,
-        id=1)
+        id=1,
+    )
     dumped = pose.dumps()
     assert (
         dumped

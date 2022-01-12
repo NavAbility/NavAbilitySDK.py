@@ -109,7 +109,7 @@ def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
     fs = res["USER"][0]["robots"][0]["sessions"][0]["factors"]
     # TODO: Check for errors
     if len(fs) == 0:
-        raise Exception(f"No factor {label} found")
+        return None
     if len(fs) > 1:
         raise Exception(f"More than one factor named {label} returned")
     return Factor.load(fs[0])

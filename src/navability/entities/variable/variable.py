@@ -1,6 +1,7 @@
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
 from typing import Dict, List
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
@@ -13,7 +14,6 @@ from navability.entities.variable.variablenodedata import (
     VariableNodeDataSchema,
 )
 
-from enum import Enum
 
 class VariableType(Enum):
     POINT2 = "RoME.Point2"

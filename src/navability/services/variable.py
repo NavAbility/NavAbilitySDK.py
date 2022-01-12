@@ -109,7 +109,7 @@ def getVariable(navAbilityClient: NavAbilityClient, client: Client, label: str):
     vs = res["USER"][0]["robots"][0]["sessions"][0]["variables"]
     # TODO: Check for errors
     if len(vs) == 0:
-        raise Exception(f"No variable {label} found")
+        return None
     if len(vs) > 1:
         raise Exception(f"More than one variable named {label} returned")
     return Variable.load(vs[0])

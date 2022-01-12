@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
-from marshmallow import Schema, fields, post_load
 from typing import List
+
+from marshmallow import Schema, fields, post_load
 
 
 @dataclass()

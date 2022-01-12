@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from datetime import datetime
 from typing import ClassVar, List
-from navability.common.timestamps import TS_FORMAT
 
-from marshmallow import Schema, fields, EXCLUDE
+from marshmallow import EXCLUDE, Schema, fields
+
+from navability.common.timestamps import TS_FORMAT
 
 
 class PPESchema(Schema):
@@ -11,7 +12,9 @@ class PPESchema(Schema):
     suggested = fields.List(fields.Float(), required=True)
     max = fields.List(fields.Float(), required=True)
     mean = fields.List(fields.Float(), required=True)
-    lastUpdatedTimestamp = fields.Method("get_lastupdated", attribute="lastUpdatedTimestamp", required=True)
+    lastUpdatedTimestamp = fields.Method(
+        "get_lastupdated", attribute="lastUpdatedTimestamp", required=True
+    )
 
     class Meta:
         ordered = True
@@ -33,7 +36,9 @@ class PPE:
     max: List[float]
     mean: List[float]
     schema: ClassVar[PPESchema] = PPESchema()
-    lastUpdatedTimestamp = fields.Method("get_last_updated", "set_last_updated", required=True)
+    lastUpdatedTimestamp = fields.Method(
+        "get_last_updated", "set_last_updated", required=True
+    )
 
     def __repr__(self):
         return f"<PPE(solveKey={self.solveKey}, suggested={self.suggested})>"

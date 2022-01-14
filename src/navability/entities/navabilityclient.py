@@ -1,24 +1,22 @@
+from dataclasses import dataclass
+
 from gql import Client as GQLCLient
-from gql.transport.websockets import WebsocketsTransport
 from gql.transport.aiohttp import AIOHTTPTransport
+from gql.transport.websockets import WebsocketsTransport
 
 
+@dataclass(frozen=True)
 class QueryOptions:
-    def __init__(
-        self, query: any, variables: any = None, fetchPolicy: any = None
-    ) -> None:
-        self.query = query
-        self.variables = variables
-        self.fetchPolicy = fetchPolicy
+    query: str
+    variables: any = None
+    fetchPolicy: any = None
 
 
+@dataclass(frozen=True)
 class MutationOptions:
-    def __init__(
-        self, mutation: any, variables: any = None, fetchPolicy: any = None
-    ) -> None:
-        self.mutation = mutation
-        self.variables = variables
-        self.fetchPolicy = fetchPolicy
+    mutation: str
+    variables: any = None
+    fetchPolicy: any = None
 
 
 class NavAbilityClient:

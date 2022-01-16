@@ -59,7 +59,10 @@ class VariableSummary:
     _id: int = None
 
     def __repr__(self):
-        return f"<VariableSummary(label={self.label},variableType={self.variableType})>"
+        return (
+            f"<VariableSummary(label={self.label},"
+            f"variableType={self.variableType},tags={self.tags})>"
+        )
 
     def dump(self):
         return VariableSummarySchema().dump(self)
@@ -79,11 +82,10 @@ class VariableSummarySchema(Schema):
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
-    _id: fields.Integer(data_key="_id", required=False)
+    _id = fields.Integer(data_key="_id", required=False)
 
     class Meta:
         ordered = True
-        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     def get_timestamp(self, obj):
         # Return a robust timestamp
@@ -121,7 +123,10 @@ class Variable:
             self.solverData["default"] = VariableNodeData(self.variableType)
 
     def __repr__(self):
-        return f"<Variable(label={self.label},variableType={self.variableType})>"
+        return (
+            f"<Variable(label={self.label},variableType={self.variableType},"
+            f"tags={self.tags})>"
+        )
 
     def dump(self):
         return VariableSchema().dump(self)
@@ -185,7 +190,7 @@ class VariableSchema(Schema):
         return [ppe.dump() for ppe in obj.ppes.values()]
 
     def set_ppes(self, obj):
-        return {ppe["solveKey"]: PPESchema.load(ppe) for ppe in obj}
+        return {ppe["solveKey"]: PPESchema().load(ppe) for ppe in obj}
 
 
 class PackedVariableSchema(Schema):

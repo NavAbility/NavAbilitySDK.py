@@ -1,6 +1,5 @@
 import logging
 import os
-import time
 from uuid import uuid4
 
 import numpy as np
@@ -19,7 +18,7 @@ from navability.entities import (
     Variable,
     VariableType,
 )
-from navability.services import addFactor, addVariable, getStatusLatest
+from navability.services import addFactor, addVariable, solveSession, waitForCompletion
 
 # setup basic logging to stderr
 logging.basicConfig(level=logging.INFO)
@@ -114,16 +113,20 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
         for v in variables
     ] + [addFactor(navability_https_client, client, f)["addFactor"] for f in factors]
 
-    wait_time = 120
-    while any(
-        [
-            getStatusLatest(navability_https_client, res).state != "Complete"
-            for res in result_ids
-        ]
-    ):
-        time.sleep(1)
-        wait_time -= 1
-        if wait_time <= 0:
-            raise Exception("Variable wasn't loaded in time")
+    logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
+    waitForCompletion(navability_https_client, result_ids, maxSeconds=120)
+
+    return (navability_https_client, client, variables, factors)
+
+
+@pytest.fixture(scope="module")
+def example_graph_solved(example_graph):
+    """Get the graph after it has been solved.
+    NOTE this changes the graph, so tests need to be defensive.
+    """
+    navability_https_client, client, variables, factors = example_graph
+    logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
+    requestId = solveSession(navability_https_client, client)["solveSession"]
+    waitForCompletion(navability_https_client, [requestId])
     return (navability_https_client, client, variables, factors)

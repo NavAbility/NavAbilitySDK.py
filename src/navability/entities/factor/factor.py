@@ -13,10 +13,13 @@ from navability.common.versions import payload_version
 class FactorSkeleton:
     label: str
     variableOrderSymbols: List[str]
-    tags: List[str] = field(default_factory=lambda: ["FACTOR"])
+    tags: List[str]
 
     def __repr__(self):
-        return f"<FactorSkeleton(label={self.label})>"
+        return (
+            f"<FactorSkeleton(label={self.label},"
+            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
+        )
 
     def dump(self):
         return FactorSkeletonSchema().dump(self)
@@ -31,12 +34,13 @@ class FactorSkeleton:
 
 class FactorSkeletonSchema(Schema):
     label = fields.Str(required=True)
-    _variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
+    variableOrderSymbols = fields.List(
+        fields.Str(), data_key="_variableOrderSymbols", required=True
+    )
     tags = fields.List(fields.Str(), required=True)
 
     class Meta:
         ordered = True
-        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     @post_load
     def marshal(self, data, **kwargs):
@@ -53,8 +57,8 @@ class FactorSummary:
 
     def __repr__(self):
         return (
-            f"<FactorSummary(label={self.label},"
-            "_variableOrderSymbols={self._variableOrderSymbols})>"
+            f"<FactorSkeleton(label={self.label},"
+            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
         )
 
     def dump(self):

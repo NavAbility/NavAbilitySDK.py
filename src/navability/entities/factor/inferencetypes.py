@@ -74,7 +74,7 @@ class Pose2Pose2Schema(Schema):
         raise Exception("This has not been implemented yet.")
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return PriorPose2(**data)
 
 
@@ -110,5 +110,5 @@ class Pose2AprilTag4CornersSchema(Schema):
         ordered = True
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return Pose2AprilTag4Corners(**data)

@@ -16,17 +16,14 @@ from navability.entities.variable.variablenodedata import (
 
 
 class VariableType(Enum):
-    POINT2 = "RoME.Point2"
-    POSE2 = "RoME.Pose2"
+    Point2 = "RoME.Point2"
+    Pose2 = "RoME.Pose2"
 
 
 @dataclass()
 class VariableSkeleton:
     label: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-
-    def __repr__(self):
-        return f"<VariableSkeleton(label={self.label})>"
 
     def dump(self):
         return VariableSkeletonSchema().dump(self)
@@ -45,23 +42,27 @@ class VariableSkeletonSchema(Schema):
 
     class Meta:
         ordered = True
-        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return VariableSkeleton(**data)
 
 
 @dataclass()
-class VariableSummary(VariableSkeleton):
-    variableType: VariableType = VariableType.POSE2
+class VariableSummary:
+    label: str
+    variableType: str
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
     ppes: Dict[str, PPE] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
     _id: int = None
 
     def __repr__(self):
-        return f"<VariableSummary(label={self.label},variableType={self.variableType})>"
+        return (
+            f"<VariableSummary(label={self.label},"
+            f"variableType={self.variableType},tags={self.tags})>"
+        )
 
     def dump(self):
         return VariableSummarySchema().dump(self)
@@ -76,16 +77,15 @@ class VariableSummary(VariableSkeleton):
 
 class VariableSummarySchema(Schema):
     label = fields.Str(required=True)
-    tags = fields.List(fields.Str(), required=True)
+    tags = fields.List(fields.Str())
     ppes = fields.Nested(PPESchema, many=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
-    _id: fields.Integer(data_key="_id", required=False)
+    _id = fields.Integer(data_key="_id", required=False)
 
     class Meta:
         ordered = True
-        unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     def get_timestamp(self, obj):
         # Return a robust timestamp
@@ -98,24 +98,35 @@ class VariableSummarySchema(Schema):
         return datetime.strptime(obj["formatted"], TS_FORMAT)
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return VariableSummary(**data)
 
 
 @dataclass()
-class Variable(VariableSummary):
+class Variable:
+    label: str
+    variableType: str
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
+    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+    timestamp: datetime = datetime.utcnow()
+    nstime: int = 0
     dataEntry: str = "{}"
     dataEntryType: str = "{}"
     solverData: Dict[str, VariableNodeData] = field(default_factory=lambda: {})
     smallData: str = "{}"
     solvable: str = 1
+    _version: str = payload_version
+    _id: int = None
 
     def __post_init__(self):
         if self.solverData == {}:
             self.solverData["default"] = VariableNodeData(self.variableType)
 
     def __repr__(self):
-        return f"<Variable(label={self.label},variableType={self.variableType})>"
+        return (
+            f"<Variable(label={self.label},variableType={self.variableType},"
+            f"tags={self.tags})>"
+        )
 
     def dump(self):
         return VariableSchema().dump(self)
@@ -137,14 +148,14 @@ class Variable(VariableSummary):
 class VariableSchema(Schema):
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
-    ppes = fields.Nested(PPESchema, many=True)
+    ppes = fields.Method("get_ppes", "set_ppes")
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
     _id: fields.Integer(data_key="_id", required=False)
     # dataEntry = fields.Str(required=True)
     # dataEntryType = fields.Str(required=True)
-    solverData = fields.Nested(VariableNodeDataSchema, many=True)
+    solverData = fields.Method("get_solverdata", "set_solverdata")
     smallData = fields.Str(required=True)
     solvable = fields.Int(required=True)
 
@@ -160,11 +171,26 @@ class VariableSchema(Schema):
         # Return a robust timestamp
         ts = obj.timestamp.isoformat(timespec="milliseconds")
         if not obj.timestamp.tzinfo:
-            ts += "+00"
+            ts += "Z"
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj["formatted"], TS_FORMAT)
+        # Have to be defensive here because it could be simply serialized
+        # or it can be GQL data with formatted
+        tsraw = obj if type(obj) == str else obj["formatted"]
+        return datetime.strptime(tsraw, TS_FORMAT)
+
+    def get_solverdata(self, obj):
+        return [sd.dump() for sd in obj.solverData.values()]
+
+    def set_solverdata(self, obj):
+        return {sd["solveKey"]: VariableNodeData.load(sd) for sd in obj}
+
+    def get_ppes(self, obj):
+        return [ppe.dump() for ppe in obj.ppes.values()]
+
+    def set_ppes(self, obj):
+        return {ppe["solveKey"]: PPESchema().load(ppe) for ppe in obj}
 
 
 class PackedVariableSchema(Schema):
@@ -175,7 +201,7 @@ class PackedVariableSchema(Schema):
 
     label = fields.Str(required=True)
     dataEntry = fields.Str(required=True)
-    nstime = fields.Str(required=True)
+    nstime = fields.Str(default="0")
     variableType = fields.Str(required=True)
     dataEntryType = fields.Str(required=True)
     ppeDict = fields.Str(attribute="ppes", required=True)

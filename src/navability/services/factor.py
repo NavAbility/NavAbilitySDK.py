@@ -43,7 +43,31 @@ def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
     )
 
 
-def lsf(
+def listFactors(
+    navAbilityClient: NavAbilityClient,
+    client: Client,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[str]:
+    return [
+        v.label
+        for v in getFactors(
+            navAbilityClient,
+            client,
+            detail=QueryDetail.SKELETON,
+            regexFilter=regexFilter,
+            tags=tags,
+            solvable=solvable,
+        )
+    ]
+
+
+# Alias
+lsf = listFactors
+
+
+def getFactors(
     navAbilityClient: NavAbilityClient,
     client: Client,
     detail: QueryDetail = QueryDetail.SKELETON,

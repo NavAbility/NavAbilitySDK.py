@@ -17,10 +17,9 @@ from navability.entities import (
     Pose2Pose2,
     PriorPose2,
     Variable,
+    VariableType,
 )
-from navability.services.factor import addFactor
-from navability.services.status import getStatusLatest
-from navability.services.variable import addVariable
+from navability.services import addFactor, addVariable, getStatusLatest
 
 # setup basic logging to stderr
 logging.basicConfig(level=logging.INFO)
@@ -69,23 +68,25 @@ def client(env_config) -> Client:
 @pytest.fixture(scope="module")
 def example_graph(navability_https_client: NavAbilityClient, client: Client):
     variables = [
-        Variable(label="x0", variableType="Pose2"),
-        Variable(label="x1", variableType="Pose2"),
-        Variable(label="x2", variableType="Pose2"),
+        Variable("x0", VariableType.Pose2.value),
+        Variable("x1", VariableType.Pose2.value),
+        Variable("x2", VariableType.Pose2.value),
     ]
     factors = [
         Factor(
             "x0f1",
+            "PriorPose2",
+            ["x0"],
             FactorData(
                 fnc=PriorPose2(
                     z=FullNormal(mean=np.zeros(3), covariance=np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
-            "PriorPose2",
-            ["x0"],
         ),
         Factor(
             "x0x1f1",
+            "Pose2Pose2",
+            ["x0", "x1"],
             FactorData(
                 fnc=Pose2Pose2(
                     z=FullNormal(
@@ -93,11 +94,11 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
                     )
                 ).dump()  # This is a generator for a PriorPose2
             ),
-            "Pose2Pose2",
-            ["x0", "x1"],
         ),
         Factor(
             "x1x2f1",
+            "Pose2Pose2",
+            ["x1", "x2"],
             FactorData(
                 fnc=Pose2Pose2(
                     z=FullNormal(
@@ -105,8 +106,6 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
                     )
                 ).dump()  # This is a generator for a PriorPose2
             ),
-            "Pose2Pose2",
-            ["x1", "x2"],
         ),
     ]
     # Variables

@@ -1,9 +1,4 @@
-from navability.entities.navabilityclient import NavAbilityClient
 from navability.services.variable import getVariable, ls
-
-
-def test_sample(navability_https_client: NavAbilityClient):
-    pass
 
 
 def test_ls(example_graph):

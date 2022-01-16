@@ -12,7 +12,7 @@ from navability.common.versions import payload_version
 @dataclass()
 class FactorSkeleton:
     label: str
-    _variableOrderSymbols: List[str]
+    variableOrderSymbols: List[str]
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
 
     def __repr__(self):
@@ -39,12 +39,15 @@ class FactorSkeletonSchema(Schema):
         unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return FactorSkeleton(**data)
 
 
 @dataclass()
-class FactorSummary(FactorSkeleton):
+class FactorSummary:
+    label = str
+    variableOrderSymbols: List[str]
+    tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
 
@@ -67,7 +70,7 @@ class FactorSummary(FactorSkeleton):
 
 class FactorSummarySchema(Schema):
     label = fields.Str(required=True)
-    _variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
+    variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     _version = fields.Str(required=True)
@@ -80,14 +83,17 @@ class FactorSummarySchema(Schema):
         # Return a robust timestamp
         ts = obj.timestamp.isoformat(timespec="milliseconds")
         if not obj.timestamp.tzinfo:
-            ts += "+00"
+            ts += "Z"
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj["formatted"], TS_FORMAT)
+        # Have to be defensive here because it could be simply serialized
+        # or it can be GQL data with formatted
+        tsraw = obj if type(obj) == str else obj["formatted"]
+        return datetime.strptime(tsraw, TS_FORMAT)
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return FactorSummary(**data)
 
 
@@ -134,7 +140,7 @@ class FactorDataSchema(Schema):
     #     raise Exception("Deserialization not supported yet.")
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return FactorData(**data)
 
 
@@ -142,30 +148,13 @@ class FactorDataSchema(Schema):
 class Factor:
     label: str
     fnctype: str
-    data: FactorData  # '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
     variableOrderSymbols: List[str]
+    data: FactorData  # '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: str = datetime.utcnow()
-    # nstime: str = "0"
+    nstime: int = 0
     solvable: str = 1
     _version: str = payload_version
-
-    def __init__(
-        self,
-        label: str,
-        data: FactorData,
-        fnctype: str,
-        variableOrderSymbols: List[str],
-        tags: List[str] = None,
-    ):
-        self.label = label
-        self.data = data
-        self.variableOrderSymbols = variableOrderSymbols
-        self.fnctype = fnctype
-        if tags is None:
-            self.tags = ["FACTOR"]
-        else:
-            self.tags = tags
 
     def __repr__(self):
         return (
@@ -192,7 +181,7 @@ class FactorSchema(Schema):
     data = fields.Method("get_data", "set_data", required=True)
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
-    nstime = fields.Str(required=True)
+    nstime = fields.Str(default="0")
     fnctype = fields.Str(required=True)
     solvable = fields.Int(required=True)
 
@@ -208,11 +197,14 @@ class FactorSchema(Schema):
         # Return a robust timestamp
         ts = obj.timestamp.isoformat(timespec="milliseconds")
         if not obj.timestamp.tzinfo:
-            ts += "+00"
+            ts += "Z"
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj["formatted"], TS_FORMAT)
+        # Have to be defensive here because it could be simply serialized
+        # or it can be GQL data with formatted
+        tsraw = obj if type(obj) == str else obj["formatted"]
+        return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_data(self, obj):
         return obj.data.dumps()
@@ -221,5 +213,5 @@ class FactorSchema(Schema):
         raise Exception("Deserialization not supported yet.")
 
     @post_load
-    def load(self, data, **kwargs):
+    def marshal(self, data, **kwargs):
         return Factor(**data)

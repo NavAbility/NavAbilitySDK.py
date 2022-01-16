@@ -4,7 +4,7 @@ from typing import List
 import numpy
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
-from src.navability.common.versions import payload_version
+from navability.common.versions import payload_version
 
 
 @dataclass()

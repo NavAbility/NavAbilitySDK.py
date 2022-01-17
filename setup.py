@@ -13,7 +13,7 @@ if sys.version_info < (3, 0):
 
 setup(
     name="navabilitysdk",
-    version="0.1.0",
+    version="0.1.1",
     license="Apache-2.0",
     author="NavAbility",
     author_email="info@navability.io",
@@ -22,7 +22,7 @@ setup(
     packages=find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     # entry_points={"console_scripts": ["navability = navability.main:cli"]},
     python_requires=">=3.5",
-    download_url="https://github.com/NavAbility/NavAbilitySDK.py/archive/refs/tags/v0.1.0.tar.gz",
+    download_url="https://github.com/NavAbility/NavAbilitySDK.py/archive/refs/tags/v0.1.1.tar.gz",  # noqa: E501, B950
     long_description="""NavAbility SDK: Access NavAbility Cloud factor graph features from Python.
 Note that this SDK and the related API are still in development. Please let us know if you have any issues at info@navability.io.""",
     install_requires=[

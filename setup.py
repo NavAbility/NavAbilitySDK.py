@@ -29,7 +29,7 @@ Note that this SDK and the related API are still in development. Please let us k
         "click>=8.0.0,<9",
         "gql[all]==3.0.0a6",
         "marshmallow==3.14.0",
-        "numpy==1.21",
+        "numpy>=1.21",
         # Dev/test dependencies
         "black==21.9b0",
         "flake8==4.0.1",

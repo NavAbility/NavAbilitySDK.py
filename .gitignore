@@ -116,3 +116,5 @@ cython_debug/
 
 venv/
 venv_test/
+
+sandbox.py

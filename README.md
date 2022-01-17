@@ -5,10 +5,10 @@ Note that this SDK and the related API are still in development. Please let us k
 
 # Installation
 
-We'll register the package shortly, but for the moment install the NavAbilitySDK directly from the repo:
+Install the NavAbilitySDK using pip:
 
 ```bash
-pip install git+ssh://git@github.com/NavAbility/NavAbilitySDK.py.git
+pip install navabilitysdk
 ```
 
 # Notes and FAQ

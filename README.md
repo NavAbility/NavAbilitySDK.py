@@ -1,7 +1,7 @@
 # NavAbilitySDK.py
 Access NavAbility Cloud factor graph features from Python.
 
-Note that this SDK and the related API are still in development. Please let us know if you have any issues. 
+Note that this SDK and the related API are still in development. Please let us know if you have any issues.
 
 # Installation
 

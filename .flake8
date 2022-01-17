@@ -14,3 +14,6 @@ ignore = W503
 max-line-length = 88
 max-complexity = 18
 select = B,C,E,F,W,T4,B9
+
+per-file-ignores =
+    setup.py: E501, B950

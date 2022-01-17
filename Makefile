@@ -8,6 +8,13 @@ $(VIRTUAL_ENV_DIR):
 	$(PYTHON_VERSION) -m venv $(VIRTUAL_ENV_DIR)
 	$(VIRTUAL_ENV_DIR)/bin/python setup.py install
 
+release: $(VIRTUAL_ENV_DIR)
+	rm -rf dist
+	$(PYTHON_VERSION) setup.py sdist
+	# Assuming you have twine already in the sdist
+	pip install twine
+	twine upload dist/*
+
 # typically, phony make targets are imperatives.
 lint: install
 	tox -e lint

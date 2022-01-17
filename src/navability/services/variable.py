@@ -43,7 +43,31 @@ def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable)
     )
 
 
-def ls(
+def listVariables(
+    navAbilityClient: NavAbilityClient,
+    client: Client,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[str]:
+    return [
+        v.label
+        for v in getVariables(
+            navAbilityClient,
+            client,
+            detail=QueryDetail.SKELETON,
+            regexFilter=regexFilter,
+            tags=tags,
+            solvable=solvable,
+        )
+    ]
+
+
+# Alias
+ls = listVariables
+
+
+def getVariables(
     navAbilityClient: NavAbilityClient,
     client: Client,
     detail: QueryDetail = QueryDetail.SKELETON,

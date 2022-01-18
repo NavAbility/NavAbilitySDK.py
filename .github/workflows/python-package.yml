@@ -29,7 +29,7 @@ jobs:
         python -m pip install -U tox tox-gh-actions
     - name: Lint
       run: |
-        tox -e lint
+        make lint
     - name: Test
       run: |
-        tox
+        make test

@@ -40,7 +40,7 @@ def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
             gql(GQL_ADDFACTOR),
             {"factor": {"client": client.dump(), "packedData": f.dumps()}},
         )
-    )
+    )["addFactor"]
 
 
 def listFactors(

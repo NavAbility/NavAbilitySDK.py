@@ -40,7 +40,7 @@ def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable)
             gql(GQL_ADDVARIABLE),
             {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
         )
-    )
+    )["addVariable"]
 
 
 def listVariables(

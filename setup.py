@@ -13,7 +13,7 @@ if sys.version_info < (3, 0):
 
 setup(
     name="navabilitysdk",
-    version="0.1.1",
+    version="0.1.2",
     license="Apache-2.0",
     author="NavAbility",
     author_email="info@navability.io",

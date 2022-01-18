@@ -21,7 +21,7 @@ from navability.entities import (
 from navability.services import addFactor, addVariable, solveSession, waitForCompletion
 
 # setup basic logging to stderr
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARN)
 
 _env_configs = {
     "local": {
@@ -109,9 +109,8 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
     ]
     # Variables
     result_ids = [
-        addVariable(navability_https_client, client, v)["addVariable"]
-        for v in variables
-    ] + [addFactor(navability_https_client, client, f)["addFactor"] for f in factors]
+        addVariable(navability_https_client, client, v) for v in variables
+    ] + [addFactor(navability_https_client, client, f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
@@ -127,6 +126,6 @@ def example_graph_solved(example_graph):
     """
     navability_https_client, client, variables, factors = example_graph
     logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
-    requestId = solveSession(navability_https_client, client)["solveSession"]
+    requestId = solveSession(navability_https_client, client)
     waitForCompletion(navability_https_client, [requestId])
     return (navability_https_client, client, variables, factors)

@@ -1,4 +1,4 @@
-.PHONY: help install test lint linting clean locales update-requirements
+.PHONY: help install test release lint clean
 
 PYTHON_VERSION?=python3
 VIRTUAL_ENV_DIR?=venv_test

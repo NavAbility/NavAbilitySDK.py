@@ -8,4 +8,4 @@ from navability.entities.navabilityclient import MutationOptions, NavAbilityClie
 def solveSession(navAbilityClient: NavAbilityClient, client: Client):
     return navAbilityClient.mutate(
         MutationOptions(gql(GQL_SOLVESESSION), {"client": client.dump()})
-    )
+    )["solveSession"]

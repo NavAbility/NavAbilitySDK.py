@@ -96,13 +96,19 @@ def getVariables(
     # exactly one user/robot/session in it, otherwise error.
     if (
         "USER" not in res
+        or len(res["USER"]) != 1
         or len(res["USER"][0]["robots"]) != 1
         or len(res["USER"][0]["robots"][0]["sessions"]) != 1
         or "variables" not in res["USER"][0]["robots"][0]["sessions"][0]
     ):
-        raise Exception(
-            "Received an empty data structure, set logger to debug for the payload"
-        )
+        # Debugging information
+        if len(res["USER"]) != 1:
+            logger.warn("User not found in result, returning empty list")
+        if len(res["USER"][0]["robots"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        if len(res["USER"][0]["robots"][0]["sessions"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        return []
     if schema is None:
         return res["USER"][0]["robots"][0]["sessions"][0]["variables"]
     return [

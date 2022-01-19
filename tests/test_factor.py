@@ -6,6 +6,12 @@ def test_lsf(example_graph):
     assert set(lsf(navability_client, client)) == set([f.label for f in factors])
 
 
+def test_lsf_no_session(example_graph):
+    navability_client, client, variables, factors = example_graph
+    client.sessionId = "Doesntexist"
+    assert lsf(navability_client, client) == []
+
+
 # def test_getFactor(example_graph):
 #     navability_client, client, variables, factors = example_graph
 #     assert (

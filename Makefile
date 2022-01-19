@@ -6,14 +6,14 @@ VIRTUAL_ENV_DIR?=venv_test
 install: $(VIRTUAL_ENV_DIR)
 $(VIRTUAL_ENV_DIR):
 	$(PYTHON_VERSION) -m venv $(VIRTUAL_ENV_DIR)
-	$(VIRTUAL_ENV_DIR)/bin/python setup.py install
+	$(VIRTUAL_ENV_DIR)/bin/$(PYTHON_VERSION) setup.py install
 
 release: $(VIRTUAL_ENV_DIR)
 	rm -rf dist
-	$(PYTHON_VERSION) setup.py sdist
+	$(VIRTUAL_ENV_DIR)/bin/$(PYTHON_VERSION) setup.py sdist
 	# Assuming you have twine already in the sdist
-	pip install twine
-	twine upload dist/*
+	$(VIRTUAL_ENV_DIR)/bin/pip install twine
+	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*
 
 # typically, phony make targets are imperatives.
 lint: install

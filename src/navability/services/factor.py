@@ -95,24 +95,24 @@ def getFactors(
     # Using the hierarchy approach, we need to check that
     # we have exactly one user/robot/session in it, otherwise error.
     if (
-        "USER" not in res
-        or len(res["USER"]) != 1
-        or len(res["USER"][0]["robots"]) != 1
-        or len(res["USER"][0]["robots"][0]["sessions"]) != 1
-        or "factors" not in res["USER"][0]["robots"][0]["sessions"][0]
+        "users" not in res
+        or len(res["users"]) != 1
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "factors" not in res["users"][0]["robots"][0]["sessions"][0]
     ):
         # Debugging information
-        if len(res["USER"]) != 1:
+        if len(res["users"]) != 1:
             logger.warn("User not found in result, returning empty list")
-        if len(res["USER"][0]["robots"]) != 1:
+        if len(res["users"][0]["robots"]) != 1:
             logger.warn("Robot not found in result, returning empty list")
-        if len(res["USER"][0]["robots"][0]["sessions"]) != 1:
+        if len(res["users"][0]["robots"][0]["sessions"]) != 1:
             logger.warn("Robot not found in result, returning empty list")
         return []
     if schema is None:
-        return res["USER"][0]["robots"][0]["sessions"][0]["factors"]
+        return res["users"][0]["robots"][0]["sessions"][0]["factors"]
     return [
-        schema.load(l) for l in res["USER"][0]["robots"][0]["sessions"][0]["factors"]
+        schema.load(l) for l in res["users"][0]["robots"][0]["sessions"][0]["factors"]
     ]
 
 
@@ -128,15 +128,15 @@ def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
     # Using the hierarchy approach, we need to check that we
     # have exactly one user/robot/session in it, otherwise error.
     if (
-        "USER" not in res
-        or len(res["USER"][0]["robots"]) != 1
-        or len(res["USER"][0]["robots"][0]["sessions"]) != 1
-        or "variables" not in res["USER"][0]["robots"][0]["sessions"][0]
+        "users" not in res
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "variables" not in res["users"][0]["robots"][0]["sessions"][0]
     ):
         raise Exception(
             "Received an empty data structure, set logger to debug for the payload"
         )
-    fs = res["USER"][0]["robots"][0]["sessions"][0]["factors"]
+    fs = res["users"][0]["robots"][0]["sessions"][0]["factors"]
     # TODO: Check for errors
     if len(fs) == 0:
         return None

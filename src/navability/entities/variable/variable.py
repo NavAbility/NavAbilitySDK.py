@@ -8,7 +8,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
-from navability.entities.variable.ppe import PPE, PPESchema
+from navability.entities.variable.ppe import Ppe, PpeSchema
 from navability.entities.variable.variablenodedata import (
     VariableNodeData,
     VariableNodeDataSchema,
@@ -23,7 +23,7 @@ class VariableType(Enum):
 @dataclass()
 class VariableSkeleton:
     label: str
-    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
+    tags: List[str] = field(default_factory=lambda: ["Variable"])
 
     def dump(self):
         return VariableSkeletonSchema().dump(self)
@@ -52,8 +52,8 @@ class VariableSkeletonSchema(Schema):
 class VariableSummary:
     label: str
     variableType: str
-    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+    tags: List[str] = field(default_factory=lambda: ["Variable"])
+    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
     _id: int = None
@@ -78,7 +78,7 @@ class VariableSummary:
 class VariableSummarySchema(Schema):
     label = fields.Str(required=True)
     tags = fields.List(fields.Str())
-    ppes = fields.Nested(PPESchema, many=True)
+    ppes = fields.Nested(PpeSchema, many=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
@@ -106,8 +106,8 @@ class VariableSummarySchema(Schema):
 class Variable:
     label: str
     variableType: str
-    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+    tags: List[str] = field(default_factory=lambda: ["Variable"])
+    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     nstime: int = 0
     dataEntry: str = "{}"

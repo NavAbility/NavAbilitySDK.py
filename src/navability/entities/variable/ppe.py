@@ -8,7 +8,7 @@ from navability.common.timestamps import TS_FORMAT, TS_FORMAT_NO_TZ
 
 
 @dataclass()
-class PPE:
+class Ppe:
     solveKey: str
     suggested: List[float]
     max: List[float]
@@ -17,22 +17,22 @@ class PPE:
 
     def __repr__(self):
         return (
-            f"<PPE(solveKey={self.solveKey},suggested={self.suggested},"
+            f"<Ppe(solveKey={self.solveKey},suggested={self.suggested},"
             f"lastUpdatedTimestamp={self.lastUpdatedTimestamp})>"
         )
 
     def dump(self):
-        return PPE.schema.dump(self)
+        return Ppe.schema.dump(self)
 
     def dumps(self):
-        return PPE.schema.dumps(self)
+        return Ppe.schema.dumps(self)
 
     @staticmethod
     def load(data):
-        return PPESchema().load(data)
+        return PpeSchema().load(data)
 
 
-class PPESchema(Schema):
+class PpeSchema(Schema):
     solveKey = fields.Str(required=True)
     suggested = fields.List(fields.Float(), required=True)
     max = fields.List(fields.Float(), required=True)
@@ -60,10 +60,10 @@ class PPESchema(Schema):
             ts = datetime.strptime(tsraw, TS_FORMAT)
         except (ValueError):
             # Fall back with no timezone and assign it.
-            # NOTE: This happens with PPEs, we need to update solver PPEs it tz.
+            # NOTE: This happens with Ppes, we need to update solver Ppes it tz.
             ts = datetime.strptime(tsraw, TS_FORMAT_NO_TZ).replace(tzinfo=timezone.utc)
         return ts
 
     @post_load
     def marshal(self, data, **kwargs):
-        return PPE(**data)
+        return Ppe(**data)

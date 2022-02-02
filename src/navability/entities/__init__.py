@@ -16,6 +16,6 @@ from .navabilityclient import (
 from .querydetail import QueryDetail
 from .scope import Scope
 from .statusmessage import MutationUpdate, StatusMessage
-from .variable.ppe import PPE
+from .variable.ppe import Ppe
 from .variable.variable import Variable, VariableSkeleton, VariableSummary, VariableType
 from .variable.variablenodedata import VariableNodeData

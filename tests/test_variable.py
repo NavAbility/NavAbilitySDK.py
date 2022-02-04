@@ -1,5 +1,5 @@
 from navability.services.variable import getVariable, ls
-
+from navability.entities import Client
 
 def test_ls(example_graph):
     navability_client, client, variables, factors = example_graph
@@ -8,8 +8,8 @@ def test_ls(example_graph):
 
 def test_ls_no_session(example_graph):
     navability_client, client, variables, factors = example_graph
-    client.sessionId = "Doesntexist"
-    assert ls(navability_client, client) == []
+    noSessionClient = Client(client.userId,client.robotId,"DoesntExist")
+    assert ls(navability_client, noSessionClient) == []
 
 
 def test_getVariable(example_graph):

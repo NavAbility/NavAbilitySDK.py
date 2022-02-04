@@ -23,7 +23,7 @@ class VariableType(Enum):
 @dataclass()
 class VariableSkeleton:
     label: str
-    tags: List[str] = field(default_factory=lambda: ["Variable"])
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
 
     def dump(self):
         return VariableSkeletonSchema().dump(self)
@@ -52,7 +52,7 @@ class VariableSkeletonSchema(Schema):
 class VariableSummary:
     label: str
     variableType: str
-    tags: List[str] = field(default_factory=lambda: ["Variable"])
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
     ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
@@ -106,7 +106,7 @@ class VariableSummarySchema(Schema):
 class Variable:
     label: str
     variableType: str
-    tags: List[str] = field(default_factory=lambda: ["Variable"])
+    tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
     ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     nstime: int = 0
@@ -190,7 +190,7 @@ class VariableSchema(Schema):
         return [ppe.dump() for ppe in obj.ppes.values()]
 
     def set_ppes(self, obj):
-        return {ppe["solveKey"]: PPESchema().load(ppe) for ppe in obj}
+        return {ppe["solveKey"]: PpeSchema().load(ppe) for ppe in obj}
 
 
 class PackedVariableSchema(Schema):

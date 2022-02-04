@@ -131,7 +131,7 @@ def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
         "users" not in res
         or len(res["users"][0]["robots"]) != 1
         or len(res["users"][0]["robots"][0]["sessions"]) != 1
-        or "variables" not in res["users"][0]["robots"][0]["sessions"][0]
+        or "factors" not in res["users"][0]["robots"][0]["sessions"][0]
     ):
         raise Exception(
             "Received an empty data structure, set logger to debug for the payload"

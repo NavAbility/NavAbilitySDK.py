@@ -76,7 +76,7 @@ query sdk_get_variables(
   	$robotIds: [ID!]!,
   	$sessionIds: [ID!]!,
     $variable_label_regexp: String = ".*",
-    $variable_tags: [String!] = ["VARIABLE"],
+    $variable_tags: [String] = ["VARIABLE"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
@@ -88,7 +88,7 @@ query sdk_get_variables(
         name
         variables(where:{
             label_MATCHES: $variable_label_regexp,
-          	tags_INCLUDES: $variable_tags,
+          	tags: $variable_tags,
           	solvable_GTE: $solvable}) {
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
@@ -105,7 +105,7 @@ query sdk_get_factors(
   	$robotIds: [ID!]!,
   	$sessionIds: [ID!]!,
     $factor_label_regexp: String = ".*",
-    $factor_tags: [String!] = ["FACTOR"],
+    $factor_tags: [String] = ["FACTOR"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
@@ -117,7 +117,7 @@ query sdk_get_factors(
         name
         factors(where:{
             label_MATCHES: $factor_label_regexp,
-          	tags_INCLUDES: $factor_tags,
+          	tags: $factor_tags,
           	solvable_GTE: $solvable}) {
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)
@@ -138,8 +138,8 @@ query sdk_get_variablesfactors(
   	$factors: Boolean! = true,
     $variable_label_regexp: String = ".*",
     $factor_label_regexp: String = ".*",
-    $variable_tags: [String!] = ["VARIABLE"],
-    $factor_tags: [String!] = ["FACTOR"],
+    $variable_tags: [String] = ["VARIABLE"],
+    $factor_tags: [String] = ["FACTOR"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
@@ -151,7 +151,7 @@ query sdk_get_variablesfactors(
         name
         variables(where:{
             label_MATCHES: $variable_label_regexp,
-          	tags_INCLUDES: $variable_tags,
+          	tags: $variable_tags,
           	solvable_GTE: 0}) @include(if: $variables){
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
@@ -159,7 +159,7 @@ query sdk_get_variablesfactors(
         }
         factors(filter:{
             label_MATCHES: $factor_label_regexp,
-          	tags_INCLUDES: $factor_tags,
+          	tags: $factor_tags,
           	solvable_GTE: $solvable}) @include(if: $factors){
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)

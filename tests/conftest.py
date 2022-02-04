@@ -39,7 +39,7 @@ _env_configs = {
     "production": {},
 }
 
-SDK_ENV = os.environ.get("NAVABILITY_ENVIRONMENT", "dev")
+SDK_ENV = os.environ.get("NVA_ENVIRONMENT", "dev")
 
 
 @pytest.fixture(scope="session")

@@ -3,14 +3,14 @@
 
 # Very generic find query
 GQL_FRAGMENT_VARIABLES = """
-fragment ppe_fields on PPE {
+fragment ppe_fields on Ppe {
   solveKey
   suggested
   max
   mean
-  lastUpdatedTimestamp {formatted}
+  lastUpdatedTimestamp
 }
-fragment solverdata_fields on SOLVERDATA {
+fragment solverdata_fields on SolverData {
   solveKey
   BayesNetOutVertIDs
   BayesNetVertID
@@ -31,20 +31,19 @@ fragment solverdata_fields on SOLVERDATA {
   vecval
   _version
 }
-fragment variable_skeleton_fields on VARIABLE {
+fragment variable_skeleton_fields on Variable {
 	label
   tags
 }
-fragment variable_summary_fields on VARIABLE {
-  timestamp {formatted}
+fragment variable_summary_fields on Variable {
+  timestamp
   ppes {
     ...ppe_fields
   }
   variableType
   _version
-  _id
 }
-fragment variable_full_fields on VARIABLE{
+fragment variable_full_fields on Variable{
   smallData
   solvable
   solverData
@@ -55,16 +54,16 @@ fragment variable_full_fields on VARIABLE{
 """
 
 GQL_FRAGMENT_FACTORS = """
-fragment factor_skeleton_fields on FACTOR {
+fragment factor_skeleton_fields on Factor {
 	label
   tags
   _variableOrderSymbols
 }
-fragment factor_summary_fields on FACTOR {
-  timestamp {formatted}
+fragment factor_summary_fields on Factor {
+  timestamp
   _version
 }
-fragment factor_full_fields on FACTOR {
+fragment factor_full_fields on Factor {
   fnctype
   solvable
   data
@@ -76,21 +75,21 @@ query sdk_get_variables(
   	$userId: ID!,
   	$robotIds: [ID!]!,
   	$sessionIds: [ID!]!,
-    $variable_label_regexp: ID = ".*",
-    $variable_tags: [String!] = ["VARIABLE"],
+    $variable_label_regexp: String = ".*",
+    $variable_tags: [String] = ["VARIABLE"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
-	USER(id: $userId) {
+	users(where: {id:$userId}) {
     name
-		robots(filter:{id_in: $robotIds}) {
+		robots(where:{id_IN: $robotIds}) {
       name
-      sessions(filter:{id_in: $sessionIds}){
+      sessions(where:{id_IN: $sessionIds}){
         name
-        variables(filter:{
-            label_regexp: $variable_label_regexp,
-          	tags_contains: $variable_tags,
-          	solvable_gte: $solvable}) {
+        variables(where:{
+            label_MATCHES: $variable_label_regexp,
+          	tags: $variable_tags,
+          	solvable_GTE: $solvable}) {
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
           ...variable_full_fields @include(if: $fields_full)
@@ -105,21 +104,21 @@ query sdk_get_factors(
   	$userId: ID!,
   	$robotIds: [ID!]!,
   	$sessionIds: [ID!]!,
-    $factor_label_regexp: ID = ".*",
-    $factor_tags: [String!] = ["FACTOR"],
+    $factor_label_regexp: String = ".*",
+    $factor_tags: [String] = ["FACTOR"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
-	USER(id: $userId) {
+	users(where: {id:$userId}) {
     name
-		robots(filter:{id_in: $robotIds}) {
+		robots(where:{id_IN: $robotIds}) {
       name
-      sessions(filter:{id_in: $sessionIds}){
+      sessions(where:{id_IN: $sessionIds}){
         name
-        factors(filter:{
-            label_regexp: $factor_label_regexp,
-          	tags_contains: $factor_tags,
-          	solvable_gte: $solvable}) {
+        factors(where:{
+            label_MATCHES: $factor_label_regexp,
+          	tags: $factor_tags,
+          	solvable_GTE: $solvable}) {
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)
           ...factor_full_fields @include(if: $fields_full)
@@ -137,31 +136,31 @@ query sdk_get_variablesfactors(
   	$sessionIds: [ID!]!,
   	$variables: Boolean! = true,
   	$factors: Boolean! = true,
-    $variable_label_regexp: ID = ".*",
-    $factor_label_regexp: ID = ".*",
-    $variable_tags: [String!] = ["VARIABLE"],
-    $factor_tags: [String!] = ["FACTOR"],
+    $variable_label_regexp: String = ".*",
+    $factor_label_regexp: String = ".*",
+    $variable_tags: [String] = ["VARIABLE"],
+    $factor_tags: [String] = ["FACTOR"],
     $solvable: Int! = 0,
   	$fields_summary: Boolean! = false,
   	$fields_full: Boolean! = false){
-	USER(id: $userId) {
+	users(where:{id: $userId}) {
     name
-		robots(filter:{id_in: $robotIds}) {
+		robots(where:{id_IN: $robotIds}) {
       name
-      sessions(filter:{id_in: $sessionIds}){
+      sessions(where:{id_IN: $sessionIds}){
         name
-        variables(filter:{
-            label_regexp: $variable_label_regexp,
-          	tags_contains: $variable_tags,
-          	solvable_gte: 0}) @include(if: $variables){
+        variables(where:{
+            label_MATCHES: $variable_label_regexp,
+          	tags: $variable_tags,
+          	solvable_GTE: 0}) @include(if: $variables){
           ...variable_skeleton_fields # Always include
           ...variable_summary_fields @include(if: $fields_summary)
           ...variable_full_fields @include(if: $fields_full)
         }
         factors(filter:{
-            label_regexp: $factor_label_regexp,
-          	tags_contains: $factor_tags,
-          	solvable_gte: $solvable}) @include(if: $factors){
+            label_MATCHES: $factor_label_regexp,
+          	tags: $factor_tags,
+          	solvable_GTE: $solvable}) @include(if: $factors){
           ...factor_skeleton_fields # Always include
           ...factor_summary_fields @include(if: $fields_summary)
           ...factor_full_fields @include(if: $fields_full)
@@ -178,10 +177,10 @@ query sdk_get_variable(
   	$robotId: ID!,
   	$sessionId: ID!,
     $label: ID!) {
-	USER(id: $userId) {
-		robots(filter:{id: $robotId}) {
-      sessions(filter:{id: $sessionId}) {
-        variables(filter:{label: $label}) {
+	users(where:{id: $userId}) {
+		robots(where:{id: $robotId}) {
+      sessions(where:{id: $sessionId}) {
+        variables(where:{label: $label}) {
           ...variable_skeleton_fields
           ...variable_summary_fields
           ...variable_full_fields
@@ -198,10 +197,10 @@ query sdk_get_variable(
   	$robotId: ID!,
   	$sessionId: ID!,
     $label: ID!) {
-	USER(id: $userId) {
-		robots(filter:{id: $robotId}) {
-      sessions(filter:{id: $sessionId}) {
-        factors(filter:{label: $label}) {
+	users(where:{id: $userId}) {
+		robots(where:{id: $robotId}) {
+      sessions(where:{id: $sessionId}) {
+        factors(where:{label: $label}) {
           ...factor_skeleton_fields
           ...factor_summary_fields
           ...factor_full_fields

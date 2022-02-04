@@ -8,7 +8,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
-from navability.entities.variable.ppe import PPE, PPESchema
+from navability.entities.variable.ppe import Ppe, PpeSchema
 from navability.entities.variable.variablenodedata import (
     VariableNodeData,
     VariableNodeDataSchema,
@@ -53,7 +53,7 @@ class VariableSummary:
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     _version: str = payload_version
     _id: int = None
@@ -78,7 +78,7 @@ class VariableSummary:
 class VariableSummarySchema(Schema):
     label = fields.Str(required=True)
     tags = fields.List(fields.Str())
-    ppes = fields.Nested(PPESchema, many=True)
+    ppes = fields.Nested(PpeSchema, many=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
@@ -107,7 +107,7 @@ class Variable:
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, PPE] = field(default_factory=lambda: {})
+    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     nstime: int = 0
     dataEntry: str = "{}"
@@ -190,7 +190,7 @@ class VariableSchema(Schema):
         return [ppe.dump() for ppe in obj.ppes.values()]
 
     def set_ppes(self, obj):
-        return {ppe["solveKey"]: PPESchema().load(ppe) for ppe in obj}
+        return {ppe["solveKey"]: PpeSchema().load(ppe) for ppe in obj}
 
 
 class PackedVariableSchema(Schema):

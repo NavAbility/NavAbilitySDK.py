@@ -1,4 +1,5 @@
-from navability.services import lsf
+from navability.entities import Client
+from navability.services import lsf  # getFactor
 
 
 def test_lsf(example_graph):
@@ -8,8 +9,8 @@ def test_lsf(example_graph):
 
 def test_lsf_no_session(example_graph):
     navability_client, client, variables, factors = example_graph
-    client.sessionId = "Doesntexist"
-    assert lsf(navability_client, client) == []
+    noSessionClient = Client(client.userId, client.robotId, "DoesntExist")
+    assert lsf(navability_client, noSessionClient) == []
 
 
 # def test_getFactor(example_graph):

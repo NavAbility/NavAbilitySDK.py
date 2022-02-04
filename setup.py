@@ -11,7 +11,7 @@ if sys.version_info < (3, 0):
 """
     )
 
-_version = "0.1.3"
+_version = "0.2.0"
 
 setup(
     name="navabilitysdk",

@@ -22,9 +22,7 @@ def test_distribution_fullnormal():
 
 def test_factor_priorpose2():
     pose = PriorPose2(
-        Z=FullNormal(
-            mu=np.asarray([0.0, 0.1, 0.2]), cov=np.diag([0.2, 0.3, 0.4])
-        )
+        Z=FullNormal(mu=np.asarray([0.0, 0.1, 0.2]), cov=np.diag([0.2, 0.3, 0.4]))
     )
     dumped = pose.dumps()
     assert (
@@ -36,9 +34,7 @@ def test_factor_priorpose2():
 
 def test_factor_pose2pose2():
     pose = Pose2Pose2(
-        Z=FullNormal(
-            mu=np.array([0.0, 0.1, 0.2]), cov=np.diag([0.2, 0.3, 0.4])
-        )
+        Z=FullNormal(mu=np.array([0.0, 0.1, 0.2]), cov=np.diag([0.2, 0.3, 0.4]))
     )
     dumped = pose.dumps()
     assert (

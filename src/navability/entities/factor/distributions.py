@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from marshmallow import EXCLUDE, Schema, fields, post_load
 
 import numpy
+from marshmallow import EXCLUDE, Schema, fields, post_load
 
 
 class Distribution:
@@ -14,10 +14,9 @@ class Distribution:
     def dumpsPacked(self):
         raise Exception(f"'dumpsPacked' has not been implemented in {str(type(self))}")
 
+
 class FullNormalSchema(Schema):
-    _type = fields.String(
-        default="IncrementalInference.PackedFullNormal"
-    )
+    _type = fields.String(default="IncrementalInference.PackedFullNormal")
     mu = fields.List(fields.Float)
     cov = fields.Method("get_cov", "set_cov", required=True)
 
@@ -25,7 +24,7 @@ class FullNormalSchema(Schema):
         return obj.cov.flatten().tolist()
 
     def set_cov(self, obj):
-        raise Exception("Deserialization not supported yet.") #obj.cov.reshape(3,3)?
+        raise Exception("Deserialization not supported yet.")  # obj.cov.reshape(3,3)?
 
     class Meta:
         ordered = True
@@ -35,13 +34,12 @@ class FullNormalSchema(Schema):
     def marshal(self, data, **kwargs):
         return FullNormal(**data)
 
+
 @dataclass
 class FullNormal(Distribution):
     _type: str = "IncrementalInference.PackedFullNormal"
     mu: numpy.ndarray = field(default_factory=lambda: numpy.zeros(3))
-    cov: numpy.ndarray = field(
-        default_factory=lambda: numpy.diag([0.1, 0.1, 0.1])
-    )
+    cov: numpy.ndarray = field(default_factory=lambda: numpy.diag([0.1, 0.1, 0.1]))
 
     def dumps(self):
         return FullNormalSchema().dumps(self)

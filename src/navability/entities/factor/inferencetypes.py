@@ -102,9 +102,7 @@ class Pose2AprilTag4CornersSchema(Schema):
     K = fields.List(fields.Float, required=True)
     taglength = fields.Float(required=True)
     id = fields.Int(required=True)
-    _type = fields.String(
-        default="/application/JuliaLang/PackedPose2AprilTag4Corners"
-    )
+    _type = fields.String(default="/application/JuliaLang/PackedPose2AprilTag4Corners")
 
     class Meta:
         ordered = True

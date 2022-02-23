@@ -103,7 +103,7 @@ class FactorSummarySchema(Schema):
 
 @dataclass()
 class FactorData:
-    fnc: Dict  # InferenceType  # {"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"}  # noqa: E501, B950
+    fnc: Dict
     eliminated: bool = False
     potentialused: bool = False
     edgeIDs: List[int] = field(default_factory=lambda: [])
@@ -153,7 +153,7 @@ class Factor:
     label: str
     fnctype: str
     variableOrderSymbols: List[str]
-    data: FactorData  # '{"eliminated":false,"potentialused":false,"edgeIDs":[],"fnc":{"datastr":"FullNormal(\\ndim: 3\\nμ: [10.0, 0.0, 1.0471975511965976]\\nΣ: [0.010000000000000002 0.0 0.0; 0.0 0.010000000000000002 0.0; 0.0 0.0 0.010000000000000002]\\n)\\n"},"multihypo":[],"certainhypo":[1,2],"nullhypo":0.0,"solveInProgress":0,"inflation":5.0}'  # noqa: E501, B950
+    data: FactorData
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: str = datetime.utcnow()
     nstime: int = 0
@@ -211,7 +211,7 @@ class FactorSchema(Schema):
         return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_data(self, obj):
-        return obj.data.dumps()
+        return obj.data.dump()
 
     def set_data(self, ob):
         raise Exception("Deserialization not supported yet.")

@@ -78,7 +78,7 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
             ["x0"],
             FactorData(
                 fnc=PriorPose2(
-                    z=FullNormal(mean=np.zeros(3), covariance=np.diag([0.1, 0.1, 0.1]))
+                    Z=FullNormal(mu=np.zeros(3), cov=np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
         ),
@@ -88,9 +88,7 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
             ["x0", "x1"],
             FactorData(
                 fnc=Pose2Pose2(
-                    z=FullNormal(
-                        mean=[1, 1, np.pi / 3], covariance=np.diag([0.1, 0.1, 0.1])
-                    )
+                    Z=FullNormal(mu=[1, 1, np.pi / 3], cov=np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
         ),
@@ -100,9 +98,7 @@ def example_graph(navability_https_client: NavAbilityClient, client: Client):
             ["x1", "x2"],
             FactorData(
                 fnc=Pose2Pose2(
-                    z=FullNormal(
-                        mean=[1, 1, np.pi / 3], covariance=np.diag([0.1, 0.1, 0.1])
-                    )
+                    Z=FullNormal(mu=[1, 1, np.pi / 3], cov=np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
         ),
@@ -127,5 +123,5 @@ def example_graph_solved(example_graph):
     navability_https_client, client, variables, factors = example_graph
     logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
     requestId = solveSession(navability_https_client, client)
-    waitForCompletion(navability_https_client, [requestId])
+    waitForCompletion(navability_https_client, [requestId], maxSeconds=180)
     return (navability_https_client, client, variables, factors)

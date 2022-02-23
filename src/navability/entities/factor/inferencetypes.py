@@ -17,10 +17,10 @@ class InferenceType:
 
 @dataclass
 class PriorPose2(InferenceType):
-    z: Distribution
+    Z: Distribution
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}(z={str(self.z)})>"
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
 
     def dump(self):
         return PriorPose2Schema().dump(self)
@@ -32,15 +32,15 @@ class PriorPose2(InferenceType):
 
 
 class PriorPose2Schema(Schema):
-    z = fields.Method("get_packed", "set_packed", data_key="str", required=True)
+    Z = fields.Method("get_Z", "set_Z", required=True)
 
     class Meta:
         ordered = True
 
-    def get_packed(self, obj):
-        return obj.z.dumpsPacked()
+    def get_Z(self, obj):
+        return obj.Z.dump()
 
-    def set_packed(self, obj):
+    def set_Z(self, obj):
         raise Exception("This has not been implemented yet.")
 
     # @post_load
@@ -50,10 +50,10 @@ class PriorPose2Schema(Schema):
 
 @dataclass
 class Pose2Pose2(InferenceType):
-    z: Distribution
+    Z: Distribution
 
     def __repr__(self):
-        return f"<{self.__class__.__name__}(z={str(self.z)})>"
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
 
     def dump(self):
         return Pose2Pose2Schema().dump(self)
@@ -65,12 +65,12 @@ class Pose2Pose2(InferenceType):
 
 
 class Pose2Pose2Schema(Schema):
-    datastr = fields.Method("get_packed", "set_packed", required=True)
+    Z = fields.Method("get_Z", "set_Z", required=True)
 
-    def get_packed(self, obj):
-        return obj.z.dumpsPacked()
+    def get_Z(self, obj):
+        return obj.Z.dump()
 
-    def set_packed(self, obj):
+    def set_Z(self, obj):
         raise Exception("This has not been implemented yet.")
 
     @post_load
@@ -85,7 +85,7 @@ class Pose2AprilTag4Corners(InferenceType):
     K: np.ndarray
     taglength: float
     id: int
-    mimeType: str = "/application/JuliaLang/PackedPose2AprilTag4Corners"
+    _type: str = "/application/JuliaLang/PackedPose2AprilTag4Corners"
 
     def dump(self):
         return Pose2AprilTag4CornersSchema().dump(self)
@@ -102,7 +102,7 @@ class Pose2AprilTag4CornersSchema(Schema):
     K = fields.List(fields.Float, required=True)
     taglength = fields.Float(required=True)
     id = fields.Int(required=True)
-    mimeType = fields.String(
+    _type = fields.String(
         default="/application/JuliaLang/PackedPose2AprilTag4Corners"
     )
 

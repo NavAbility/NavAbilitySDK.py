@@ -1,4 +1,3 @@
-import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List
@@ -35,7 +34,7 @@ class FactorSkeleton:
 class FactorSkeletonSchema(Schema):
     label = fields.Str(required=True)
     variableOrderSymbols = fields.List(
-        fields.Str(), data_key="_variableOrderSymbols", required=True
+        fields.Str, data_key="_variableOrderSymbols", required=True
     )
     tags = fields.List(fields.Str(), required=True)
 
@@ -74,7 +73,9 @@ class FactorSummary:
 
 class FactorSummarySchema(Schema):
     label = fields.Str(required=True)
-    variableOrderSymbols: fields.Str(data_key="_variableOrderSymbols", many=True)
+    variableOrderSymbols = fields.List(
+        fields.Str, data_key="_variableOrderSymbols", required=True
+    )
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     _version = fields.Str(required=True)
@@ -181,7 +182,9 @@ class Factor:
 class FactorSchema(Schema):
     label = fields.Str(required=True)
     _version = fields.Str(required=True)
-    _variableOrderSymbols = fields.Method("get_variableOrderSymbols", required=True)
+    variableOrderSymbols = fields.List(
+        fields.Str, data_key="_variableOrderSymbols", required=True
+    )
     data = fields.Method("get_data", "set_data", required=True)
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
@@ -192,10 +195,6 @@ class FactorSchema(Schema):
     class Meta:
         ordered = True
         unknown = EXCLUDE  # Note: This is because of _version, remote and fix later.
-
-    def get_variableOrderSymbols(self, obj):
-        # TODO: Switch this out to a real embedded object, no need for strings.
-        return json.dumps(obj.variableOrderSymbols)
 
     def get_timestamp(self, obj):
         # Return a robust timestamp

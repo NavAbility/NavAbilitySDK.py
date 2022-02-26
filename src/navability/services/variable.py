@@ -34,40 +34,40 @@ DETAIL_SCHEMA = {
 logger = logging.getLogger(__name__)
 
 
-def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
-    return navAbilityClient.mutate(
+async def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
+    result = await navAbilityClient.mutate(
         MutationOptions(
             gql(GQL_ADDVARIABLE),
             {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
         )
-    )["addVariable"]
+    )
+    return result["addVariable"]
 
 
-def listVariables(
+async def listVariables(
     navAbilityClient: NavAbilityClient,
     client: Client,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[str]:
-    return [
-        v.label
-        for v in getVariables(
-            navAbilityClient,
-            client,
-            detail=QueryDetail.SKELETON,
-            regexFilter=regexFilter,
-            tags=tags,
-            solvable=solvable,
-        )
-    ]
+    variables = await getVariables(
+        navAbilityClient,
+        client,
+        detail=QueryDetail.SKELETON,
+        regexFilter=regexFilter,
+        tags=tags,
+        solvable=solvable,
+    )
+    result = [v.label for v in variables]
+    return result
 
 
 # Alias
 ls = listVariables
 
 
-def getVariables(
+async def getVariables(
     navAbilityClient: NavAbilityClient,
     client: Client,
     detail: QueryDetail = QueryDetail.SKELETON,
@@ -86,7 +86,7 @@ def getVariables(
         "fields_full": detail == QueryDetail.FULL,
     }
     logger.debug(f"Query params: {params}")
-    res = navAbilityClient.query(
+    res = await navAbilityClient.query(
         QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLES), params)
     )
     logger.debug(f"Query result: {res}")
@@ -116,11 +116,11 @@ def getVariables(
     ]
 
 
-def getVariable(navAbilityClient: NavAbilityClient, client: Client, label: str):
+async def getVariable(navAbilityClient: NavAbilityClient, client: Client, label: str):
     params = client.dump()
     params["label"] = label
     logger.debug(f"Query params: {params}")
-    res = navAbilityClient.query(
+    res = await navAbilityClient.query(
         QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLE), params)
     )
     logger.debug(f"Query result: {res}")

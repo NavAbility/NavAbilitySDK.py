@@ -34,40 +34,39 @@ DETAIL_SCHEMA = {
 logger = logging.getLogger(__name__)
 
 
-def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
-    return navAbilityClient.mutate(
+async def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
+    result = await navAbilityClient.mutate(
         MutationOptions(
             gql(GQL_ADDFACTOR),
             {"factor": {"client": client.dump(), "packedData": f.dumps()}},
         )
-    )["addFactor"]
+    )
+    return result["addFactor"]
 
 
-def listFactors(
+async def listFactors(
     navAbilityClient: NavAbilityClient,
     client: Client,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[str]:
-    return [
-        v.label
-        for v in getFactors(
-            navAbilityClient,
-            client,
-            detail=QueryDetail.SKELETON,
-            regexFilter=regexFilter,
-            tags=tags,
-            solvable=solvable,
-        )
-    ]
+    factors = await getFactors(
+        navAbilityClient,
+        client,
+        detail=QueryDetail.SKELETON,
+        regexFilter=regexFilter,
+        tags=tags,
+        solvable=solvable,
+    )
+    return [f.label for f in factors]
 
 
 # Alias
 lsf = listFactors
 
 
-def getFactors(
+async def getFactors(
     navAbilityClient: NavAbilityClient,
     client: Client,
     detail: QueryDetail = QueryDetail.SKELETON,
@@ -86,7 +85,7 @@ def getFactors(
         "fields_full": detail == QueryDetail.FULL,
     }
     logger.debug(f"Query params: {params}")
-    res = navAbilityClient.query(
+    res = await navAbilityClient.query(
         QueryOptions(gql(GQL_FRAGMENT_FACTORS + GQL_GETFACTORS), params)
     )
     logger.debug(f"Query result: {res}")
@@ -116,11 +115,11 @@ def getFactors(
     ]
 
 
-def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
+async def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
     params = client.dump()
     params["label"] = label
     logger.debug(f"Query params: {params}")
-    res = navAbilityClient.query(
+    res = await navAbilityClient.query(
         QueryOptions(gql(GQL_FRAGMENT_FACTORS + GQL_GETFACTOR), params)
     )
     logger.debug(f"Query result: {res}")

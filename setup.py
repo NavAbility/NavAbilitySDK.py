@@ -36,5 +36,6 @@ Note that this SDK and the related API are still in development. Please let us k
         "black==21.9b0",
         "flake8==4.0.1",
         "pytest==6.2.5",
+        "pytest-asyncio==0.18.1",
     ],
 )

@@ -5,7 +5,7 @@ from navability.entities import NavAbilityClient
 from navability.services import getStatusLatest
 
 
-def waitForCompletion(
+async def waitForCompletion(
     navAbilityClient: NavAbilityClient,
     requestIds: List[str],
     maxSeconds: int = 60,
@@ -21,13 +21,13 @@ def waitForCompletion(
             Defaults to "Complete".
     """
     wait_time = maxSeconds
-    while any(
-        [
-            getStatusLatest(navAbilityClient, res).state != expectedStatus
-            for res in requestIds
-        ]
-    ):
+    tasksInProgress = True
+    while tasksInProgress:
         time.sleep(2)
         wait_time -= 2
         if wait_time <= 0:
             raise Exception(exceptionMessage)
+        tasksInProgress = False
+        for requestId in requestIds:
+            result = await getStatusLatest(navAbilityClient, requestId)
+            tasksInProgress |= result.state != expectedStatus

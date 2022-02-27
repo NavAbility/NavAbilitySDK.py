@@ -30,24 +30,38 @@ class NavAbilityClient:
 class NavAbilityWebsocketClient(NavAbilityClient):
     def __init__(self, url: str = "wss://api.d1.navability.io/graphql") -> None:
         super().__init__()
-        transport = WebsocketsTransport(url=url)
-        self.client = GQLCLient(transport=transport, fetch_schema_from_transport=True)
+        self.transport = WebsocketsTransport(url=url)
 
-    def query(self, options: QueryOptions):
-        return self.client.execute(options.query, options.variables)
+    async def query(self, options: QueryOptions):
+        async with GQLCLient(
+            transport=self.transport, fetch_schema_from_transport=False
+        ) as client:
+            result = await client.execute(options.query, options.variables)
+            return result
 
-    def mutate(self, options: MutationOptions):
-        return self.client.execute(options.mutation, options.variables)
+    async def mutate(self, options: MutationOptions):
+        async with GQLCLient(
+            transport=self.transport, fetch_schema_from_transport=False
+        ) as client:
+            result = await client.execute(options.mutation, options.variables)
+            return result
 
 
 class NavAbilityHttpsClient(NavAbilityClient):
     def __init__(self, url: str = "https://api.d1.navability.io") -> None:
         super().__init__()
-        transport = AIOHTTPTransport(url=url)
-        self.client = GQLCLient(transport=transport, fetch_schema_from_transport=True)
+        self.transport = AIOHTTPTransport(url=url)
 
-    def query(self, options: QueryOptions):
-        return self.client.execute(options.query, options.variables)
+    async def query(self, options: QueryOptions):
+        async with GQLCLient(
+            transport=self.transport, fetch_schema_from_transport=True
+        ) as client:
+            result = await client.execute(options.query, options.variables)
+            return result
 
-    def mutate(self, options: MutationOptions):
-        return self.client.execute(options.mutation, options.variables)
+    async def mutate(self, options: MutationOptions):
+        async with GQLCLient(
+            transport=self.transport, fetch_schema_from_transport=True
+        ) as client:
+            result = await client.execute(options.mutation, options.variables)
+            return result

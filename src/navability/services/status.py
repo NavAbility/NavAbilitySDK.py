@@ -5,16 +5,16 @@ from navability.entities.navabilityclient import NavAbilityClient, QueryOptions
 from navability.entities.statusmessage import StatusMessageSchema
 
 
-def getStatusMessages(navAbilityClient: NavAbilityClient, id: str):
-    statusMessages = navAbilityClient.query(
+async def getStatusMessages(navAbilityClient: NavAbilityClient, id: str):
+    statusMessages = await navAbilityClient.query(
         QueryOptions(gql(GQL_GETSTATUSMESSAGES), {"id": id})
     )
     schema = StatusMessageSchema(many=True)
     return schema.load(statusMessages["statusMessages"])
 
 
-def getStatusLatest(navAbilityClient: NavAbilityClient, id: str):
-    statusMessages = navAbilityClient.query(
+async def getStatusLatest(navAbilityClient: NavAbilityClient, id: str):
+    statusMessages = await navAbilityClient.query(
         QueryOptions(gql(GQL_GETSTATUSLATEST), {"id": id})
     )
     schema = StatusMessageSchema()

@@ -16,16 +16,20 @@ pip install navabilitysdk
 - **Why is the SDK camel-cased?** True, Python code should be snake-cased. This was a design decision to align all the SDKS. All the functions and fields should look the same, so you can easily switch from one language to another without having to read documentation. This may change in the future as we grow the SDKs.
 - **Which user should I use?** The Guest user is open and free for everyone to use. We recommend testing with this user, because it doesn't require any authentication. Note though, that the data is cleared on a regular basis, and that everyone can see your test data (all Guest users are created equal), so don't put anything in there that that is sensitive.
 - **I have sensitive data, how do I create a user?** Great question, the NavAbility services completely isolate data per user and you can create a user at any point. At the moment we create users on demand because the services are changing as we develop them, and we want to make sure we can let everyone know as they do. Send us an email at [info@navability.io](mailto:info@navability.io) and we'll create a user for you right away.
+- **Why Asyncio?** We're working on integrating these into [Example Jupyter Notebooks](https://github.com/NavAbility/BinderNotebooks) which only support asynchronous GQL calls in the `gql` library. This design decision will be standardized in all our SDKs in the next release. Overally it's been a good call, and we'll expand on more asynchronous functionality as these SDKs develop.  
 - Otherwise for any questions, comments, or feedback please feel free to email us at [info@navability.io](mailto:info@navability.io) or write an issue on the repo.  
 # Example
 
 This script will create variables and factors, list the graph, and solve the session for SLAM estimates.
 
-NOTE: You'll need numpy to run it.
+> NOTES:
+> * You'll need to start Python using `python -m asyncio` to support the `await` command.
+> * You'll need numpy to run the example.
 
 ```python
 from uuid import uuid4
 import numpy as np
+import json
 from navability.entities import (
     Client,
     Factor,
@@ -96,23 +100,34 @@ factors = [
     ]
 
 # Get the result IDs so we can check on their completion
-result_ids = [addVariable(navability_client, client, v)["addVariable"] for v in variables] + [addFactor(navability_client, client, f)["addFactor"] for f in factors]
+print("Adding variables and factors..\r\n")
+variable_results = [await addVariable(navability_client, client, v) for v in variables]
+factor_results = [await addFactor(navability_client, client, f) for f in factors]
+result_ids = variable_results + factor_results
 
 # Wait for them to be inserted if they havent already
-waitForCompletion(navability_client, result_ids, maxSeconds=60)
+print("Waiting for them to be loaded..\r\n")
+await waitForCompletion(navability_client, result_ids, maxSeconds=120)
 
 # Interrogate the graph
 # Get the variables
-ls(navability_client, client)
+print("Listing all the variables and factors in the session:\r\n")
+vs = await ls(navability_client, client)
+print("Variables: " + json.dumps(vs, indent=4, sort_keys=True))
 # Get the factors
-lsf(navability_client, client)
+fs = await lsf(navability_client, client)
+print("Factors: " + json.dumps(fs, indent=4, sort_keys=True))
 # There's some pretty neat functionality with searching, but we'll save that for more comprehensive tutorials
 
 # Request a SLAM multimodal solve and wait for the response
 # Note: Guest sessions solve a little slower than usual because they're using some small hardware we put down for community use. Feel free to reach out if you want faster solving.
-requestId = solveSession(navability_client, client)["solveSession"]
-waitForCompletion(navability_client, [requestId], maxSeconds=120)
+print("Requesting that the graph be solved to determine the positions of the variables (poses)...")
+request_id = await solveSession(navability_client, client)
+await waitForCompletion(navability_client, [request_id], maxSeconds=120)
 
 # Get the solves positions of the variables (these are stores in the PPEs structure)
-estimates = {v.label: getVariable(navability_client, client, v.label).ppes['default'].suggested for v in variables}
+print("Getting the estimates of the variables (poses)...")
+estimates = {v.label: (await getVariable(navability_client, client, v.label)).ppes['default'].suggested for v in variables}
+print("Solved estimates for the positions:\r\n")
+print(json.dumps(estimates, indent=4, sort_keys=True))
 ```

@@ -22,7 +22,7 @@ pip install navabilitysdk
 
 This script will create variables and factors, list the graph, and solve the session for SLAM estimates.
 
-> NOTES: 
+> NOTES:
 > * You'll need to start Python using `python -m asyncio` to support the `await` command.
 > * You'll need numpy to run the example.
 

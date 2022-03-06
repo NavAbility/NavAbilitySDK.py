@@ -65,7 +65,7 @@ def client(env_config) -> Client:
 
 
 @pytest.fixture(scope="module")
-async def example_graph(navability_https_client: NavAbilityClient, client: Client):
+async def example_2d_graph(navability_https_client: NavAbilityClient, client: Client):
     variables = [
         Variable("x0", VariableType.Pose2.value),
         Variable("x1", VariableType.Pose2.value),
@@ -110,17 +110,23 @@ async def example_graph(navability_https_client: NavAbilityClient, client: Clien
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
-    await waitForCompletion(navability_https_client, result_ids, maxSeconds=120)
+    # Await for only Complete messages, otherwise fail.
+    await waitForCompletion(
+        navability_https_client,
+        result_ids,
+        expectedStatuses=["Complete"],
+        maxSeconds=120,
+    )
 
     return (navability_https_client, client, variables, factors)
 
 
 @pytest.fixture(scope="module")
-async def example_graph_solved(example_graph):
+async def example_2d_graph_solved(example_2d_graph):
     """Get the graph after it has been solved.
     NOTE this changes the graph, so tests need to be defensive.
     """
-    navability_https_client, client, variables, factors = example_graph
+    navability_https_client, client, variables, factors = example_2d_graph
     logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
     requestId = await solveSession(navability_https_client, client)
     await waitForCompletion(navability_https_client, [requestId], maxSeconds=180)

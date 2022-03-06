@@ -7,20 +7,20 @@ from navability.services import lsf  # getFactor
 
 
 @pytest.mark.asyncio
-async def test_lsf(example_graph):
-    navability_client, client, variables, factors = example_graph
+async def test_lsf(example_2d_graph):
+    navability_client, client, variables, factors = example_2d_graph
     assert set(await lsf(navability_client, client)) == set([f.label for f in factors])
 
 
 @pytest.mark.asyncio
-async def test_lsf_no_session(example_graph):
-    navability_client, client, variables, factors = example_graph
+async def test_lsf_no_session(example_2d_graph):
+    navability_client, client, variables, factors = example_2d_graph
     noSessionClient = Client(client.userId, client.robotId, "DoesntExist")
     assert await lsf(navability_client, noSessionClient) == []
 
 
-# def test_getFactor(example_graph):
-#     navability_client, client, variables, factors = example_graph
+# def test_getFactor(example_2d_graph):
+#     navability_client, client, variables, factors = example_2d_graph
 #     assert (
 #         getFactor(navability_client, client, factors[0].label).label
 #         == variables[0].label

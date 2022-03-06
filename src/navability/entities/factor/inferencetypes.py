@@ -16,22 +16,22 @@ class InferenceType:
 
 
 @dataclass
-class PriorPose2(InferenceType):
+class Prior(InferenceType):
     Z: Distribution
 
     def __repr__(self):
         return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
 
     def dump(self):
-        return PriorPose2Schema().dump(self)
+        return ZSchema().dump(self)
 
     def dumps(self):
-        return PriorPose2Schema().dumps(self)
+        return ZSchema().dumps(self)
 
     # TODO: Deserializing this.
 
 
-class PriorPose2Schema(Schema):
+class ZSchema(Schema):
     Z = fields.Method("get_Z", "set_Z", required=True)
 
     class Meta:
@@ -49,6 +49,38 @@ class PriorPose2Schema(Schema):
 
 
 @dataclass
+class LinearRelative(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+@dataclass
+class PriorPose2(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+@dataclass
 class Pose2Pose2(InferenceType):
     Z: Distribution
 
@@ -56,26 +88,12 @@ class Pose2Pose2(InferenceType):
         return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
 
     def dump(self):
-        return Pose2Pose2Schema().dump(self)
+        return ZSchema().dump(self)
 
     def dumps(self):
-        return Pose2Pose2Schema().dumps(self)
+        return ZSchema().dumps(self)
 
     # TODO: Deserializing this.
-
-
-class Pose2Pose2Schema(Schema):
-    Z = fields.Method("get_Z", "set_Z", required=True)
-
-    def get_Z(self, obj):
-        return obj.Z.dump()
-
-    def set_Z(self, obj):
-        raise Exception("This has not been implemented yet.")
-
-    @post_load
-    def marshal(self, data, **kwargs):
-        return PriorPose2(**data)
 
 
 @dataclass

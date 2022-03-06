@@ -10,27 +10,39 @@ from navability.common.versions import payload_version
 @dataclass()
 class VariableNodeData:
     variableType: str
-    vecval: List[float] = field(default_factory=lambda: list(numpy.zeros(3 * 100)))
-    dimval: int = 3
-    vecbw: List[float] = field(default_factory=lambda: list(numpy.zeros(3)))
-    dimbw: int = 3
+    solveKey: str
+    dims: int
+    vecval: List[float] = None
+    dimval: int = 0
+    vecbw: List[float] = None
+    dimbw: int = 0
     BayesNetOutVertIDs: List[int] = field(default_factory=list)
-    dimIDs: List[int] = field(default_factory=lambda: [0, 1, 2])
-    dims: int = 3
+    dimIDs: List[int] = None
     eliminated: bool = False
     BayesNetVertID: str = "_null"
     separator: List[int] = field(default_factory=list)
     initialized: bool = False
-    infoPerCoord: List[int] = field(default_factory=lambda: list(numpy.zeros(3)))
+    infoPerCoord: List[int] = None
     ismargin: bool = False
     dontmargin: bool = False
     solveInProgress: int = 0
     solvedCount: int = 0
-    solveKey: str = "default"
     _version: str = payload_version
 
+    def __post_init__(self):
+        # Initializes all the fields dependent on dims
+        self.vecval = list(numpy.zeros(self.dims * 100))
+        self.dimval = self.dims
+        self.vecbw = list(numpy.zeros(self.dims))
+        self.dimbw = self.dims
+        self.dimIDs = list(range(0, self.dims))
+        self.infoPerCoord = list(numpy.zeros(self.dims))
+
     def __repr__(self):
-        return f"<VariableNodeData(solveKey={self.solveKey})>"
+        return (
+            f"<VariableNodeData(variableType={self.variableType}, "
+            "solveKey={self.solveKey}, dims={self.dims})>"
+        )
 
     def dump(self):
         return VariableNodeDataSchema().dump(self)

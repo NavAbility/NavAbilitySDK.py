@@ -15,6 +15,36 @@ class Distribution:
         raise Exception(f"'dumpsPacked' has not been implemented in {str(type(self))}")
 
 
+class NormalSchema(Schema):
+    _type = fields.String(default="IncrementalInference.PackedNormal")
+    mu = fields.Float()
+    sigma = fields.Float()
+
+    @post_load
+    def marshal(self, data, **kwargs):
+        return Normal(**data)
+
+    class Meta:
+        ordered = True
+
+
+@dataclass
+class Normal(Distribution):
+    mu: float
+    sigma: float
+    _type: str = "IncrementalInference.PackedNormal"
+
+    def dumps(self):
+        return NormalSchema().dumps(self)
+
+    def dump(self):
+        return NormalSchema().dump(self)
+
+    @staticmethod
+    def load(data):
+        return NormalSchema().load(data)
+
+
 class FullNormalSchema(Schema):
     _type = fields.String(default="IncrementalInference.PackedFullNormal")
     mu = fields.List(fields.Float)
@@ -37,9 +67,10 @@ class FullNormalSchema(Schema):
 
 @dataclass
 class FullNormal(Distribution):
-    _type: str = "IncrementalInference.PackedFullNormal"
+    # TODO: Remove the default initializers.
     mu: numpy.ndarray = field(default_factory=lambda: numpy.zeros(3))
     cov: numpy.ndarray = field(default_factory=lambda: numpy.diag([0.1, 0.1, 0.1]))
+    _type: str = "IncrementalInference.PackedFullNormal"
 
     def dumps(self):
         return FullNormalSchema().dumps(self)

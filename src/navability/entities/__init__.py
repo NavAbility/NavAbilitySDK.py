@@ -1,11 +1,21 @@
 # flake8: noqa: F401
 from .client import Client
-from .factor.distributions import Distribution, FullNormal
+from .factor.distributions import (
+    Categorical,
+    Distribution,
+    FullNormal,
+    Normal,
+    Rayleigh,
+    Uniform,
+)
 from .factor.factor import Factor, FactorData, FactorSkeleton, FactorSummary
 from .factor.inferencetypes import (
     InferenceType,
+    LinearRelative,
+    Mixture,
     Pose2AprilTag4Corners,
     Pose2Pose2,
+    Prior,
     PriorPose2,
 )
 from .navabilityclient import (

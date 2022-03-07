@@ -6,8 +6,18 @@ from navability.services import getVariable
 
 
 @pytest.mark.asyncio
-async def test_solveSession(example_graph_solved):
-    navability_client, client, variables, factors = example_graph_solved
+async def test_solveSession_1d(example_1d_graph_solved):
+    navability_client, client, variables, factors = example_1d_graph_solved
+    ppes = {
+        v: (await getVariable(navability_client, client, v)).ppes["default"]
+        for v in vars
+    }
+    assert len(ppes) == 4
+
+
+@pytest.mark.asyncio
+async def test_solveSession_2d(example_2d_graph_solved):
+    navability_client, client, variables, factors = example_2d_graph_solved
     v = await getVariable(navability_client, client, variables[0].label)
     assert "default" in v.ppes
     assert v.ppes["default"].solveKey == "default"

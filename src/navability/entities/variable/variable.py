@@ -16,8 +16,26 @@ from navability.entities.variable.variablenodedata import (
 
 
 class VariableType(Enum):
+    """Variable Type enum, not used in classes until we resolve the
+    larger VariableNodeData issues.
+    """
+
     Point2 = "RoME.Point2"
     Pose2 = "RoME.Pose2"
+    ContinuousScalar = "IncrementalInference.ContinuousScalar"
+    # TBD - https://github.com/JuliaRobotics/Caesar.jl/discussions/810
+    Pose1 = "IncrementalInference.ContinuousScalar"
+
+
+def _getVariableNodeData(variableType: str, solveKey: str):
+    # Not pretty but temporary because I believe we're going to remove
+    # VariableNodeData initialization
+    if variableType == "RoME.Point2":
+        return VariableNodeData(variableType, solveKey, 2)
+    if variableType == "RoME.Pose2":
+        return VariableNodeData(variableType, solveKey, 3)
+    if variableType == "IncrementalInference.ContinuousScalar":
+        return VariableNodeData(variableType, solveKey, 1)
 
 
 @dataclass()
@@ -119,8 +137,11 @@ class Variable:
     _id: int = None
 
     def __post_init__(self):
+        pass
         if self.solverData == {}:
-            self.solverData["default"] = VariableNodeData(self.variableType)
+            self.solverData["default"] = _getVariableNodeData(
+                self.variableType, "default"
+            )
 
     def __repr__(self):
         return (

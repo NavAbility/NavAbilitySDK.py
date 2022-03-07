@@ -2,14 +2,14 @@ import time
 from typing import List
 
 from navability.entities import NavAbilityClient
-from navability.services import getStatusLatest
+from navability.services import getStatusesLatest
 
 
 async def waitForCompletion(
     navAbilityClient: NavAbilityClient,
     requestIds: List[str],
     maxSeconds: int = 60,
-    expectedStatus: str = "Complete",
+    expectedStatuses: List[str] = None,
     exceptionMessage: str = "Requests did not complete in time",
 ):
     """Wait for the requests to complete, poll until done.
@@ -20,14 +20,17 @@ async def waitForCompletion(
         expectedStatus (str, optional): Expected status message per request.
             Defaults to "Complete".
     """
+    if expectedStatuses is None:
+        expectedStatuses = ["Complete", "Failed"]
     wait_time = maxSeconds
-    tasksInProgress = True
-    while tasksInProgress:
-        time.sleep(2)
-        wait_time -= 2
-        if wait_time <= 0:
-            raise Exception(exceptionMessage)
-        tasksInProgress = False
-        for requestId in requestIds:
-            result = await getStatusLatest(navAbilityClient, requestId)
-            tasksInProgress |= result.state != expectedStatus
+    tasksComplete = False
+    while not tasksComplete:
+        statuses = (await getStatusesLatest(navAbilityClient, requestIds)).values()
+        tasksComplete = all(s.state in expectedStatuses for s in statuses)
+        if tasksComplete:
+            break
+        else:
+            time.sleep(2)
+            wait_time -= 2
+            if wait_time <= 0:
+                raise Exception(exceptionMessage)

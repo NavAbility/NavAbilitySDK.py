@@ -1,5 +1,6 @@
 import logging
 import os
+from collections import OrderedDict
 from uuid import uuid4
 
 import numpy as np
@@ -10,11 +11,16 @@ from navability.entities import (
     Factor,
     FactorData,
     FullNormal,
+    LinearRelative,
+    Mixture,
     NavAbilityClient,
     NavAbilityHttpsClient,
     NavAbilityWebsocketClient,
+    Normal,
     Pose2Pose2,
+    Prior,
     PriorPose2,
+    Uniform,
     Variable,
     VariableType,
 )
@@ -62,6 +68,78 @@ def navability_https_client(env_config) -> NavAbilityClient:
 @pytest.fixture(scope="module")
 def client(env_config) -> Client:
     return Client("Guest", "PySDKAutomation", "Session_" + str(uuid4())[0:8])
+
+
+@pytest.fixture(scope="module")
+async def example_1d_graph(navability_https_client: NavAbilityClient, client: Client):
+    variables = [
+        Variable("x0", VariableType.ContinuousScalar.value),
+        Variable("x1", VariableType.ContinuousScalar.value),
+        Variable("x2", VariableType.ContinuousScalar.value),
+        Variable("x3", VariableType.ContinuousScalar.value),
+    ]
+    factors = [
+        Factor("x0f1", "Prior", ["x0"], FactorData(fnc=Prior(Z=Normal(0, 1)).dump())),
+        Factor(
+            "x0x1f1",
+            "LinearRelative",
+            ["x0", "x1"],
+            FactorData(fnc=LinearRelative(Normal(10, 0.1)).dump()),
+        ),
+        Factor(
+            "x1x2f1",
+            "Mixture",
+            ["x1", "x2"],
+            FactorData(
+                fnc=Mixture(
+                    LinearRelative,
+                    OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))]),
+                    [0.4, 0.6],
+                    2,
+                ).dump()
+            ),
+        ),
+        Factor(
+            "x2x3f1",
+            "LinearRelative",
+            ["x2", "x3"],
+            FactorData(fnc=LinearRelative(Normal(-50, 1)).dump()),
+        ),
+        Factor(
+            "x3x0f1",
+            "LinearRelative",
+            ["x3", "x0"],
+            FactorData(fnc=LinearRelative(Normal(40, 1)).dump()),
+        ),
+    ]
+    # Variables
+    result_ids = [
+        await addVariable(navability_https_client, client, v) for v in variables
+    ] + [await addFactor(navability_https_client, client, f) for f in factors]
+
+    logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
+
+    # Await for only Complete messages, otherwise fail.
+    await waitForCompletion(
+        navability_https_client,
+        result_ids,
+        expectedStatuses=["Complete"],
+        maxSeconds=120,
+    )
+
+    return (navability_https_client, client, variables, factors)
+
+
+@pytest.fixture(scope="module")
+async def example_1d_graph_solved(example_1d_graph):
+    """Get the graph after it has been solved.
+    NOTE this changes the graph, so tests need to be defensive.
+    """
+    navability_https_client, client, variables, factors = example_2d_graph
+    logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
+    requestId = await solveSession(navability_https_client, client)
+    await waitForCompletion(navability_https_client, [requestId], maxSeconds=180)
+    return (navability_https_client, client, variables, factors)
 
 
 @pytest.fixture(scope="module")

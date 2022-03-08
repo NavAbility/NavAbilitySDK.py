@@ -66,12 +66,19 @@ def navability_https_client(env_config) -> NavAbilityClient:
 
 
 @pytest.fixture(scope="module")
-def client(env_config) -> Client:
-    return Client("Guest", "PySDKAutomation", "Session_" + str(uuid4())[0:8])
+def client_1d(env_config) -> Client:
+    return Client("Guest", "PySDKAutomation", "Session_1D_" + str(uuid4())[0:8])
 
 
 @pytest.fixture(scope="module")
-async def example_1d_graph(navability_https_client: NavAbilityClient, client: Client):
+def client_2d(env_config) -> Client:
+    return Client("Guest", "PySDKAutomation", "Session_2D_" + str(uuid4())[0:8])
+
+
+@pytest.fixture(scope="module")
+async def example_1d_graph(
+    navability_https_client: NavAbilityClient, client_1d: Client
+):
     variables = [
         Variable("x0", VariableType.ContinuousScalar.value),
         Variable("x1", VariableType.ContinuousScalar.value),
@@ -114,8 +121,8 @@ async def example_1d_graph(navability_https_client: NavAbilityClient, client: Cl
     ]
     # Variables
     result_ids = [
-        await addVariable(navability_https_client, client, v) for v in variables
-    ] + [await addFactor(navability_https_client, client, f) for f in factors]
+        await addVariable(navability_https_client, client_1d, v) for v in variables
+    ] + [await addFactor(navability_https_client, client_1d, f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
@@ -127,7 +134,7 @@ async def example_1d_graph(navability_https_client: NavAbilityClient, client: Cl
         maxSeconds=120,
     )
 
-    return (navability_https_client, client, variables, factors)
+    return (navability_https_client, client_1d, variables, factors)
 
 
 @pytest.fixture(scope="module")
@@ -135,7 +142,7 @@ async def example_1d_graph_solved(example_1d_graph):
     """Get the graph after it has been solved.
     NOTE this changes the graph, so tests need to be defensive.
     """
-    navability_https_client, client, variables, factors = example_2d_graph
+    navability_https_client, client, variables, factors = example_1d_graph
     logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
     requestId = await solveSession(navability_https_client, client)
     await waitForCompletion(navability_https_client, [requestId], maxSeconds=180)
@@ -143,7 +150,9 @@ async def example_1d_graph_solved(example_1d_graph):
 
 
 @pytest.fixture(scope="module")
-async def example_2d_graph(navability_https_client: NavAbilityClient, client: Client):
+async def example_2d_graph(
+    navability_https_client: NavAbilityClient, client_2d: Client
+):
     variables = [
         Variable("x0", VariableType.Pose2.value),
         Variable("x1", VariableType.Pose2.value),
@@ -183,8 +192,8 @@ async def example_2d_graph(navability_https_client: NavAbilityClient, client: Cl
     ]
     # Variables
     result_ids = [
-        await addVariable(navability_https_client, client, v) for v in variables
-    ] + [await addFactor(navability_https_client, client, f) for f in factors]
+        await addVariable(navability_https_client, client_2d, v) for v in variables
+    ] + [await addFactor(navability_https_client, client_2d, f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
@@ -196,7 +205,7 @@ async def example_2d_graph(navability_https_client: NavAbilityClient, client: Cl
         maxSeconds=120,
     )
 
-    return (navability_https_client, client, variables, factors)
+    return (navability_https_client, client_2d, variables, factors)
 
 
 @pytest.fixture(scope="module")

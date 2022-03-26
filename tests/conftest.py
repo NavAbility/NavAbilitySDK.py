@@ -17,8 +17,11 @@ from navability.entities import (
     NavAbilityHttpsClient,
     NavAbilityWebsocketClient,
     Normal,
+    Point2Point2Range,
+    Pose2Point2BearingRange,
     Pose2Pose2,
     Prior,
+    PriorPoint2,
     PriorPose2,
     Uniform,
     Variable,
@@ -86,7 +89,7 @@ async def example_1d_graph(
         Variable("x3", VariableType.ContinuousScalar.value),
     ]
     factors = [
-        Factor("x0f1", "Prior", ["x0"], FactorData(fnc=Prior(Z=Normal(0, 1)).dump())),
+        Factor("x0f1", "Prior", ["x0"], FactorData(fnc=Prior(Normal(0, 1)).dump())),
         Factor(
             "x0x1f1",
             "LinearRelative",
@@ -157,6 +160,7 @@ async def example_2d_graph(
         Variable("x0", VariableType.Pose2.value),
         Variable("x1", VariableType.Pose2.value),
         Variable("x2", VariableType.Pose2.value),
+        Variable("l0", VariableType.Point2.value),
     ]
     factors = [
         Factor(
@@ -165,7 +169,7 @@ async def example_2d_graph(
             ["x0"],
             FactorData(
                 fnc=PriorPose2(
-                    Z=FullNormal(mu=np.zeros(3), cov=np.diag([0.1, 0.1, 0.1]))
+                    FullNormal(np.zeros(3), np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
         ),
@@ -175,7 +179,7 @@ async def example_2d_graph(
             ["x0", "x1"],
             FactorData(
                 fnc=Pose2Pose2(
-                    Z=FullNormal(mu=[1, 1, np.pi / 3], cov=np.diag([0.1, 0.1, 0.1]))
+                    FullNormal([1, 1, np.pi / 3], np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
             ),
         ),
@@ -185,8 +189,33 @@ async def example_2d_graph(
             ["x1", "x2"],
             FactorData(
                 fnc=Pose2Pose2(
-                    Z=FullNormal(mu=[1, 1, np.pi / 3], cov=np.diag([0.1, 0.1, 0.1]))
+                    FullNormal([1, 1, np.pi / 3], np.diag([0.1, 0.1, 0.1]))
                 ).dump()  # This is a generator for a PriorPose2
+            ),
+        ),
+        # TODO: Improve problem setup in future.
+        Factor(
+            "l0f1",
+            "PriorPoint2",
+            ["l0"],
+            FactorData(
+                fnc=PriorPoint2(FullNormal(np.asarray([5, 0]), np.diag([2, 2]))).dump()
+            ),
+        ),
+        Factor(
+            "x0l0f1",
+            "Point2Point2Range",
+            ["x0", "l0"],
+            FactorData(fnc=Point2Point2Range(Normal(5, 0.1)).dump()),  # Range
+        ),
+        Factor(
+            "x0l0f2",
+            "Pose2Point2BearingRange",
+            ["x0", "l0"],
+            FactorData(
+                fnc=Pose2Point2BearingRange(
+                    Normal(0, 0.3), Normal(5, 0.1)  # Bearing, range
+                ).dump()
             ),
         ),
     ]

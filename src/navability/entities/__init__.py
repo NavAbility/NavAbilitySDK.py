@@ -13,9 +13,12 @@ from .factor.inferencetypes import (
     InferenceType,
     LinearRelative,
     Mixture,
+    Point2Point2Range,
     Pose2AprilTag4Corners,
+    Pose2Point2BearingRange,
     Pose2Pose2,
     Prior,
+    PriorPoint2,
     PriorPose2,
 )
 from .navabilityclient import (

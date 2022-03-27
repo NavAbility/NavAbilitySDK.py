@@ -83,6 +83,22 @@ class PriorPose2(InferenceType):
 
 
 @dataclass
+class PriorPoint2(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+@dataclass
 class Pose2Pose2(InferenceType):
     Z: Distribution
 
@@ -96,6 +112,56 @@ class Pose2Pose2(InferenceType):
         return ZSchema().dumps(self)
 
     # TODO: Deserializing this.
+
+
+@dataclass
+class Point2Point2Range(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+@dataclass
+class Pose2Point2BearingRange(InferenceType):
+    bearing: Distribution
+    range: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(bearing={str(self.bearing)}, range={str(self.range)})>"  # noqa: E501, B950
+
+    def dump(self):
+        return Pose2Point2BearingRangeSchema().dump(self)
+
+    def dumps(self):
+        return Pose2Point2BearingRangeSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+class Pose2Point2BearingRangeSchema(Schema):
+    bearstr = fields.Method("get_bearstr", required=True)
+    rangstr = fields.Method("get_rangstr", required=True)
+
+    class Meta:
+        ordered = True
+
+    def get_bearstr(self, obj):
+        return obj.bearing.dump()
+
+    def get_rangstr(self, obj):
+        return obj.range.dump()
+
+    # def set_Z(self, obj):
+    #     raise Exception("This has not been implemented yet.")
 
 
 @dataclass

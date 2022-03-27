@@ -36,6 +36,7 @@ def _getVariableNodeData(variableType: str, solveKey: str):
         return VariableNodeData(variableType, solveKey, 3)
     if variableType == "IncrementalInference.ContinuousScalar":
         return VariableNodeData(variableType, solveKey, 1)
+    raise Exception(f"Variable type '{variableType}' not supported.")
 
 
 @dataclass()

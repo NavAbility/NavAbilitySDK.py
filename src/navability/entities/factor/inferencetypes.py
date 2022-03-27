@@ -50,6 +50,10 @@ class ZSchema(Schema):
     #     return PriorPose2(**data)
 
 
+"""
+Create a ContinousScalar->ContinousScalar (also known as Pose1->Pose1) factor with a distribution Z representing the 1D relationship
+between the variables, e.g. `Normal(1.0, 0.1)`.
+"""
 @dataclass
 class LinearRelative(InferenceType):
     Z: Distribution
@@ -66,6 +70,10 @@ class LinearRelative(InferenceType):
     # TODO: Deserializing this.
 
 
+"""
+Create a prior factor for a Pose2 with a distribution Z representing (x,y,theta) prior information, 
+e.g. `FullNormal([0.0, 0.0, 0.0], diagm([0.01, 0.01, 0.01]))`.
+"""
 @dataclass
 class PriorPose2(InferenceType):
     Z: Distribution
@@ -82,6 +90,10 @@ class PriorPose2(InferenceType):
     # TODO: Deserializing this.
 
 
+"""
+Create a prior factor for a Point2 with a distribution Z representing (x,y) prior information, 
+e.g. `FullNormal([0.0, 0.0.0], diag([0.01, 0.01]))`.
+"""
 @dataclass
 class PriorPoint2(InferenceType):
     Z: Distribution
@@ -98,6 +110,10 @@ class PriorPoint2(InferenceType):
     # TODO: Deserializing this.
 
 
+"""
+Create a Pose2->Pose2 factor with a distribution Z representing the (x,y,theta) relationship
+between the variables, e.g. `FullNormal([1,0,0.3333*π], diag([0.01,0.01,0.01]))`.
+"""
 @dataclass
 class Pose2Pose2(InferenceType):
     Z: Distribution
@@ -114,6 +130,10 @@ class Pose2Pose2(InferenceType):
     # TODO: Deserializing this.
 
 
+"""
+Create a Point2->Point2 range factor with a 1D distribution:
+- range: The range from the pose to the point.
+"""
 @dataclass
 class Point2Point2Range(InferenceType):
     Z: Distribution
@@ -130,6 +150,11 @@ class Point2Point2Range(InferenceType):
     # TODO: Deserializing this.
 
 
+"""
+Create a Pose2->Point2 bearing+range factor with 1D distributions:
+- bearing: The bearing from the pose to the point.
+- range: The range from the pose to the point.
+"""
 @dataclass
 class Pose2Point2BearingRange(InferenceType):
     bearing: Distribution
@@ -164,6 +189,10 @@ class Pose2Point2BearingRangeSchema(Schema):
     #     raise Exception("This has not been implemented yet.")
 
 
+"""
+Create a AprilTags factor that directly relates a Pose2 to the information from an AprilTag reading.
+Corners need to be provided, homography and tag length are defaulted and can be overwritten.
+"""
 @dataclass
 class Pose2AprilTag4Corners(InferenceType):
     corners: np.ndarray
@@ -210,19 +239,20 @@ class Mixture(InferenceType):
         mechanics: type,
         components: "OrderedDict[str, Distribution]",
         probabilities: List[float],
-        dims,
+        dims: int,
     ):
         """Create a Mixture factor type with an underlying factor type, a named set of
          distributions that should be mixed, the probabilities of each distribution
-        (the mix), and the dimensions of the underlying factor (e.g.
+        (the mix), and the dimensions of the underlying factor (e.g. OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))]))
         ContinuousScalar=1, Pose2Pose2=3, etc.).
 
         Args:
-            mechanics (type): The underlying factor type.
+            mechanics (type): The underlying factor type, e.g. Pose2Pose2.
             components (OrderedDict[Distribution]): The named set of distributions that
-            should be mixed, e.g. probabilities (List[float]): The probabilities of each
-            distribution (the mix)
-            dims (int): The dimensions of the
+            should be mixed, e.g. OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))])
+            probabilities (List[float]): The probabilities of each
+            distribution (the mix), e.g. [0.4, 0.6]
+            dims (int): The dimensions of the underlying factor, e.g. for Pose2Pose2 it's 3
         """  # noqa: E501, B950
         self.mechanics = mechanics
         self.components = components

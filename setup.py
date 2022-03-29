@@ -33,7 +33,7 @@ Note that this SDK and the related API are still in development. Please let us k
         "marshmallow==3.14.0",
         "numpy>=1.21",
         # Dev/test dependencies
-        "black>=22.3.0",  # REF: https://github.com/psf/black/issues/2634
+        "black==22.1.0",  # REF: https://github.com/psf/black/issues/2634
         "flake8==4.0.1",
         "pytest==6.2.5",
         "pytest-asyncio==0.18.1",

@@ -164,6 +164,28 @@ class Point2Point2Range(InferenceType):
 
 
 """
+Create a Pose2->Point2 range factor with a 1D distribution:
+- range: The range from the pose to the point.
+"""
+
+
+@dataclass
+class Pose2Point2Range(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+"""
 Create a Pose2->Point2 bearing+range factor with 1D distributions:
 - bearing: The bearing from the pose to the point.
 - range: The range from the pose to the point.

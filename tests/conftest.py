@@ -17,8 +17,8 @@ from navability.entities import (
     NavAbilityHttpsClient,
     NavAbilityWebsocketClient,
     Normal,
-    Point2Point2Range,
     Pose2Point2BearingRange,
+    Pose2Point2Range,
     Pose2Pose2,
     Prior,
     PriorPoint2,
@@ -204,9 +204,9 @@ async def example_2d_graph(
         ),
         Factor(
             "x0l0f1",
-            "Point2Point2Range",
+            "Pose2Point2Range",
             ["x0", "l0"],
-            FactorData(fnc=Point2Point2Range(Normal(5, 0.1)).dump()),  # Range
+            FactorData(fnc=Pose2Point2Range(Normal(5, 0.1)).dump()),  # Range
         ),
         Factor(
             "x0l0f2",

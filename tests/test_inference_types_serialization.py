@@ -9,6 +9,7 @@ from navability.entities import (
     Point2Point2Range,
     Pose2AprilTag4Corners,
     Pose2Point2BearingRange,
+    Pose2Point2Range,
     Pose2Pose2,
     Prior,
     PriorPoint2,
@@ -93,6 +94,16 @@ def test_priorpoint2():
 
 def test_point2point2range():
     pose = Point2Point2Range(Normal(89.44271909999159, 3))
+    dumped = pose.dumps()
+    assert (
+        dumped
+        == '{"Z": {"_type": "IncrementalInference.PackedNormal", "mu": 89.44271909999159, "sigma": 3.0}}'  # noqa: E501, B950
+    )
+    pass
+
+
+def test_pose2point2range():
+    pose = Pose2Point2Range(Normal(89.44271909999159, 3))
     dumped = pose.dumps()
     assert (
         dumped

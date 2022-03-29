@@ -16,6 +16,7 @@ from .factor.inferencetypes import (
     Point2Point2Range,
     Pose2AprilTag4Corners,
     Pose2Point2BearingRange,
+    Pose2Point2Range,
     Pose2Pose2,
     Prior,
     PriorPoint2,

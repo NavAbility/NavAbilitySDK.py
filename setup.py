@@ -28,7 +28,7 @@ setup(
     long_description="""NavAbility SDK: Access NavAbility Cloud factor graph features from Python.
 Note that this SDK and the related API are still in development. Please let us know if you have any issues at info@navability.io.""",
     install_requires=[
-        "click>=8.0.0,<9",
+        "click==8.0.2",
         "gql[all]==3.0.0a6",
         "marshmallow==3.14.0",
         "numpy>=1.21",

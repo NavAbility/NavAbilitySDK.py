@@ -11,6 +11,12 @@ Install the NavAbilitySDK using pip:
 pip install navabilitysdk
 ```
 
+# Starting a Python REPL for the Examples
+
+To use the NavAbility SDK example in a REPL you need to start it with `asyncio`, i.e. run `python -m asyncio`.
+
+If you don't, you'll see `SyntaxError: 'await' outside function`.
+
 # Notes and FAQ
 
 - **Why is the SDK camel-cased?** True, Python code should be snake-cased. This was a design decision to align all the SDKS. All the functions and fields should look the same, so you can easily switch from one language to another without having to read documentation. This may change in the future as we grow the SDKs.

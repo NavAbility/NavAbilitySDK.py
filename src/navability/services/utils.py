@@ -41,7 +41,7 @@ async def waitForCompletion(
                 
 # Helper functions for NavAbility App visualizations
 def GraphVizApp(client):
-    topography_vis_link = f"https://app.navability.io/cloud/graph?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    topography_vis_link = f"https://app.navability.io/cloud/graph/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
     print(topography_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/factor_graph.png)]({topography_vis_link})""")
@@ -49,7 +49,7 @@ def GraphVizApp(client):
         return
 
 def MapVizApp(client):
-    geometry_vis_link = f"https://app.navability.io/cloud/map?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    geometry_vis_link = f"https://app.navability.io/cloud/map/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
     print(geometry_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/geometric_map.png)]({geometry_vis_link})""")

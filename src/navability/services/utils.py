@@ -1,6 +1,9 @@
 import time
 from typing import List
 
+# use markdown to link to graph and map visualizations
+from IPython.display import Markdown as md
+
 from navability.entities import NavAbilityClient
 from navability.services import getStatusesLatest
 
@@ -34,3 +37,21 @@ async def waitForCompletion(
             wait_time -= 2
             if wait_time <= 0:
                 raise Exception(exceptionMessage)
+
+                
+# Helper functions for NavAbility App visualizations
+def GraphVizApp(client):
+    topography_vis_link = f"https://app.navability.io/cloud/graph/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    print(topography_vis_link)
+    try:
+        return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/factor_graph.png)]({topography_vis_link})""")
+    except:
+        return
+
+def MapVizApp(client):
+    geometry_vis_link = f"https://app.navability.io/cloud/map/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    print(geometry_vis_link)
+    try:
+        return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/geometric_map.png)]({geometry_vis_link})""")
+    except:
+        return

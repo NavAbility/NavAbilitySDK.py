@@ -41,8 +41,8 @@ _env_configs = {
     },
     "dev": {
         "navability_client": {
-            "url_websocket": "wss://api.d1.navability.io/graphql",
-            "url_https": "https://api.d1.navability.io",
+            "url_websocket": "wss://api.navability.io/graphql",
+            "url_https": "https://api.navability.io",
         }
     },
     "production": {},
@@ -70,12 +70,16 @@ def navability_https_client(env_config) -> NavAbilityClient:
 
 @pytest.fixture(scope="module")
 def client_1d(env_config) -> Client:
-    return Client("guest@navability.io", "PySDKAutomation", "Session_1D_" + str(uuid4())[0:8])
+    return Client(
+        "guest@navability.io", "PySDKAutomation", "Session_1D_" + str(uuid4())[0:8]
+    )
 
 
 @pytest.fixture(scope="module")
 def client_2d(env_config) -> Client:
-    return Client("guest@navability.io", "PySDKAutomation", "Session_2D_" + str(uuid4())[0:8])
+    return Client(
+        "guest@navability.io", "PySDKAutomation", "Session_2D_" + str(uuid4())[0:8]
+    )
 
 
 @pytest.fixture(scope="module")

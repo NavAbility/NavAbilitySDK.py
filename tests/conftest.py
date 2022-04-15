@@ -41,8 +41,8 @@ _env_configs = {
     },
     "dev": {
         "navability_client": {
-            "url_websocket": "wss://api.d1.navability.io/graphql",
-            "url_https": "https://api.d1.navability.io",
+            "url_websocket": "wss://api.navability.io/graphql",
+            "url_https": "https://api.navability.io",
         }
     },
     "production": {},

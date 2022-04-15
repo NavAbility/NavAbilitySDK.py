@@ -28,7 +28,7 @@ class NavAbilityClient:
 
 
 class NavAbilityWebsocketClient(NavAbilityClient):
-    def __init__(self, url: str = "wss://api.d1.navability.io/graphql") -> None:
+    def __init__(self, url: str = "wss://api.navability.io/graphql") -> None:
         super().__init__()
         self.transport = WebsocketsTransport(url=url)
 
@@ -48,7 +48,7 @@ class NavAbilityWebsocketClient(NavAbilityClient):
 
 
 class NavAbilityHttpsClient(NavAbilityClient):
-    def __init__(self, url: str = "https://api.d1.navability.io") -> None:
+    def __init__(self, url: str = "https://api.navability.io") -> None:
         super().__init__()
         self.transport = AIOHTTPTransport(url=url)
 

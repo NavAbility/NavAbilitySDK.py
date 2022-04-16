@@ -108,7 +108,7 @@ class FactorData:
     eliminated: bool = False
     potentialused: bool = False
     edgeIDs: List[int] = field(default_factory=lambda: [])
-    multihypo: List[int] = field(default_factory=lambda: [])
+    multihypo: List[float] = field(default_factory=lambda: [])
     certainhypo: List[int] = field(default_factory=lambda: [1, 2])
     nullhypo: float = 0
     solveInProgress: int = 0
@@ -128,7 +128,7 @@ class FactorDataSchema(Schema):
     fnc = fields.Dict(
         required=True
     )  # fields.Method("get_fnc", "set_fnc", required=True)
-    multihypo = fields.List(fields.Int(), required=True)
+    multihypo = fields.List(fields.Float(), required=True)
     certainhypo = fields.List(fields.Int(), required=True)
     nullhypo = fields.Float(required=True)
     solveInProgress = fields.Int(required=True)

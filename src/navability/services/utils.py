@@ -48,8 +48,10 @@ def GraphVizApp(client):
     except:
         return
 
-def MapVizApp(client):
+def MapVizApp(client, variableStartsWith=''):
     geometry_vis_link = f"https://app.navability.io/cloud/map/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    if 0 < len(variableStartsWith):
+        geometry_vis_link = geometry_vis_link + '&variableStartsWith=' + variableStartsWith
     print(geometry_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/geometric_map.png)]({geometry_vis_link})""")

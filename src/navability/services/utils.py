@@ -40,8 +40,10 @@ async def waitForCompletion(
 
                 
 # Helper functions for NavAbility App visualizations
-def GraphVizApp(client):
+def GraphVizApp(client, variableStartsWith=''):
     topography_vis_link = f"https://app.navability.io/cloud/graph/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
+    if 0 < len(variableStartsWith):
+        topography_vis_link = topography_vis_link + '&variableStartsWith=' + variableStartsWith
     print(topography_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/factor_graph.png)]({topography_vis_link})""")

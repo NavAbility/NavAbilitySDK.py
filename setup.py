@@ -30,6 +30,7 @@ Note that this SDK and the related API are still in development. Please let us k
     install_requires=[
         "click==8.0.2",
         "gql[all]==3.0.0a6",
+        "ipython==8.2.0",
         "marshmallow==3.14.0",
         "numpy>=1.21",
         # Dev/test dependencies

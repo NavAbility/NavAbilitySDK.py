@@ -40,20 +40,24 @@ async def waitForCompletion(
 
                 
 # Helper functions for NavAbility App visualizations
-def GraphVizApp(client, variableStartsWith=''):
+def GraphVizApp(client, variableStartsWith=None):
     topography_vis_link = f"https://app.navability.io/cloud/graph/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
-    if 0 < len(variableStartsWith):
-        topography_vis_link = topography_vis_link + '&variableStartsWith=' + variableStartsWith
+    if variableStartsWith!=None:
+        topography_vis_link = topography_vis_link + '&variableStartsWith'
+        if 0 < len(variableStartsWith):
+            topography_vis_link = topography_vis_link + '=' + variableStartsWith
     print(topography_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/factor_graph.png)]({topography_vis_link})""")
     except:
         return
 
-def MapVizApp(client, variableStartsWith=''):
+def MapVizApp(client, variableStartsWith=None):
     geometry_vis_link = f"https://app.navability.io/cloud/map/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"
-    if 0 < len(variableStartsWith):
-        geometry_vis_link = geometry_vis_link + '&variableStartsWith=' + variableStartsWith
+    if variableStartsWith!=None:
+        geometry_vis_link = geometry_vis_link + '&variableStartsWith'
+        if 0 < len(variableStartsWith):
+            geometry_vis_link = geometry_vis_link + '=' + variableStartsWith
     print(geometry_vis_link)
     try:
         return md(f"""[![Navigate to Factor Graph](http://www.navability.io/wp-content/uploads/2022/03/geometric_map.png)]({geometry_vis_link})""")

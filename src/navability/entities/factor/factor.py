@@ -110,7 +110,7 @@ class FactorData:
     edgeIDs: List[int] = field(default_factory=lambda: [])
     multihypo: List[float] = field(default_factory=lambda: [])
     certainhypo: List[int] = field(default_factory=lambda: [1, 2])
-    nullhypo: float = 0
+    nullhypo: float = field(default_factory=lambda: 0)
     solveInProgress: int = 0
     inflation: float = 5
 

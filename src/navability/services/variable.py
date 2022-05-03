@@ -34,7 +34,7 @@ DETAIL_SCHEMA = {
 logger = logging.getLogger(__name__)
 
 
-async def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
+async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
     result = await navAbilityClient.mutate(
         MutationOptions(
             gql(GQL_ADDVARIABLE),
@@ -42,6 +42,15 @@ async def addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Var
         )
     )
     return result["addVariable"]
+
+
+def addVariable(client: NavAbilityClient, context: Client, v_lbl, varType: str = None):
+    if isinstance(v_lbl, Variable):
+        return _addVariable(client, context, v_lbl)
+    if isinstance(v_lbl, str):
+        v = Variable(v_lbl, varType)
+        return _addVariable(client, context, v)
+    raise NotImplementedError()
 
 
 async def listVariables(

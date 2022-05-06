@@ -44,11 +44,11 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
     return result["addVariable"]
 
 
-def addVariable(client: NavAbilityClient, context: Client, v_lbl, varType: str = None):
-    if isinstance(v_lbl, Variable):
-        return _addVariable(client, context, v_lbl)
-    if isinstance(v_lbl, str):
-        v = Variable(v_lbl, varType)
+def addVariable(client: NavAbilityClient, context: Client, variable_or_label, varType: str = None):
+    if isinstance(variable_or_label, Variable):
+        return _addVariable(client, context, variable_or_label)
+    if isinstance(variable_or_label, str):
+        v = Variable(variable_or_label, varType)
         return _addVariable(client, context, v)
     raise NotImplementedError()
 

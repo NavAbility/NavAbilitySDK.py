@@ -46,11 +46,11 @@ def assembleFactorName(xisyms: List[str]):
 def getFncTypeName(fnc: InferenceType):
     return type(fnc).__name__
 
-def addFactor(client: NavAbilityClient, context: Client, f_labels, fnc=None, multihypo = [], nullhypo=0.0):
-    if isinstance(f_labels, Factor):
-        return _addFactor(client, context, f_labels)
+def addFactor(client: NavAbilityClient, context: Client, factor_or_labels, fnc=None, multihypo = [], nullhypo=0.0):
+    if isinstance(factor_or_labels, Factor):
+        return _addFactor(client, context, factor_or_labels)
     elif fnc != None:
-        fac = Factor(assembleFactorName(f_labels), getFncTypeName(fnc), f_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo))
+        fac = Factor(assembleFactorName(factor_or_labels), getFncTypeName(fnc), factor_or_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo))
         return _addFactor(client, context, fac)
     else:
         raise NotImplementedError()

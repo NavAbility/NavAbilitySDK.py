@@ -3,6 +3,8 @@ from typing import List
 
 from gql import gql
 
+from uuid import uuid4
+
 from navability.common.mutations import GQL_ADDFACTOR
 from navability.common.queries import (
     GQL_FRAGMENT_FACTORS,
@@ -16,6 +18,10 @@ from navability.entities.factor.factor import (
     FactorSkeleton,
     FactorSkeletonSchema,
     FactorSummarySchema,
+    FactorData,
+)
+from navability.entities.factor.inferencetypes import (
+    InferenceType,
 )
 from navability.entities.navabilityclient import (
     MutationOptions,
@@ -33,8 +39,23 @@ DETAIL_SCHEMA = {
 
 logger = logging.getLogger(__name__)
 
+def assembleFactorName(xisyms: List[str]):
+    s = "".join(xisyms) + 'f_' + str(uuid4())[0:4]
+    return s
 
-async def addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
+def getFncTypeName(fnc: InferenceType):
+    return type(fnc).__name__
+
+def addFactor(client: NavAbilityClient, context: Client, factor_or_labels, fnc=None, multihypo = [], nullhypo=0.0):
+    if isinstance(factor_or_labels, Factor):
+        return _addFactor(client, context, factor_or_labels)
+    elif fnc != None:
+        fac = Factor(assembleFactorName(factor_or_labels), getFncTypeName(fnc), factor_or_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo))
+        return _addFactor(client, context, fac)
+    else:
+        raise NotImplementedError()
+
+async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
     result = await navAbilityClient.mutate(
         MutationOptions(
             gql(GQL_ADDFACTOR),

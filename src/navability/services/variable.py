@@ -22,6 +22,7 @@ from navability.entities.variable.variable import (
     VariableSkeleton,
     VariableSkeletonSchema,
     VariableSummarySchema,
+    VariableType,
 )
 
 DETAIL_SCHEMA = {
@@ -44,11 +45,15 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
     return result["addVariable"]
 
 
-def addVariable(client: NavAbilityClient, context: Client, variable_or_label, varType: str = None):
+def addVariable(client: NavAbilityClient, context: Client, variable_or_label, varType = None):
     if isinstance(variable_or_label, Variable):
         return _addVariable(client, context, variable_or_label)
-    if isinstance(variable_or_label, str):
+    # TODO standardise varType to string or VariableType after design discussion
+    if isinstance(varType, str):
         v = Variable(variable_or_label, varType)
+        return _addVariable(client, context, v)
+    elif isinstance(varType, VariableType):
+        v = Variable(variable_or_label, varType.value)
         return _addVariable(client, context, v)
     raise NotImplementedError()
 

@@ -9,7 +9,7 @@ from navability.services import getVariable
 async def test_solveSession_1d(example_1d_graph_solved):
     navability_client, client, variables, factors = example_1d_graph_solved
     ppes = {
-        v.label: (await getVariable(navability_client, client, v.label)).ppes["default"]
+        v: (await getVariable(navability_client, client, v)).ppes["default"]
         for v in variables
     }
     assert len(ppes) == 4

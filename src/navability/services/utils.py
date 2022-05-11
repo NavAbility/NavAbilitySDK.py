@@ -38,7 +38,7 @@ async def waitForCompletion(
             if wait_time <= 0:
                 raise Exception(exceptionMessage)
 
-                
+
 # Helper functions for NavAbility App visualizations
 def GraphVizApp(client, variableStartsWith=None):
     topography_vis_link = f"https://app.navability.io/cloud/graph/?userId={client.userId}&robotStartsWith={client.robotId}&sessionStartsWith={client.sessionId}"

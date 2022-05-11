@@ -45,7 +45,7 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
     return result["addVariable"]
 
 
-def addVariable(client: NavAbilityClient, context: Client, variable_or_label, varType = None):
+def addVariable(client: NavAbilityClient, context: Client, variable_or_label, varType=None):
     if isinstance(variable_or_label, Variable):
         return _addVariable(client, context, variable_or_label)
     # TODO standardise varType to string or VariableType after design discussion

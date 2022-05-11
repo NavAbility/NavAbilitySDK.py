@@ -86,50 +86,24 @@ def client_2d(env_config) -> Client:
 async def example_1d_graph(
     navability_https_client: NavAbilityClient, client_1d: Client
 ):
-    variables = [
-        Variable("x0", VariableType.ContinuousScalar.value),
-        Variable("x1", VariableType.ContinuousScalar.value),
-        Variable("x2", VariableType.ContinuousScalar.value),
-        Variable("x3", VariableType.ContinuousScalar.value),
-    ]
+    # Using the new signatures to validate both new and old addVariable/addFactor
+    variables = ["x0", "x1", "x2", "x3"]
     factors = [
-        Factor("x0f1", "Prior", ["x0"], FactorData(fnc=Prior(Normal(0, 1)).dump())),
-        Factor(
-            "x0x1f1",
-            "LinearRelative",
-            ["x0", "x1"],
-            FactorData(fnc=LinearRelative(Normal(10, 0.1)).dump()),
-        ),
-        Factor(
-            "x1x2f1",
-            "Mixture",
-            ["x1", "x2"],
-            FactorData(
-                fnc=Mixture(
-                    LinearRelative,
-                    OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))]),
-                    [0.4, 0.6],
-                    2,
-                ).dump()
-            ),
-        ),
-        Factor(
-            "x2x3f1",
-            "LinearRelative",
-            ["x2", "x3"],
-            FactorData(fnc=LinearRelative(Normal(-50, 1)).dump()),
-        ),
-        Factor(
-            "x3x0f1",
-            "LinearRelative",
-            ["x3", "x0"],
-            FactorData(fnc=LinearRelative(Normal(40, 1)).dump()),
-        ),
+        (["x0"], Prior(Normal(0, 1))),
+        (["x0", "x1"], LinearRelative(Normal(10, 0.1))),
+        (["x1", "x2"],
+            Mixture(
+                LinearRelative,
+                OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))]),
+                [0.4, 0.6],
+                2)),
+        (["x2", "x3"], LinearRelative(Normal(-50, 1))),
+        (["x3", "x0"], LinearRelative(Normal(40, 1))),
     ]
     # Variables
     result_ids = [
-        await addVariable(navability_https_client, client_1d, v) for v in variables
-    ] + [await addFactor(navability_https_client, client_1d, f) for f in factors]
+        await addVariable(navability_https_client, client_1d, v, VariableType.ContinuousScalar) for v in variables
+    ] + [await addFactor(navability_https_client, client_1d, *f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 

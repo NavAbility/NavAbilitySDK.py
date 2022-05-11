@@ -1,9 +1,8 @@
 import logging
 from typing import List
+from uuid import uuid4
 
 from gql import gql
-
-from uuid import uuid4
 
 from navability.common.mutations import GQL_ADDFACTOR
 from navability.common.queries import (
@@ -14,15 +13,13 @@ from navability.common.queries import (
 from navability.entities.client import Client
 from navability.entities.factor.factor import (
     Factor,
+    FactorData,
     FactorSchema,
     FactorSkeleton,
     FactorSkeletonSchema,
     FactorSummarySchema,
-    FactorData,
 )
-from navability.entities.factor.inferencetypes import (
-    InferenceType,
-)
+from navability.entities.factor.inferencetypes import InferenceType
 from navability.entities.navabilityclient import (
     MutationOptions,
     NavAbilityClient,
@@ -39,21 +36,28 @@ DETAIL_SCHEMA = {
 
 logger = logging.getLogger(__name__)
 
+
 def assembleFactorName(xisyms: List[str]):
     s = "".join(xisyms) + 'f_' + str(uuid4())[0:4]
     return s
 
+
 def getFncTypeName(fnc: InferenceType):
     return type(fnc).__name__
 
-def addFactor(client: NavAbilityClient, context: Client, factor_or_labels, fnc=None, multihypo = [], nullhypo=0.0):
+
+def addFactor(client: NavAbilityClient, context: Client, factor_or_labels, fnc=None,
+              multihypo=[], nullhypo=0.0):
     if isinstance(factor_or_labels, Factor):
         return _addFactor(client, context, factor_or_labels)
-    elif fnc != None:
-        fac = Factor(assembleFactorName(factor_or_labels), getFncTypeName(fnc), factor_or_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo))
+    elif fnc is not None:
+        fac = Factor(assembleFactorName(factor_or_labels), getFncTypeName(fnc),
+                factor_or_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo,
+                nullhypo=nullhypo))
         return _addFactor(client, context, fac)
     else:
         raise NotImplementedError()
+
 
 async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
     result = await navAbilityClient.mutate(

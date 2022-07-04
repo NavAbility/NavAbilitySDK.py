@@ -14,7 +14,7 @@ mutation sdk_addFactor ($factor: FactorGraphInput!) {
 """
 
 GQL_SOLVESESSION = """
-mutation sdk_solveSession ($client: ClientInput!) {
-  solveSession(client: $client)
+mutation sdk_solveSession ($client: ClientInput!, $options: SolveOptionsInput) {
+  solveSession(client: $client, options: $options)
 }
 """

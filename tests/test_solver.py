@@ -24,6 +24,15 @@ async def test_solveSession_2d(example_2d_graph_solved):
     assert len(v.ppes["default"].suggested) == 3
 
 
+@pytest.mark.asyncio
+async def test_solveSession_2d_parametric(example_2d_graph_solved_parametric):
+    navability_client, client, variables, factors = example_2d_graph_solved_parametric
+    v = await getVariable(navability_client, client, variables[0].label)
+    assert "parametric" in v.ppes
+    assert v.ppes["parametric"].solveKey == "parametric"
+    assert len(v.ppes["parametric"].suggested) == 3
+
+
 # Redefining the event loop so we can we can use module-level fixtures.
 @pytest.fixture(scope="module")
 def event_loop():

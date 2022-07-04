@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 
 def assembleFactorName(xisyms: List[str]):
-    s = "".join(xisyms) + 'f_' + str(uuid4())[0:4]
+    s = "".join(xisyms) + "f_" + str(uuid4())[0:4]
     return s
 
 
@@ -46,14 +46,23 @@ def getFncTypeName(fnc: InferenceType):
     return type(fnc).__name__
 
 
-def addFactor(client: NavAbilityClient, context: Client, factor_or_labels, fnc=None,
-              multihypo=[], nullhypo=0.0):
+def addFactor(
+    client: NavAbilityClient,
+    context: Client,
+    factor_or_labels,
+    fnc=None,
+    multihypo=[],
+    nullhypo=0.0,
+):
     if isinstance(factor_or_labels, Factor):
         return _addFactor(client, context, factor_or_labels)
     elif fnc is not None:
-        fac = Factor(assembleFactorName(factor_or_labels), getFncTypeName(fnc),
-                factor_or_labels, FactorData(fnc=fnc.dump(), multihypo=multihypo,
-                nullhypo=nullhypo))
+        fac = Factor(
+            assembleFactorName(factor_or_labels),
+            getFncTypeName(fnc),
+            factor_or_labels,
+            FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo),
+        )
         return _addFactor(client, context, fac)
     else:
         raise NotImplementedError()

@@ -1,8 +1,11 @@
+import logging
 from dataclasses import dataclass
 
 from gql import Client as GQLCLient
 from gql.transport.aiohttp import AIOHTTPTransport
 from gql.transport.websockets import WebsocketsTransport
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -36,6 +39,9 @@ class NavAbilityWebsocketClient(NavAbilityClient):
         async with GQLCLient(
             transport=self.transport, fetch_schema_from_transport=False
         ) as client:
+            logger.debug(
+                f"Calling query {options.query} with arguments: {options.variables}"
+            )
             result = await client.execute(options.query, options.variables)
             return result
 
@@ -43,6 +49,9 @@ class NavAbilityWebsocketClient(NavAbilityClient):
         async with GQLCLient(
             transport=self.transport, fetch_schema_from_transport=False
         ) as client:
+            logger.debug(
+                f"Calling mutation {options.mutation} with arguments: {options.variables}"
+            )
             result = await client.execute(options.mutation, options.variables)
             return result
 

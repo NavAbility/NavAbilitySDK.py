@@ -40,7 +40,7 @@ class NavAbilityWebsocketClient(NavAbilityClient):
             transport=self.transport, fetch_schema_from_transport=False
         ) as client:
             logger.debug(
-                f"Calling query {options.query} with arguments: {options.variables}"
+                f"Calling query {options.query} with args: {options.variables}"
             )
             result = await client.execute(options.query, options.variables)
             return result
@@ -50,7 +50,7 @@ class NavAbilityWebsocketClient(NavAbilityClient):
             transport=self.transport, fetch_schema_from_transport=False
         ) as client:
             logger.debug(
-                f"Calling mutation {options.mutation} with arguments: {options.variables}"
+                f"Calling mutation {options.mutation} with args: {options.variables}"
             )
             result = await client.execute(options.mutation, options.variables)
             return result

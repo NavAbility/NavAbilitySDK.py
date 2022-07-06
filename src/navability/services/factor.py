@@ -51,7 +51,7 @@ def addFactor(
     context: Client,
     factor_or_labels,
     fnc=None,
-    multihypo=[],
+    multihypo=None,
     nullhypo=0.0,
 ):
     if isinstance(factor_or_labels, Factor):
@@ -61,7 +61,11 @@ def addFactor(
             assembleFactorName(factor_or_labels),
             getFncTypeName(fnc),
             factor_or_labels,
-            FactorData(fnc=fnc.dump(), multihypo=multihypo, nullhypo=nullhypo),
+            FactorData(
+                fnc=fnc.dump(),
+                multihypo=([] if multihypo is None else multihypo),
+                nullhypo=nullhypo,
+            ),
         )
         return _addFactor(client, context, fac)
     else:

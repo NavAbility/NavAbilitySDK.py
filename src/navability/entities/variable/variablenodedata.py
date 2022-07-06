@@ -41,7 +41,7 @@ class VariableNodeData:
     def __repr__(self):
         return (
             f"<VariableNodeData(variableType={self.variableType}, "
-            "solveKey={self.solveKey}, dims={self.dims})>"
+            f"solveKey={self.solveKey}, dims={self.dims})>"
         )
 
     def dump(self):

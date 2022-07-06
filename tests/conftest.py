@@ -27,6 +27,7 @@ from navability.entities import (
     Variable,
     VariableType,
 )
+from navability.entities.solve import SolveOptions
 from navability.services import addFactor, addVariable, solveSession, waitForCompletion
 
 # setup basic logging to stderr
@@ -91,18 +92,24 @@ async def example_1d_graph(
     factors = [
         (["x0"], Prior(Normal(0, 1))),
         (["x0", "x1"], LinearRelative(Normal(10, 0.1))),
-        (["x1", "x2"],
+        (
+            ["x1", "x2"],
             Mixture(
                 LinearRelative,
                 OrderedDict([("hypo1", Normal(0, 2)), ("hypo2", Uniform(30, 55))]),
                 [0.4, 0.6],
-                2)),
+                2,
+            ),
+        ),
         (["x2", "x3"], LinearRelative(Normal(-50, 1))),
         (["x3", "x0"], LinearRelative(Normal(40, 1))),
     ]
     # Variables
     result_ids = [
-        await addVariable(navability_https_client, client_1d, v, VariableType.ContinuousScalar) for v in variables
+        await addVariable(
+            navability_https_client, client_1d, v, VariableType.ContinuousScalar
+        )
+        for v in variables
     ] + [await addFactor(navability_https_client, client_1d, *f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
@@ -223,5 +230,20 @@ async def example_2d_graph_solved(example_2d_graph):
     navability_https_client, client, variables, factors = example_2d_graph
     logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
     requestId = await solveSession(navability_https_client, client)
+    await waitForCompletion(navability_https_client, [requestId], maxSeconds=180)
+    return (navability_https_client, client, variables, factors)
+
+
+@pytest.fixture(scope="module")
+async def example_2d_graph_solved_parametric(example_2d_graph):
+    """Get the graph after it has been solved.
+    NOTE this changes the graph, so tests need to be defensive.
+    """
+    navability_https_client, client, variables, factors = example_2d_graph
+    logging.info(f"[Fixture] Solving graph, client = {client.dumps()}")
+    # Note the parametric key is not needed here, it is overwritten by default.
+    requestId = await solveSession(
+        navability_https_client, client, SolveOptions("parametric", True)
+    )
     await waitForCompletion(navability_https_client, [requestId], maxSeconds=180)
     return (navability_https_client, client, variables, factors)

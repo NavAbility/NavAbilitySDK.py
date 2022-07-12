@@ -31,12 +31,16 @@ class VariableNodeData:
 
     def __post_init__(self):
         # Initializes all the fields dependent on dims
-        self.vecval = list(numpy.zeros(self.dims * 100))
+        if self.vecval is None:
+            self.vecval = list(numpy.zeros(self.dims * 100))
         self.dimval = self.dims
-        self.vecbw = list(numpy.zeros(self.dims))
+        if self.vecbw is None:
+            self.vecbw = list(numpy.zeros(self.dims))
         self.dimbw = self.dims
-        self.dimIDs = list(range(0, self.dims))
-        self.infoPerCoord = list(numpy.zeros(self.dims))
+        if self.dimIDs is None:
+            self.dimIDs = list(range(0, self.dims))
+        if self.infoPerCoord is None:
+            self.infoPerCoord = list(numpy.zeros(self.dims))
 
     def __repr__(self):
         return (

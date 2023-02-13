@@ -11,7 +11,7 @@ parts:
   - file: factors
 - caption: Build a Graph 🕶️
   chapters:
-  - file: intersphinx
+  - file: buildgraph
 - caption: Graph Solvers
   chapters:
   - file: solvers

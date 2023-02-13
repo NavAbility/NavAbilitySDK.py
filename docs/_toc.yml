@@ -2,18 +2,20 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: intro
+root: index
 parts:
-- caption: Basic examples 🪄
+- caption: From a Graph 🪄
   chapters:
   - file: getting-started
-  - file: markdown
-  - file: notebooks
-  - file: markdown-notebooks
-- caption: Cool extensions 🕶️
+  - file: variables
+  - file: factors
+- caption: Build a Graph 🕶️
   chapters:
   - file: intersphinx
+- caption: Graph Solvers
+  chapters:
   - file: sphinx-examples
-  - file: sphinx-hoverxref
-  - file: sphinx-proof
+- caption: Summary
+  chapters:
+  - file: summary
 

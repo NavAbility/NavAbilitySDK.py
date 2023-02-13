@@ -14,7 +14,7 @@ parts:
   - file: intersphinx
 - caption: Graph Solvers
   chapters:
-  - file: sphinx-examples
+  - file: solvers
 - caption: Summary
   chapters:
   - file: summary

@@ -6,6 +6,7 @@ root: intro
 parts:
 - caption: Basic examples 🪄
   chapters:
+  - file: getting-started
   - file: markdown
   - file: notebooks
   - file: markdown-notebooks

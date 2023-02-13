@@ -13,7 +13,7 @@ pip install -r docs/requirements.txt
 jupyter-book build docs/
 
 # View the docs with for instance firefox
-firefox docs/_build/index.html
+firefox docs/_build/html/index.html
 ```
 
 ## Resources

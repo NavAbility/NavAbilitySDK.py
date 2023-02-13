@@ -22,8 +22,10 @@ class VariableType(Enum):
 
     Point2 = "RoME.Point2"
     Pose2 = "RoME.Pose2"
+    Pose3 = "RoME.Pose3"
     ContinuousScalar = "IncrementalInference.ContinuousScalar"
     # TBD - https://github.com/JuliaRobotics/Caesar.jl/discussions/810
+    Position1 = "IncrementalInference.ContinuousScalar"
     Pose1 = "IncrementalInference.ContinuousScalar"
 
 
@@ -34,6 +36,8 @@ def _getVariableNodeData(variableType: str, solveKey: str):
         return VariableNodeData(variableType, solveKey, 2)
     if variableType == "RoME.Pose2":
         return VariableNodeData(variableType, solveKey, 3)
+    if variableType == "RoME.Pose3":
+        return VariableNodeData(variableType, solveKey, 6)
     if variableType == "IncrementalInference.ContinuousScalar":
         return VariableNodeData(variableType, solveKey, 1)
     raise Exception(f"Variable type '{variableType}' not supported.")

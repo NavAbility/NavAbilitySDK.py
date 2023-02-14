@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example &#8212; Docs for NavAbilitySDK.py, with JupyterBooks</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/proof.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-examples.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster.custom.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster.bundle.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-shadow.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-punk.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-noir.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-light.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-borderless.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/css/micromodal.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script src="_static/tabs.js"></script>
+    <script src="_static/js/hoverxref.js"></script>
+    <script src="_static/js/tooltipster.bundle.min.js"></script>
+    <script src="_static/js/micromodal.min.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"tex": {"macros": {"N": "\\mathbb{N}", "floor": ["\\lfloor#1\\rfloor", 1], "bmat": ["\\left[\\begin{array}"], "emat": ["\\end{array}\\right]"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Notes and FAQ" href="notesfaq.html" />
+    <link rel="prev" title="Graph Solvers" href="solvers.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Docs for NavAbilitySDK.py, with JupyterBooks</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    NavAbilitySDK.py
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  From a Graph 🪄
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="getting-started.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="variables.html">
+   Working with Variables
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="factors.html">
+   Working with Factors
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Add to Graph 🕶️
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="buildgraph.html">
+   Build a Graph
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Graph Solvers
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="solvers.html">
+   Graph Solvers
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Bigger Example
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Example
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Notes and FAQ
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="notesfaq.html">
+   Notes and FAQ
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Summary
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="summary.html">
+   Summary
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://navability.github.io/NavAbilitySDK.py/"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://navability.github.io/NavAbilitySDK.py//issues/new?title=Issue%20on%20page%20%2Fbigexample.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/bigexample.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Example</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="example">
+<h1>Example<a class="headerlink" href="#example" title="Permalink to this headline">#</a></h1>
+<p>This script will create variables and factors, list the graph, and solve the session for SLAM estimates.</p>
+<blockquote>
+<div><p>NOTES:</p>
+<ul class="simple">
+<li><p>You’ll need to start Python using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">asyncio</span></code> to support the <code class="docutils literal notranslate"><span class="pre">await</span></code> command.</p></li>
+<li><p>You’ll need numpy to run the example.</p></li>
+</ul>
+</div></blockquote>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">navability.entities</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">Client</span><span class="p">,</span>
+    <span class="n">Factor</span><span class="p">,</span>
+    <span class="n">FactorData</span><span class="p">,</span>
+    <span class="n">FullNormal</span><span class="p">,</span>
+    <span class="n">NavAbilityHttpsClient</span><span class="p">,</span>
+    <span class="n">Pose2Pose2</span><span class="p">,</span>
+    <span class="n">PriorPose2</span><span class="p">,</span>
+    <span class="n">Variable</span><span class="p">,</span>
+    <span class="n">VariableType</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">navability.services</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">addFactor</span><span class="p">,</span>
+    <span class="n">addVariable</span><span class="p">,</span>
+    <span class="n">solveSession</span><span class="p">,</span>
+    <span class="n">ls</span><span class="p">,</span>
+    <span class="n">lsf</span><span class="p">,</span>
+    <span class="n">waitForCompletion</span><span class="p">,</span>
+    <span class="n">getVariable</span>
+<span class="p">)</span>
+
+<span class="n">navability_client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;Guest&quot;</span><span class="p">,</span> <span class="s2">&quot;MyUser&quot;</span><span class="p">,</span> <span class="s2">&quot;Session_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+
+<span class="c1"># Create variables x0, x1, and x2</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+<span class="p">]</span>
+
+<span class="c1"># Create factors between them</span>
+<span class="n">factors</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">Factor</span><span class="p">(</span>
+            <span class="s2">&quot;x0f1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;PriorPose2&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span>
+            <span class="n">FactorData</span><span class="p">(</span>
+                <span class="n">fnc</span><span class="o">=</span><span class="n">PriorPose2</span><span class="p">(</span>
+                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]))</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">Factor</span><span class="p">(</span>
+            <span class="s2">&quot;x0x1f1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pose2Pose2&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">],</span>
+            <span class="n">FactorData</span><span class="p">(</span>
+                <span class="n">fnc</span><span class="o">=</span><span class="n">Pose2Pose2</span><span class="p">(</span>
+                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span>
+                        <span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">3</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+                    <span class="p">)</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+        <span class="n">Factor</span><span class="p">(</span>
+            <span class="s2">&quot;x1x2f1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Pose2Pose2&quot;</span><span class="p">,</span>
+            <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">],</span>
+            <span class="n">FactorData</span><span class="p">(</span>
+                <span class="n">fnc</span><span class="o">=</span><span class="n">Pose2Pose2</span><span class="p">(</span>
+                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span>
+                        <span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">3</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
+                    <span class="p">)</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
+            <span class="p">),</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+
+<span class="c1"># Get the result IDs so we can check on their completion</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Adding variables and factors..</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">variable_results</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
+<span class="n">factor_results</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">]</span>
+<span class="n">result_ids</span> <span class="o">=</span> <span class="n">variable_results</span> <span class="o">+</span> <span class="n">factor_results</span>
+
+<span class="c1"># Wait for them to be inserted if they havent already</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waiting for them to be loaded..</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">result_ids</span><span class="p">,</span> <span class="n">maxSeconds</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+
+<span class="c1"># Interrogate the graph</span>
+<span class="c1"># Get the variables</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing all the variables and factors in the session:</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">vs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ls</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables: &quot;</span> <span class="o">+</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># Get the factors</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Factors: &quot;</span> <span class="o">+</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1"># There&#39;s some pretty neat functionality with searching, but we&#39;ll save that for more comprehensive tutorials</span>
+
+<span class="c1"># Request a SLAM multimodal solve and wait for the response</span>
+<span class="c1"># Note: Guest sessions solve a little slower than usual because they&#39;re using some small hardware we put down for community use. Feel free to reach out if you want faster solving.</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Requesting that the graph be solved to determine the positions of the variables (poses)...&quot;</span><span class="p">)</span>
+<span class="n">request_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">solveSession</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
+<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="p">[</span><span class="n">request_id</span><span class="p">],</span> <span class="n">maxSeconds</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+
+<span class="c1"># Get the solves positions of the variables (these are stores in the PPEs structure)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Getting the estimates of the variables (poses)...&quot;</span><span class="p">)</span>
+<span class="n">estimates</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">:</span> <span class="p">(</span><span class="k">await</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">))</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solved estimates for the positions:</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">estimates</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="solvers.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Graph Solvers</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="notesfaq.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Notes and FAQ</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By NavAbility Inc.<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

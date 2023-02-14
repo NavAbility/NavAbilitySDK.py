@@ -4,7 +4,7 @@ NavAbility fundamentally organizes mapping, localization, and perception data (a
 
 ## Free `guest@navability.io` access
 
-A free tier access to NavAbility servers is provided through the user `guest@navability.io`.  To learn more about using the guest user, consider trying the [NavAbilty Tutorials](https://app.navability.io/get-started/tutorials).
+A free tier access to NavAbility servers is provided through the user `guest@navability.io`.  To learn more about using the guest user, consider trying the [NavAbilty Tutorials](./nvatutorials).
 
 ## Privacy and Auth Token
 

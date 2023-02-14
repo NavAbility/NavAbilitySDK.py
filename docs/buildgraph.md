@@ -25,6 +25,12 @@ result_v0 = await addVariable(client, context, "x0", VariableType.Pose2)
 
 Note that asynchronous tasks are used to increase the upload performance.  Each of these events are queued on the server for processing.  While the variable is being created, let's also add a prior factor.
 
+```{eval-rst}
+.. autofunction:: navability.services.addVariable
+```
+
+### And Zero-Prior
+
 We now have a factor graph with one variable, but to solve it we need some additional information.  In this example, we need the estimated starting point of our robot.
 We use unary factors called priors to represent absolute information to be introduced.  In this case we use `PriorPose2`, as our variable type is also `Pose2`.
 Since factors represent a probabilistic interaction between variables, we need to specify the distribution our factor will represent. Here we use `FullNormal` which is a [multivariate normal distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution). 
@@ -45,6 +51,14 @@ As before, we can use the NavAbility App to visualize the factor graph
 ```python
 # Click on the generated URL or graphic to open the NavAbility App Graph visualization page for this session
 GraphVizApp(context, variableStartsWith="")
+```
+
+<!-- ```{eval-rst}
+.. automodule:: navability.services
+   :members: addVariable
+``` -->
+```{eval-rst}
+.. autofunction:: navability.services.addFactor
 ```
 
 ## Odometry Factor

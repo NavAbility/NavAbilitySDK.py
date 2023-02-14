@@ -33,9 +33,15 @@ varLbls = await listVariables(client, context)
 
 The await call is used to wait on the underlying asynchronous call.
 
-<!-- ```@docs
-listVariables
+<!-- ```{eval-rst}
+.. autofunction:: navability.services.listVariables
 ``` -->
+<!-- ```{eval-rst}
+.. autoclass:: myst_parser.mocking.MockRSTParser
+    :show-inheritance:
+    :members: parse
+``` -->
+
 
 ## Numerical Solution
 
@@ -72,7 +78,7 @@ v0["solverData"][3]["vecval"]
 
 To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution called the parametric point estimate (`PPE`) for each of the `solveKey`s.  While various forms of `PPE`s can exists---such as mean, max, modes, etc.---a common `suggested` field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (`default`) can be obtained by:
 ```python
-xyr = v0["ppes"][2]["suggested"]
+xyr = v0.ppes["default"]["suggested"]
 # [-0.00, 0.00, 0.00]
 ```
 

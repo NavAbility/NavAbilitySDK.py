@@ -23,5 +23,6 @@ This documentation folder is based on work from:
 
 With auto docstring extension:
 - https://jupyterbook.org/en/stable/advanced/developers.html?highlight=docstrings#api-reference-from-docstrings
+- AND the workaround, https://myst-parser.readthedocs.io/en/latest/faq/index.html#howto-autodoc
 
 

@@ -15,6 +15,12 @@ parts:
 - caption: Graph Solvers
   chapters:
   - file: solvers
+- caption: Bigger Example
+  chapters:
+  - file: bigexample
+- caption: Notes and FAQ
+  chapters:
+  - file: notesfaq
 - caption: Summary
   chapters:
   - file: summary

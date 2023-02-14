@@ -6,6 +6,7 @@ from gql import gql
 from navability.common.mutations import GQL_ADDVARIABLE
 from navability.common.queries import (
     GQL_FRAGMENT_VARIABLES,
+    GQL_LISTVARIABLES,
     GQL_GETVARIABLE,
     GQL_GETVARIABLES,
 )
@@ -46,15 +47,18 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
 
 
 def addVariable(
-    client: NavAbilityClient, context: Client, variable_or_label, varType=None
+    client: NavAbilityClient, 
+    context: Client, 
+    variable_or_label, 
+    varType=None
 ):
     """ Add a variable to the graph.
 
     Args:
-        client (NavAbilityClient): _description_
-        context (Client): _description_
-        variable_or_label (_type_): _description_
-        varType (_type_, optional): _description_. Defaults to None.
+        client (NavAbilityClient): client connection to API server
+        context (Client): Unique context with (user, robot, session)
+        variable_or_label (Variable or string): The variable to add.
+        varType (VariableType, optional): Pose2, Pose3, etc. Defaults to None.
 
     Raises:
         NotImplementedError: _description_
@@ -75,15 +79,27 @@ def addVariable(
 
 
 async def listVariables(
-    navAbilityClient: NavAbilityClient,
-    client: Client,
+    client: NavAbilityClient,
+    context: Client,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[str]:
+    """Get a list of Variable labels in the graph.
+
+    Args:
+        client (NavAbilityClient): client connection to API server
+        context (Client): Unique context with (user, robot, session)
+        regexFilter (str, optional): Filter on variable label. Defaults to ".*".
+        tags (List[str], optional): Variables can have string tags. Defaults to None.
+        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+
+    Returns:
+        List[str]: Async task returning a list of Variable labels.
+    """
     variables = await getVariables(
-        navAbilityClient,
         client,
+        context,
         detail=QueryDetail.SKELETON,
         regexFilter=regexFilter,
         tags=tags,
@@ -91,6 +107,17 @@ async def listVariables(
     )
     result = [v.label for v in variables]
     return result
+    # TODO use new much faster API side listing,
+    # params = {
+    #     "userId": context.userId,
+    #     "robotId": context.robotId,
+    #     "sessionId": context.sessionId,
+    # }
+    # logger.debug(f"Query params: {params}")
+    # res = await client.query(
+    #     QueryOptions(gql(GQL_LISTVARIABLES), params)
+    # )
+
 
 
 # Alias
@@ -98,17 +125,30 @@ ls = listVariables
 
 
 async def getVariables(
-    navAbilityClient: NavAbilityClient,
-    client: Client,
+    client: NavAbilityClient,
+    context: Client,
     detail: QueryDetail = QueryDetail.SKELETON,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[VariableSkeleton]:
+    """Get a list of Variable from a graph using various filters.
+
+    Args:
+        client (NavAbilityClient): client connection to API server
+        context (Client): Unique context with (user, robot, session)
+        detail (QueryDetail, optional): Defaults to QueryDetail.SKELETON.
+        regexFilter (str, optional): Filter on variable label. Defaults to ".*".
+        tags (List[str], optional): Variables can have string tags. Defaults to None.
+        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+
+    Returns:
+        List[VariableSkeleton]: Async task returning a list of VariableSkeleton
+    """
     params = {
-        "userId": client.userId,
-        "robotIds": [client.robotId],
-        "sessionIds": [client.sessionId],
+        "userId": context.userId,
+        "robotIds": [context.robotId],
+        "sessionIds": [context.sessionId],
         "variable_label_regexp": regexFilter,
         "variable_tags": tags if tags is not None else ["VARIABLE"],
         "solvable": solvable,
@@ -116,7 +156,7 @@ async def getVariables(
         "fields_full": detail == QueryDetail.FULL,
     }
     logger.debug(f"Query params: {params}")
-    res = await navAbilityClient.query(
+    res = await client.query(
         QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLES), params)
     )
     logger.debug(f"Query result: {res}")
@@ -146,11 +186,15 @@ async def getVariables(
     ]
 
 
-async def getVariable(navAbilityClient: NavAbilityClient, client: Client, label: str):
-    params = client.dump()
+async def getVariable(
+    client: NavAbilityClient, 
+    context: Client, 
+    label: str
+):
+    params = context.dump()
     params["label"] = label
     logger.debug(f"Query params: {params}")
-    res = await navAbilityClient.query(
+    res = await client.query(
         QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLE), params)
     )
     logger.debug(f"Query result: {res}")

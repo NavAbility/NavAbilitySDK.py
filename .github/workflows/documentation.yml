@@ -22,10 +22,8 @@ release_sphinx:
     # to my conf.py extensions list. that fixes the broken uploads
     - name: Building documentation
       run: |
-        pip install dist/*.whl
-        pip install sphinx Pallets-Sphinx-Themes
-        sphinx-apidoc --no-toc --module-first -o docs/autodoc src/stenotype
-        sphinx-build docs public -b dirhtml
+        pip install -r docs/requirements.txt
+        jupyter-book build docs/
 
     # # still need to build and set the PAT to get a rebuild on the pages job,
     # # apart from that quite clean and nice 

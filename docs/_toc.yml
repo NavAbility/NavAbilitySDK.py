@@ -9,7 +9,7 @@ parts:
   - file: getting-started
   - file: variables
   - file: factors
-- caption: Build a Graph 🕶️
+- caption: Add to Graph 🕶️
   chapters:
   - file: buildgraph
 - caption: Graph Solvers

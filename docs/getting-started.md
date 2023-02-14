@@ -8,11 +8,11 @@ A free tier access to NavAbility servers is provided through the user `guest@nav
 
 ## Privacy and Auth Token
 
-A user specific authentication token is needed whether you are just accessing an existing graph, modifying, adding data, or building a whole new graph directly through the SDK.  At present, the only way to obtain a temporary authentication token is through the [NavAbility App on the "Connect" page](https://app.navability.io/edge/connect) (or from the App, use the burger menu top left to access the Connect page).  A user login to NavAbility is needed before an auth token can be provided.  Auth tokens last for 24 hours, and should be kept private to each session or usage.  Do not store or share the token with others.  See below for getting a login if you do not already have one.
+A user specific authentication token is needed whether you are just accessing an existing graph, modifying, adding data, or building a whole new graph directly through the SDK.  At present, the only way to obtain a temporary authentication token is through the [NavAbility App on the "Connect" page][nva-app-auth] (or from the App, use the burger menu top left to access the Connect page).  A user login to NavAbility is needed before an auth token can be provided.  Auth tokens last for 24 hours, and should be kept private to each session or usage.  Do not store or share the token with others.  See below for getting a login if you do not already have one.
 
 ## NavAbility App Login
 
-You can login via the [NavAbility App](https://app.navability.io/get-started/introduction/) by clicking on the account menu top right.  please do reach out if you have any questions via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)](https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw), emailing us at <info@navability.io>, or [filing specific issues against the SDK][sdk-py].
+You can login via the [NavAbility App](https://app.navability.io/get-started/introduction/) by clicking on the account menu top right.  Reach out if you have any questions via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite], emailing us at <info@navability.io>, or [filing specific issues against the SDK][sdk-py].
 
 <a href="https://app.navability.io/edge/connect"><p align="center">
 <img src="https://user-images.githubusercontent.com/6412556/218193635-2325bbd1-f82c-4391-8959-8f54b2acdc0a.png" width="240px" border="0" />
@@ -21,15 +21,26 @@ You can login via the [NavAbility App](https://app.navability.io/get-started/int
 ## Installing
 
 The NavAbilitySDK can be installed as a usual Julia package:
-```python
+```
 pip install navabilitysdk
+```
+
+Installing from within a Python kernel can also be done using:
+```python
+# Install a pip package inside a Jupyter kernel
+# import sys
+# !{sys.executable} -m pip install navabilitysdk
 ```
 
 ## Loading NavAbilitySDK
 
 Loading the SDK module:
 ```python
-import navabilitysdk
+from navability.entities import *
+from navability.services import *
+from uuid import uuid4
+import asyncio
+import numpy as np
 ```
 
 **NOTE** The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite] or <info@navability.io> for more help.
@@ -37,3 +48,4 @@ import navabilitysdk
 [sdk-py]: https://github.com/NavAbility/NavAbilitySDK.py/issues
 [cjl-docs]: https://juliarobotics.org/Caesar.jl/latest/
 [slack-invite]: https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw
+[nva-app-auth]: https://app.navability.io/edge/connect

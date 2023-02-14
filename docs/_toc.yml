@@ -15,8 +15,9 @@ parts:
 - caption: Graph Solvers
   chapters:
   - file: solvers
-- caption: Bigger Example
+- caption: Tutorials
   chapters:
+  - file: nvatutorials
   - file: bigexample
 - caption: Notes and FAQ
   chapters:

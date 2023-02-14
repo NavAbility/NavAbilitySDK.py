@@ -13,24 +13,24 @@ jobs:
     # needs: [build]
     runs-on: ubuntu-latest
     container:
-      image: python:3.8
+      image: python:3.6
       volumes:
         - dist:dist
         - public:public
     steps:
 
       # check out sources that will be used for autodocs, plus readme
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
-      # download wheel that was build and uploaded in the build step
-      - uses: actions/download-artifact@v1
-        with:
-          name: distributions
-          path: dist
+      # # download wheel that was build and uploaded in the build step
+      # - uses: actions/download-artifact@v1
+      #   with:
+      #     name: distributions
+      #     path: dist
 
       # didn't need to change anything here, but had to add sphinx.ext.githubpages
       # to my conf.py extensions list. that fixes the broken uploads
-      - name: Building documentation
+      - name: Run JupyterBook
         run: |
           pip install -r docs/requirements.txt
           jupyter-book build docs/

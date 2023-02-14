@@ -118,3 +118,5 @@ venv/
 venv_test/
 
 sandbox.py
+
+docs/_build

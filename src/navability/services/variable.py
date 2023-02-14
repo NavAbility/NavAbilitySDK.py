@@ -48,6 +48,20 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
 def addVariable(
     client: NavAbilityClient, context: Client, variable_or_label, varType=None
 ):
+    """ Add a variable to the graph.
+
+    Args:
+        client (NavAbilityClient): _description_
+        context (Client): _description_
+        variable_or_label (_type_): _description_
+        varType (_type_, optional): _description_. Defaults to None.
+
+    Raises:
+        NotImplementedError: _description_
+
+    Returns:
+        _type_: _description_
+    """
     if isinstance(variable_or_label, Variable):
         return _addVariable(client, context, variable_or_label)
     # TODO standardise varType to string or VariableType after design discussion

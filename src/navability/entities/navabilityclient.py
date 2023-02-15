@@ -57,6 +57,11 @@ class NavAbilityWebsocketClient(NavAbilityClient):
 
 
 class NavAbilityHttpsClient(NavAbilityClient):
+    """Connection object for queries and mutations to API server.
+
+    Args:
+        NavAbilityClient (NavAbilityClient): the connection object
+    """
     def __init__(self, url: str = "https://api.navability.io") -> None:
         super().__init__()
         self.transport = AIOHTTPTransport(url=url)

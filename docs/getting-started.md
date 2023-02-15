@@ -50,7 +50,9 @@ To use the NavAbility SDK example in a REPL you need to start it with `asyncio`,
 If you don't, you'll see `SyntaxError: 'await' outside function`. 
 
 
-**NOTE** The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite] or <info@navability.io> for more help.
+:::{seealso}
+The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite] or <info@navability.io> for more help.
+:::
 
 [sdk-py]: https://github.com/NavAbility/NavAbilitySDK.py/issues
 [cjl-docs]: https://juliarobotics.org/Caesar.jl/latest/

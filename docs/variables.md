@@ -82,7 +82,9 @@ xyr = v0.ppes["default"]["suggested"]
 # [-0.00, 0.00, 0.00]
 ```
 
-**WARNING** At time of writing these numerical values represent the solution stored in coordinates.  In the future, these values are expected to stored directly as on-manifold point representations.  The internal solver computations are already all on-manifold.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
+:::{warning} 
+At time of writing these numerical values represent the solution stored in coordinates.  In the future, these values are expected to stored directly as on-manifold point representations.  The internal solver computations are already all on-manifold.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
+:::
 
 ## SDK Supported Variables
 
@@ -93,7 +95,9 @@ The list of variable types currently supported by the SDK are:
 - `Position3` / `Point3`
 - `Pose3`
 
-**NOTE** Many more variable types are already supported by the solver, see [additional docs here](https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/).  Reach out to NavAbility for help or support in bringing more variable types to the SDK sooner, or for help in building more variable types that may not yet exist in either libraries.
+:::{tip}
+Many more variable types are already supported by the solver, see [additional docs here](https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/).  Reach out to NavAbility for help or support in bringing more variable types to the SDK sooner, or for help in building more variable types that may not yet exist in either libraries.
+:::
 
 ## Data `BlobEntry=>Blob`
 
@@ -114,10 +118,13 @@ Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can b
 
 See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
 
-**NOTE** A blob is owned by a `user` and only accessible by other users if allowed via approved roles or permissions.
+:::{tip}
+A blob is owned by a `user` and only accessible by other users if allowed via approved roles or permissions.
+:::
 
-
-**NOTE** All `blobId`s are unique across the entire distributed system and are immutable.
+:::{tip}
+All `blobId`s are unique across the entire distributed system and are immutable.
+:::
 
 <!-- ```@docs
 listBlobEntries

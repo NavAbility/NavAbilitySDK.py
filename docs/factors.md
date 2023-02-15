@@ -44,7 +44,9 @@ GraphVizApp(context, variableStartsWith="")
 
 A `variableStartsWith="l"` type filter can be used to filter the visualization to more specific elements of the graph.  This is useful in large graphs where the visualization easily overwhelms the display -- e.g. just show variables starting with `l` which may indicate landmarks.
 
-**NOTE** A console output will only produce the text URL as above, but Markdown enhanced output (such as Jupyter or Pluto notebooks) will also produce a clickable graphic.
+:::{tip}
+A console output will only produce the text URL as above, but Markdown enhanced output (such as Jupyter or Pluto notebooks) will also produce a clickable graphic.
+:::
 
 The NavAbilityApp Graph visualization page can also be found in the hamburger menu (top right).  Once on the Graph visualization page, the global filter menu (top left) can be used to look for specific user, robot, session, and starts with criteria.  Here is an example following from earlier (as per one of the ICRA 2022 tutorials) showing a variable `x0` and the unary prior factor `x0f_8ebc`:
 
@@ -71,7 +73,9 @@ The list of currently supported factors in the SDK are:
 - `PriorPose3`
 - `Pose3Pose3`
 
-**NOTE** Many more factor types are already supported by the solver, see [additional docs here](https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/).  Reach out to NavAbility for help or support in bringing more variable types to eh SDK sooner, or for help in building more factor types that may not yet exist in either libraries.
+:::{tip}
+Many more factor types are already supported by the solver, see [additional docs here](https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/).  Reach out to NavAbility for help or support in bringing more variable types to eh SDK sooner, or for help in building more factor types that may not yet exist in either libraries.
+:::
 
 <!-- ## Factor Index
 

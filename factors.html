@@ -492,7 +492,10 @@ getFactor
 </pre></div>
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">variableStartsWith=&quot;l&quot;</span></code> type filter can be used to filter the visualization to more specific elements of the graph.  This is useful in large graphs where the visualization easily overwhelms the display – e.g. just show variables starting with <code class="docutils literal notranslate"><span class="pre">l</span></code> which may indicate landmarks.</p>
-<p><strong>NOTE</strong> A console output will only produce the text URL as above, but Markdown enhanced output (such as Jupyter or Pluto notebooks) will also produce a clickable graphic.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A console output will only produce the text URL as above, but Markdown enhanced output (such as Jupyter or Pluto notebooks) will also produce a clickable graphic.</p>
+</div>
 <p>The NavAbilityApp Graph visualization page can also be found in the hamburger menu (top right).  Once on the Graph visualization page, the global filter menu (top left) can be used to look for specific user, robot, session, and starts with criteria.  Here is an example following from earlier (as per one of the ICRA 2022 tutorials) showing a variable <code class="docutils literal notranslate"><span class="pre">x0</span></code> and the unary prior factor <code class="docutils literal notranslate"><span class="pre">x0f_8ebc</span></code>:</p>
 <p><a href="https://app.navability.io/cloud/graph/?userId=guest@navability.io&robotStartsWith=SDKjl_0181&sessionStartsWith=Tutorial1_af33&variableStartsWith"> <p align="center">
 <img src="https://user-images.githubusercontent.com/6412556/218284321-83fad03b-ea54-4a0a-976d-49020f48dcd4.png" width="480" border="0" /></p>
@@ -517,7 +520,10 @@ GraphVizApp
 <li><p><code class="docutils literal notranslate"><span class="pre">PriorPose3</span></code></p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">Pose3Pose3</span></code></p></li>
 </ul>
-<p><strong>NOTE</strong> Many more factor types are already supported by the solver, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/">additional docs here</a>.  Reach out to NavAbility for help or support in bringing more variable types to eh SDK sooner, or for help in building more factor types that may not yet exist in either libraries.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Many more factor types are already supported by the solver, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/">additional docs here</a>.  Reach out to NavAbility for help or support in bringing more variable types to eh SDK sooner, or for help in building more factor types that may not yet exist in either libraries.</p>
+</div>
 <!-- ## Factor Index
 
 ```@docs

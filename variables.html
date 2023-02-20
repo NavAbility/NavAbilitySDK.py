@@ -69,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with Factors" href="factors.html" />
+    <link rel="next" title="Data BlobEntry=&gt;Blob" href="blobs.html" />
     <link rel="prev" title="Getting Started" href="getting-started.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -144,6 +144,16 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Working with Variables
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="blobs.html">
+   Data
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     BlobEntry=&gt;Blob
+    </span>
+   </code>
   </a>
  </li>
  <li class="toctree-l1">
@@ -439,16 +449,6 @@ title="Print to PDF"
    SDK Supported Variables
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-blobentry-blob">
-   Data
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     BlobEntry=&gt;Blob
-    </span>
-   </code>
-  </a>
- </li>
 </ul>
 
     </nav>
@@ -514,16 +514,6 @@ title="Print to PDF"
    SDK Supported Variables
   </a>
  </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#data-blobentry-blob">
-   Data
-   <code class="docutils literal notranslate">
-    <span class="pre">
-     BlobEntry=&gt;Blob
-    </span>
-   </code>
-  </a>
- </li>
 </ul>
 
                         </nav>
@@ -542,17 +532,19 @@ title="Print to PDF"
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># copy the auth token from the NavAbility App</span>
 <span class="n">auth_token</span> <span class="o">=</span> <span class="s2">&quot;r3ft ... eo7_&quot;</span> <span class="c1"># e.g. if not guest</span>
 
-<span class="c1"># also create a client connection</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span> <span class="c1"># pass auth_token if not using guest</span>
+<span class="c1"># create an authorized client connection</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">(</span><span class="n">auth_token</span><span class="o">=</span><span class="n">auth_token</span><span class="p">)</span> 
+<span class="c1"># leave out the auth_token if using `guest@navability.io`</span>
 
 <span class="c1"># create a unique context for the client, i.e. (user, robot, session)</span>
 <span class="n">context</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span>
-  <span class="s2">&quot;guest@navability.io&quot;</span><span class="p">,</span> <span class="c1"># user specific name for auth</span>
+  <span class="s2">&quot;my@user.com&quot;</span><span class="p">,</span> <span class="c1"># user specific auth</span>
   <span class="s2">&quot;ExampleRobot&quot;</span><span class="p">,</span>
   <span class="s2">&quot;Hexagonal&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>The <code class="docutils literal notranslate"><span class="pre">client</span></code> is used to make requests to the system, and <code class="docutils literal notranslate"><span class="pre">context</span></code> is used to describe a specific session graph.</p>
 <!-- ```@docs
 NavAbilityHttpsClient
 Client
@@ -586,26 +578,26 @@ getVariable
 ``` -->
 <section id="understanding-solvekeys">
 <h3>Understanding <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#understanding-solvekeys" title="Permalink to this headline">#</a></h3>
-<p>Since various numerical solutions may exists for the same factor graph, we introduce the idea of a <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  Different numerical values for different <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s can exists for any number of reasons.  Using the example from above, we might find:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="p">[</span><span class="s2">&quot;solverData&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;solveKey&quot;</span><span class="p">]</span>
-<span class="c1"># graphinit</span>
-<span class="n">v0</span><span class="p">[</span><span class="s2">&quot;solverData&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">][</span><span class="s2">&quot;solveKey&quot;</span><span class="p">]</span>
-<span class="c1"># default</span>
-<span class="n">v0</span><span class="p">[</span><span class="s2">&quot;solverData&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;solveKey&quot;</span><span class="p">]</span>
-<span class="c1"># parametric</span>
+<p>Since various numerical solutions may exists for the same factor graph, we introduce the idea of a <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  Different numerical values for different <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s can exists for any number of reasons.  For example, we may find a different situation in each of three <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s, <code class="docutils literal notranslate"><span class="pre">('default',</span> <span class="pre">'parametric',</span> <span class="pre">'graphinit')</span></code>, where we can explore some of the properties:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">variableType</span>
+<span class="c1"># &#39;RoME.Pose3&#39;</span>
+<span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;parametric&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">initialized</span>
+<span class="c1"># False</span>
+<span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;grahpinit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vecval</span>
+<span class="c1"># [0,0,0...]</span>
 </pre></div>
 </div>
-<p>Each of these <code class="docutils literal notranslate"><span class="pre">solverData</span></code>s are unique identified via the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  The <code class="docutils literal notranslate"><span class="pre">graphinit</span></code> solver values are a duplicate of the numerical values for the variable before inference computation was performed.  In this example the <code class="docutils literal notranslate"><span class="pre">default</span></code> key corresponds to the nonparametric solution, and <code class="docutils literal notranslate"><span class="pre">parametric</span></code> represents a Gaussian only parametric solution.</p>
+<p>Each of these <code class="docutils literal notranslate"><span class="pre">solverData</span></code>s are unique identified via the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  The <code class="docutils literal notranslate"><span class="pre">graphinit</span></code> solver values are a duplicate of the numerical values for the variable before inference computation was performed.  In this example the <code class="docutils literal notranslate"><span class="pre">default</span></code> key corresponds to the nonparametric solution, and <code class="docutils literal notranslate"><span class="pre">parametric</span></code> represents a Gaussian only parametric solution.  Repeat solves, or solving via different methods, or solves with different parameter selections can all be supported via <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.</p>
 <p>The numerical values can be obtained from the <code class="docutils literal notranslate"><span class="pre">solverData</span></code> via:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="p">[</span><span class="s2">&quot;solverData&quot;</span><span class="p">][</span><span class="mi">3</span><span class="p">][</span><span class="s2">&quot;vecval&quot;</span><span class="p">]</span>
-<span class="c1"># [-0.001, 0.002, 0.001]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;graphinit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vecval</span>
+<span class="c1"># [-0.001, 0.002, 0.001, ...]</span>
 </pre></div>
 </div>
 </section>
 <section id="understanding-ppes">
 <h3>Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s<a class="headerlink" href="#understanding-ppes" title="Permalink to this headline">#</a></h3>
-<p>To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution called the parametric point estimate (<code class="docutils literal notranslate"><span class="pre">PPE</span></code>) for each of the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.  While various forms of <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s can exists—such as mean, max, modes, etc.—a common <code class="docutils literal notranslate"><span class="pre">suggested</span></code> field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (<code class="docutils literal notranslate"><span class="pre">default</span></code>) can be obtained by:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xyr</span> <span class="o">=</span> <span class="n">v0</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">][</span><span class="s2">&quot;suggested&quot;</span><span class="p">]</span>
+<p>To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (<code class="docutils literal notranslate"><span class="pre">PPE</span></code>) for each of the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.  While various forms of <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s can exists—such as mean, max, modes, etc.—a common <code class="docutils literal notranslate"><span class="pre">suggested</span></code> field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (<code class="docutils literal notranslate"><span class="pre">default</span></code>) can be obtained by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xyr</span> <span class="o">=</span> <span class="n">v0</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span>
 <span class="c1"># [-0.00, 0.00, 0.00]</span>
 </pre></div>
 </div>
@@ -629,34 +621,6 @@ getVariable
 <p class="admonition-title">Tip</p>
 <p>Many more variable types are already supported by the solver, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/">additional docs here</a>.  Reach out to NavAbility for help or support in bringing more variable types to the SDK sooner, or for help in building more variable types that may not yet exist in either libraries.</p>
 </div>
-</section>
-<section id="data-blobentry-blob">
-<h2>Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code><a class="headerlink" href="#data-blobentry-blob" title="Permalink to this headline">#</a></h2>
-<p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s associated with a particular variable.  For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">de</span> <span class="o">=</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">fetch</span>
-<span class="n">de</span> <span class="o">.|&gt;</span> <span class="n">s</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;blobLabel&quot;</span><span class="p">]</span>
-<span class="c1"># e.g. [&quot;Camera0&quot;, &quot;user_calibration&quot;, etc.]</span>
-</pre></div>
-</div>
-<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">blobId</span></code> of the first <code class="docutils literal notranslate"><span class="pre">dataEntry</span></code> on this variable:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">de</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;blobId&quot;</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
-<span class="c1"># [0x2e, 0x45, ..., 0x2b] # length 1225 bytes</span>
-</pre></div>
-</div>
-<p>Data blobs are provided in binary format (i.e. <code class="docutils literal notranslate"><span class="pre">::Vector{UInt8}</span></code>).  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
-<p>See <a class="reference external" href="https://app.navability.io/get-started/tutorials/icra-5-marineexample">Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs</a>.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>A blob is owned by a <code class="docutils literal notranslate"><span class="pre">user</span></code> and only accessible by other users if allowed via approved roles or permissions.</p>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>All <code class="docutils literal notranslate"><span class="pre">blobId</span></code>s are unique across the entire distributed system and are immutable.</p>
-</div>
-<!-- ```@docs
-listBlobEntries
-getBlob
-``` -->
 </section>
 </section>
 
@@ -694,10 +658,10 @@ getBlob
             <p class="prev-next-title">Getting Started</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="factors.html" title="next page">
+    <a class='right-next' id="next-link" href="blobs.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with Factors</p>
+        <p class="prev-next-title">Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code></p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

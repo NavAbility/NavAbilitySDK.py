@@ -147,6 +147,16 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="blobs.html">
+   Data
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     BlobEntry=&gt;Blob
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="factors.html">
    Working with Factors
   </a>
@@ -400,7 +410,7 @@ title="Print to PDF"
 <p>The following questions have come up in previous conversations:</p>
 <ul class="simple">
 <li><p><strong>Why is the SDK camel-cased?</strong> True, Python code should be snake-cased. This was a design decision to align all the SDKS. All the functions and fields should look the same, so you can easily switch from one language to another without having to read documentation. This may change in the future as we grow the SDKs.</p></li>
-<li><p><strong>Which user should I use?</strong> The <code class="docutils literal notranslate"><span class="pre">guest&#64;navability.io</span></code> user is open and free for everyone to use. We recommend testing with this user, because it doesn’t require any authentication. Note though, that the data is cleared on a regular basis, and that everyone can see your test data (all Guest users are created equal), so don’t put anything in there that that is sensitive.</p></li>
+<li><p><strong>Which user should I use?</strong> The <code class="docutils literal notranslate"><span class="pre">guest&#64;navability.io</span></code> user is open and free for everyone to use. We recommend testing with this user, because it doesn’t require any authentication. Note though, that the data is cleared on a regular basis, and that everyone can see your test data (all Guest users are created equal), so don’t put anything in there that is sensitive.</p></li>
 <li><p><strong>I have sensitive data, how do I create a user?</strong> Great question, the NavAbility services completely isolate data per user and you can create a user at any point. At the moment we create users on demand because the services are changing as we develop them, and we want to make sure we can let everyone know as they do. Send us an email at <a class="reference external" href="mailto:info&#37;&#52;&#48;navability&#46;io">info<span>&#64;</span>navability<span>&#46;</span>io</a> and we’ll create a user for you right away.</p></li>
 <li><p><strong>Why Asyncio?</strong> We’re working on integrating these into <a class="reference external" href="https://github.com/NavAbility/BinderNotebooks">Example Jupyter Notebooks</a> which only support asynchronous GQL calls in the <code class="docutils literal notranslate"><span class="pre">gql</span></code> library. This design decision will be standardized in all our SDKs in the next release. Overally it’s been a good call, and we’ll expand on more asynchronous functionality as these SDKs develop.</p></li>
 <li><p><strong>Why IPython?</strong> We’re temporarily importing IPython to generate links for our notebooks and this will be removed in the near future.</p></li>

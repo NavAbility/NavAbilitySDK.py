@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Summary &#8212; NavAbilitySDK.py Documentation</title>
+    <title>Data BlobEntry=&gt;Blob &#8212; NavAbilitySDK.py Documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -69,7 +69,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Notes and FAQ" href="notesfaq.html" />
+    <link rel="next" title="Working with Factors" href="factors.html" />
+    <link rel="prev" title="Working with Variables" href="variables.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -134,7 +135,7 @@ const thebe_selector_output = ".output, .cell_output"
   From a Graph 🪄
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="getting-started.html">
    Getting Started
@@ -145,8 +146,8 @@ const thebe_selector_output = ".output, .cell_output"
    Working with Variables
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="blobs.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Data
    <code class="docutils literal notranslate">
     <span class="pre">
@@ -219,9 +220,9 @@ const thebe_selector_output = ".output, .cell_output"
   Summary
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="summary.html">
    Summary
   </a>
  </li>
@@ -315,7 +316,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://navability.github.io/NavAbilitySDK.py//issues/new?title=Issue%20on%20page%20%2Fsummary.html&body=Your%20issue%20content%20here."
+        <a href="https://navability.github.io/NavAbilitySDK.py//issues/new?title=Issue%20on%20page%20%2Fblobs.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -343,7 +344,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/summary.md"
+        <a href="_sources/blobs.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -392,7 +393,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Summary</h1>
+                <h1>Data BlobEntry=>Blob</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -404,18 +405,32 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="summary">
-<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h1>
-<p>Autodoc of docstrings (WIP):</p>
-<!-- doesnt seem to the right way to envoke docstrings here -->
-<!-- this pattern does find addVariable but not adding content to docs -->
-<!-- ```{eval-rst}
-.. automodule:: navability.services
-   :members: addVariable
-``` -->
-<!-- this partially works
-```{eval-rst}
-.. autofunction:: navability.services.addFactor
+  <section id="data-blobentry-blob">
+<h1>Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code><a class="headerlink" href="#data-blobentry-blob" title="Permalink to this headline">#</a></h1>
+<p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s associated with a particular variable.  For example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">de</span> <span class="o">=</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">fetch</span>
+<span class="n">de</span> <span class="o">.|&gt;</span> <span class="n">s</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;blobLabel&quot;</span><span class="p">]</span>
+<span class="c1"># e.g. [&quot;Camera0&quot;, &quot;user_calibration&quot;, etc.]</span>
+</pre></div>
+</div>
+<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">blobId</span></code> of the first <code class="docutils literal notranslate"><span class="pre">dataEntry</span></code> on this variable:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">de</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;blobId&quot;</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
+<span class="c1"># [0x2e, 0x45, ..., 0x2b] # length 1225 bytes</span>
+</pre></div>
+</div>
+<p>Data blobs are provided in binary format (i.e. <code class="docutils literal notranslate"><span class="pre">::Vector{UInt8}</span></code>).  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
+<p>See <a class="reference external" href="https://app.navability.io/get-started/tutorials/icra-5-marineexample">Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs</a>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>A blob is owned by a <code class="docutils literal notranslate"><span class="pre">user</span></code> and only accessible by other users if allowed via approved roles or permissions.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>All <code class="docutils literal notranslate"><span class="pre">blobId</span></code>s are unique across the entire distributed system and are immutable.</p>
+</div>
+<!-- ```@docs
+listBlobEntries
+getBlob
 ``` --></section>
 
     <script type="text/x-thebe-config">
@@ -445,12 +460,19 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="notesfaq.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="variables.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Notes and FAQ</p>
+            <p class="prev-next-title">Working with Variables</p>
         </div>
+    </a>
+    <a class='right-next' id="next-link" href="factors.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Working with Factors</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
     </a>
 </div>
             </footer>

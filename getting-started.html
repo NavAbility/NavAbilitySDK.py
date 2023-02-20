@@ -147,6 +147,16 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="blobs.html">
+   Data
+   <code class="docutils literal notranslate">
+    <span class="pre">
+     BlobEntry=&gt;Blob
+    </span>
+   </code>
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="factors.html">
    Working with Factors
   </a>
@@ -553,7 +563,10 @@ title="Print to PDF"
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="starting-a-python-repl-for-the-examples">
 <h1>Starting a Python REPL for the Examples<a class="headerlink" href="#starting-a-python-repl-for-the-examples" title="Permalink to this headline">#</a></h1>
-<p>To use the NavAbility SDK example in a REPL you need to start it with <code class="docutils literal notranslate"><span class="pre">asyncio</span></code>, i.e. run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">asyncio</span></code>.</p>
+<p>To use the NavAbility SDK example in a REPL you need to start it with <code class="docutils literal notranslate"><span class="pre">asyncio</span></code>, i.e. run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">asyncio</span></code>.  Together with a <a class="reference external" href="https://docs.python.org/dev/library/venv.html">virtual environment</a>, the entire call becomes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">asyncio</span> <span class="n">venv</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">venv</span>
+</pre></div>
+</div>
 <p>If you don’t, you’ll see <code class="docutils literal notranslate"><span class="pre">SyntaxError:</span> <span class="pre">'await'</span> <span class="pre">outside</span> <span class="pre">function</span></code>.</p>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>

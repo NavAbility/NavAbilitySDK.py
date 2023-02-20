@@ -1,4 +1,4 @@
-# 10,000ft Overview: Data Structure Layout
+# 10,000ft: Data Overview
 
 Knowing how data is organized will help you use and find things much faster.  This is shown early in the docs for easy reference as questions may arise throughout the progression of the docs. 
 
@@ -6,7 +6,7 @@ Knowing how data is organized will help you use and find things much faster.  Th
 The SDKs (which are optimized for machine-to-machine integration) can be used in concert with the [NavAbility App][nva-app-url] (which is optimized for human-to-machine interaction).
 :::
 
-## Data Breakdown
+## Data Structures
 
 The following summary is used to organize user interaction, data storage, retrieval, queried search, SLAM solving and much more.  From the top:
 

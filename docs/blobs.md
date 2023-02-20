@@ -21,7 +21,7 @@ blob = await getBlob(client, context, entries[1].id]; checkhash=false)
 # [0x2e, 0x45, ..., 0x2b] # length 1225 bytes
 ```
 
-Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
+Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
 
 
 :::{tip}

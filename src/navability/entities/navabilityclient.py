@@ -62,9 +62,17 @@ class NavAbilityHttpsClient(NavAbilityClient):
     Args:
         NavAbilityClient (NavAbilityClient): the connection object
     """
-    def __init__(self, url: str = "https://api.navability.io") -> None:
+    def __init__(self, url: str = "https://api.navability.io", auth_token: str = "") -> None:
         super().__init__()
-        self.transport = AIOHTTPTransport(url=url)
+        if len(auth_token) == 0:
+            self.transport = AIOHTTPTransport(
+                url=url,
+            )
+        else:
+            self.transport = AIOHTTPTransport(
+                url=url,
+                headers={'Authorization': 'Bearer '+auth_token}
+            )
 
     async def query(self, options: QueryOptions):
         async with GQLCLient(

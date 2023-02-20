@@ -45,7 +45,10 @@ import numpy as np
 
 # Starting a Python REPL for the Examples
 
-To use the NavAbility SDK example in a REPL you need to start it with `asyncio`, i.e. run `python -m asyncio`.
+To use the NavAbility SDK example in a REPL you need to start it with `asyncio`, i.e. run `python -m asyncio`.  Together with a [virtual environment][py-venv], the entire call becomes:
+```python
+python3 -m asyncio venv /path/to/user/venv
+```
 
 If you don't, you'll see `SyntaxError: 'await' outside function`. 
 
@@ -58,3 +61,4 @@ The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph
 [cjl-docs]: https://juliarobotics.org/Caesar.jl/latest/
 [slack-invite]: https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw
 [nva-app-auth]: https://app.navability.io/edge/connect
+[py-venv]: https://docs.python.org/dev/library/venv.html

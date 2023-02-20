@@ -7,16 +7,19 @@ Most use cases will involve retrieving information from a factor graph session a
 # copy the auth token from the NavAbility App
 auth_token = "r3ft ... eo7_" # e.g. if not guest
 
-# also create a client connection
-client = NavAbilityHttpsClient() # pass auth_token if not using guest
+# create an authorized client connection
+client = NavAbilityHttpsClient(auth_token=auth_token) 
+# leave out the auth_token if using `guest@navability.io`
 
 # create a unique context for the client, i.e. (user, robot, session)
 context = Client(
-  "guest@navability.io", # user specific name for auth
+  "my@user.com", # user specific auth
   "ExampleRobot",
   "Hexagonal",
 )
 ```
+
+The `client` is used to make requests to the system, and `context` is used to describe a specific session graph.
 
 <!-- ```@docs
 NavAbilityHttpsClient

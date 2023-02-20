@@ -15,9 +15,9 @@ class BlobEntry:
     id: str
     label: str
     description: str
-    createdTimestamp: datetime # = datetime.utcnow()
-    updatedTimestamp: datetime
-    size: int
+    # createdTimestamp: datetime # = datetime.utcnow()
+    # updatedTimestamp: datetime
+    # size: int
     blobstore: str
     hash: str = ''
     mimeType: str = 'application/octet-stream'
@@ -37,17 +37,18 @@ class BlobEntry:
 
     @staticmethod
     def load(data):
+        import pdb; pdb.set_trace()
         return BlobEntrySchema().load(data)
 
 
 # Legacy BlobEntry_ contract
-class BlobEntySchema(Schema):
+class BlobEntrySchema(Schema):
     id = fields.Str(required=True)
     label = fields.Str(required=True)
     description: str = fields.Str(required=True)
-    createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
-    updatedTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
-    size: int  = fields.Integer(required=True)
+    # createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
+    # updatedTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
+    # size: int  = fields.Integer(required=True)
     blobstore: str = fields.Str(required=True)
     hash = fields.Str(required=False)
     mimeType = fields.Str(required=False)

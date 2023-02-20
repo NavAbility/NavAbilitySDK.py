@@ -23,8 +23,6 @@ blob = await getBlob(client, context, entries[1].id]; checkhash=false)
 
 Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
 
-See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
-
 
 :::{tip}
 A blob is owned by a `user` and only accessible by other users if allowed via approved roles or permissions.
@@ -52,6 +50,8 @@ To simplify many different requirements, a `BlobEntry` has the following field s
   # size: int
 }
 ```
+
+See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
 
 
 <!-- ```@docs

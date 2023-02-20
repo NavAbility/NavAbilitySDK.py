@@ -1,12 +1,15 @@
 import logging
 import warnings
+import requests
 from typing import List
 
 from gql import gql
 
-# from navability.common.mutations import GQL_ADDVARIABLE
 from navability.common.queries import (
     GQL_LISTDATAENTRIES,
+)
+from navability.common.mutations import (
+    GQL_CREATEDOWNLOAD,
 )
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
@@ -36,7 +39,7 @@ async def listBlobEntries(
         variableLabel (string): list data entries connected to which variable
 
     Returns:
-        _type_: coroutine containing a list of `BlobEntry`s
+        BlobEntry: coroutine containing a list of `BlobEntry`s
 
     """
     params = {
@@ -66,26 +69,15 @@ async def listBlobEntries(
         if len(res["users"][0]["robots"][0]["sessions"]) != 1:
             logger.warn("Robot not found in result, returning empty list")
         return []
-    _lb = lambda s: s['label']
-    resdata = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['data']
-    ret = []
-    [ret.append(_lb(v)) for v in resdata]
-
+    
+    # extract result
     schema = BlobEntrySchema()
-    # schema = None
-    if schema is None:
-        return ret
+    resdata = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['data']
+
     return [
         schema.load(l) for l in resdata
     ]
-    # for d in listdata
-    #   tupk = Tuple(Symbol.(keys(d)))
-    #   nt = NamedTuple{tupk}( values(d) )
-    #   push!(ret,
-    #     nt
-    #   )
-    # end
-    # return ret
+
 
 async def listDataEntries(
     client: NavAbilityClient,
@@ -94,3 +86,55 @@ async def listDataEntries(
 ):
     warnings.warn('listDataEntries is deprecated, use listBlobEntries instead.')
     return await listBlobEntries(client, context, variableLabel)
+
+
+
+async def createDownload(
+    client: NavAbilityClient,
+    user: str,
+    blobId: str,
+):
+    """ Request URLs for data blob download.
+
+    Args:
+    client (NavAbilityClient): The NavAbility client for handling requests.
+    userId (String): The userId with access to the data.
+    blobId (String): The unique blob identifier of the data.
+    """
+    params = {
+        "userId": user,
+        "blobId": blobId,
+    }
+    logger.debug(f"Query params: {params}")
+    res = await client.mutate(
+        MutationOptions(
+            gql(GQL_CREATEDOWNLOAD),
+            params,
+        )
+    )
+
+    # TODO error checking
+    if not 'url' in res:
+        raise ValueError('Cannot create download for ', user, " seeking ", blobId)
+    return res['url']
+
+
+
+async def getBlob(
+    client: NavAbilityClient,
+    user: str,
+    blobId: str,
+):
+    """_summary_
+
+    Args:
+    client (NavAbilityClient): The NavAbility client for handling requests.
+    userId (String): The userId with access to the data.
+    blobId (String): The unique blob identifier of the data.
+
+    Returns:
+        data: coroutine with data blob content
+    """
+    url = await createDownload(client, user, blobId)
+    resp = requests.get(url)
+    return resp.content

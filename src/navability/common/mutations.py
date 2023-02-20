@@ -101,10 +101,10 @@ mutation sdk_export_session(
 
 
 GQL_CREATEDOWNLOAD = """
-mutation sdk_url_createdownload ($userId: String!, $fileId: ID!) {
+mutation sdk_url_createdownload ($userId: String!, $blobId: ID!) {
   url: createDownload(
     userId: $userId
-    fileId: $fileId
+    fileId: $blobId
   )
 }
 """

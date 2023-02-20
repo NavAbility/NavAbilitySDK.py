@@ -17,8 +17,8 @@ from navability.entities.navabilityclient import (
 # from navability.entities.querydetail import QueryDetail
 from navability.entities.blob.blob import (
     BlobEntry,
+    BlobEntrySchema,
 )
-    # BlobEntrySchema,
 
 
 logger = logging.getLogger(__name__)
@@ -70,14 +70,13 @@ async def listBlobEntries(
     resdata = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['data']
     ret = []
     [ret.append(_lb(v)) for v in resdata]
-    # return ret
-    # TODO: Check for errors
-    # schema = BlobEntrySchema()
-    schema = None
+
+    schema = BlobEntrySchema()
+    # schema = None
     if schema is None:
         return ret
     return [
-        schema.load(l) for l in ret
+        schema.load(l) for l in resdata
     ]
     # for d in listdata
     #   tupk = Tuple(Symbol.(keys(d)))

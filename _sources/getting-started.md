@@ -32,16 +32,6 @@ Installing from within a Python kernel can also be done using:
 # !{sys.executable} -m pip install navabilitysdk
 ```
 
-## Loading NavAbilitySDK
-
-Loading the SDK module:
-```python
-from navability.entities import *
-from navability.services import *
-from uuid import uuid4
-import asyncio
-import numpy as np
-```
 
 # Starting a Python REPL for the Examples
 
@@ -52,6 +42,16 @@ python3 -m asyncio venv /path/to/user/venv
 
 If you don't, you'll see `SyntaxError: 'await' outside function`. 
 
+## Importing NavAbilitySDK
+
+Loading the SDK module:
+```python
+from navability.entities import *
+from navability.services import *
+import asyncio
+from uuid import uuid4
+import numpy as np
+```
 
 :::{seealso}
 The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite] or <info@navability.io> for more help.

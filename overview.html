@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Notes and FAQ &#8212; NavAbilitySDK.py Documentation</title>
+    <title>10,000ft Overview: Data Structure Layout &#8212; NavAbilitySDK.py Documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -69,8 +69,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Summary" href="summary.html" />
-    <link rel="prev" title="Example" href="bigexample.html" />
+    <link rel="next" title="Working with Variables" href="variables.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -135,14 +135,14 @@ const thebe_selector_output = ".output, .cell_output"
   From a Graph 🪄
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="getting-started.html">
    Getting Started
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="overview.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    10,000ft Overview: Data Structure Layout
   </a>
  </li>
@@ -213,9 +213,9 @@ const thebe_selector_output = ".output, .cell_output"
   Notes and FAQ
  </span>
 </p>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="notesfaq.html">
    Notes and FAQ
   </a>
  </li>
@@ -321,7 +321,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://navability.github.io/NavAbilitySDK.py//issues/new?title=Issue%20on%20page%20%2Fnotesfaq.html&body=Your%20issue%20content%20here."
+        <a href="https://navability.github.io/NavAbilitySDK.py//issues/new?title=Issue%20on%20page%20%2Foverview.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -349,7 +349,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/notesfaq.md"
+        <a href="_sources/overview.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -386,23 +386,70 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-breakdown">
+   Data Breakdown
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-example">
+   Data Example
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Notes and FAQ</h1>
+                <h1>10,000ft Overview: Data Structure Layout</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-breakdown">
+   Data Breakdown
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#data-example">
+   Data Example
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -410,17 +457,83 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="notes-and-faq">
-<h1>Notes and FAQ<a class="headerlink" href="#notes-and-faq" title="Permalink to this headline">#</a></h1>
-<p>The following questions have come up in previous conversations:</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="ft-overview-data-structure-layout">
+<h1>10,000ft Overview: Data Structure Layout<a class="headerlink" href="#ft-overview-data-structure-layout" title="Permalink to this headline">#</a></h1>
+<p>Knowing how data is organized will help you use and find things much faster.  This is shown early in the docs for easy reference as questions may arise throughout the progression of the docs.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>The SDKs (which are optimized for machine-to-machine integration) can be used in concert with the <a class="reference external" href="https://app.navability.io/home">NavAbility App</a> (which is optimized for human-to-machine interaction).</p>
+</div>
+<section id="data-breakdown">
+<h2>Data Breakdown<a class="headerlink" href="#data-breakdown" title="Permalink to this headline">#</a></h2>
+<p>The following summary is used to organize user interaction, data storage, retrieval, queried search, SLAM solving and much more.  From the top:</p>
 <ul class="simple">
-<li><p><strong>Why is the SDK camel-cased?</strong> True, Python code should be snake-cased. This was a design decision to align all the SDKS. All the functions and fields should look the same, so you can easily switch from one language to another without having to read documentation. This may change in the future as we grow the SDKs.</p></li>
-<li><p><strong>Which user should I use?</strong> The <code class="docutils literal notranslate"><span class="pre">guest&#64;navability.io</span></code> user is open and free for everyone to use. We recommend testing with this user, because it doesn’t require any authentication. Note though, that the data is cleared on a regular basis, and that everyone can see your test data (all Guest users are created equal), so don’t put anything in there that is sensitive.</p></li>
-<li><p><strong>I have sensitive data, how do I create a user?</strong> Great question, the NavAbility services completely isolate data per user and you can create a user at any point. At the moment we create users on demand because the services are changing as we develop them, and we want to make sure we can let everyone know as they do. Send us an email at <a class="reference external" href="mailto:info&#37;&#52;&#48;navability&#46;io">info<span>&#64;</span>navability<span>&#46;</span>io</a> and we’ll create a user for you right away.</p></li>
-<li><p><strong>Why Asyncio?</strong> We’re working on integrating these into <a class="reference external" href="https://github.com/NavAbility/BinderNotebooks">Example Jupyter Notebooks</a> which only support asynchronous GQL calls in the <code class="docutils literal notranslate"><span class="pre">gql</span></code> library. This design decision will be standardized in all our SDKs in the next release. Overally it’s been a good call, and we’ll expand on more asynchronous functionality as these SDKs develop.</p></li>
-<li><p><strong>Why IPython?</strong> We’re temporarily importing IPython to generate links for our notebooks and this will be removed in the near future.</p></li>
-<li><p>Otherwise for any questions, comments, or feedback please feel free to email us at <a class="reference external" href="mailto:info&#37;&#52;&#48;navability&#46;io">info<span>&#64;</span>navability<span>&#46;</span>io</a> or write an issue on the repo.</p></li>
+<li><p>User</p>
+<ul>
+<li><p>Robots</p>
+<ul>
+<li><p>Sessions</p>
+<ul>
+<li><p>Variables</p>
+<ul>
+<li><p>BlobEntries (this includes raw, processing, and product data)</p></li>
+<li><p>PPEs (parametric point estimates)</p></li>
+<li><p>SolverData (Gaussian and non-Gaussian solutions)</p></li>
 </ul>
+</li>
+<li><p>Factors</p>
+<ul>
+<li><p>mathematical structure</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="data-example">
+<h2>Data Example<a class="headerlink" href="#data-example" title="Permalink to this headline">#</a></h2>
+<p>So for example:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="mailto:my&#37;&#52;&#48;user&#46;com">my<span>&#64;</span>user<span>&#46;</span>com</a></p>
+<ul>
+<li><p>RoboticAgent_e3ddc</p>
+<ul>
+<li><p>Session_2001_01_d8</p>
+<ul>
+<li><p>Variable: pose0</p>
+<ul>
+<li><p>BlobEntries: {CameraFwd_1225, LidarScan_643, IMU_4677, FusedPointCloud_High, VisualDescriptors, ObjectMap, …}</p></li>
+<li><p>PPEs: {parametric, nonparametric, verification}</p></li>
+<li><p>SolverData: {init, parametric, multimodal, 3_hypo, …}</p></li>
+</ul>
+</li>
+<li><p>pose1</p></li>
+<li><p>pose2</p></li>
+<li><p>…</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>HandhelpDevice7</p>
+<ul>
+<li><p>Session_sdc9hk2</p>
+<ul>
+<li><p>x0</p></li>
+<li><p>tag4</p></li>
+<li><p>…</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Let’s start by looking at variables on the next page.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,17 +563,17 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="bigexample.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="getting-started.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Example</p>
+            <p class="prev-next-title">Getting Started</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="summary.html" title="next page">
+    <a class='right-next' id="next-link" href="variables.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Summary</p>
+        <p class="prev-next-title">Working with Variables</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

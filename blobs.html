@@ -142,6 +142,11 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="overview.html">
+   10,000ft Overview: Data Structure Layout
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="variables.html">
    Working with Variables
   </a>
@@ -381,12 +386,36 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#blobentry-structure">
+   BlobEntry Structure
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -398,6 +427,19 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#blobentry-structure">
+   BlobEntry Structure
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -405,21 +447,28 @@ title="Print to PDF"
                 
               <div>
                 
-  <section id="data-blobentry-blob">
+  <section class="tex2jax_ignore mathjax_ignore" id="data-blobentry-blob">
 <h1>Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code><a class="headerlink" href="#data-blobentry-blob" title="Permalink to this headline">#</a></h1>
 <p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s associated with a particular variable.  For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">de</span> <span class="o">=</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">fetch</span>
-<span class="n">de</span> <span class="o">.|&gt;</span> <span class="n">s</span><span class="o">-&gt;</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;blobLabel&quot;</span><span class="p">]</span>
-<span class="c1"># e.g. [&quot;Camera0&quot;, &quot;user_calibration&quot;, etc.]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entries</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">fetch</span>
+<span class="c1"># human friendly labels</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">en</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">])</span>
+<span class="c1"># e.g. [&#39;Camera0&#39;, &#39;UserCalib&#39;, &#39;GPS&#39;, &#39;JoystickCmds&#39;]</span>
+
+<span class="c1"># machine friendly system wide unique identifier</span>
+<span class="nb">print</span><span class="p">([</span><span class="n">en</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">blobId</span></code> of the first <code class="docutils literal notranslate"><span class="pre">dataEntry</span></code> on this variable:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">de</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="s2">&quot;blobId&quot;</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p><code class="docutils literal notranslate"><span class="pre">Blob</span></code>s are separate from <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s.  Various nodes on the graph can have any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s (including duplicates), but the user does not necessary have the need to pull the bandwidth heavy blobs across all parts of the system network.</p>
+</div>
+<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">id</span></code> (or <code class="docutils literal notranslate"><span class="pre">blobId</span></code>) of from a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
 <span class="c1"># [0x2e, 0x45, ..., 0x2b] # length 1225 bytes</span>
 </pre></div>
 </div>
-<p>Data blobs are provided in binary format (i.e. <code class="docutils literal notranslate"><span class="pre">::Vector{UInt8}</span></code>).  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
-<p>See <a class="reference external" href="https://app.navability.io/get-started/tutorials/icra-5-marineexample">Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs</a>.</p>
+<p>Data blobs are provided in binary format (i.e. <code class="docutils literal notranslate"><span class="pre">::Vector{UInt8}</span></code>).  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>A blob is owned by a <code class="docutils literal notranslate"><span class="pre">user</span></code> and only accessible by other users if allowed via approved roles or permissions.</p>
@@ -428,10 +477,30 @@ title="Print to PDF"
 <p class="admonition-title">Tip</p>
 <p>All <code class="docutils literal notranslate"><span class="pre">blobId</span></code>s are unique across the entire distributed system and are immutable.</p>
 </div>
+<section id="blobentry-structure">
+<h2>BlobEntry Structure<a class="headerlink" href="#blobentry-structure" title="Permalink to this headline">#</a></h2>
+<p>To simplify many different requirements, a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> has the following field structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
+  <span class="n">label</span><span class="p">:</span> <span class="n">string</span>
+  <span class="n">description</span><span class="p">:</span> <span class="n">string</span>
+  <span class="n">blobstore</span><span class="p">:</span> <span class="n">string</span>
+  <span class="nb">hash</span><span class="p">:</span> <span class="n">string</span>
+  <span class="n">mimeType</span><span class="p">:</span> <span class="n">string</span>
+  <span class="n">origin</span><span class="p">:</span> <span class="n">string</span>
+
+  <span class="c1">## planned future fields</span>
+  <span class="c1"># createdTimestamp: datetime</span>
+  <span class="c1"># size: int</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>See <a class="reference external" href="https://app.navability.io/get-started/tutorials/icra-5-marineexample">Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs</a>.</p>
 <!-- ```@docs
 listBlobEntries
 getBlob
 ``` --></section>
+</section>
 
     <script type="text/x-thebe-config">
     {

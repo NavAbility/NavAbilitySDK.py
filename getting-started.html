@@ -69,7 +69,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Working with Variables" href="variables.html" />
+    <link rel="next" title="10,000ft Overview: Data Structure Layout" href="overview.html" />
     <link rel="prev" title="Introduction" href="index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -139,6 +139,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="overview.html">
+   10,000ft Overview: Data Structure Layout
   </a>
  </li>
  <li class="toctree-l1">
@@ -434,17 +439,19 @@ title="Print to PDF"
      Installing
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#loading-navabilitysdk">
-     Loading NavAbilitySDK
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#starting-a-python-repl-for-the-examples">
    Starting a Python REPL for the Examples
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#importing-navabilitysdk">
+     Importing NavAbilitySDK
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -496,17 +503,19 @@ title="Print to PDF"
      Installing
     </a>
    </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#loading-navabilitysdk">
-     Loading NavAbilitySDK
-    </a>
-   </li>
   </ul>
  </li>
  <li class="toc-h1 nav-item toc-entry">
   <a class="reference internal nav-link" href="#starting-a-python-repl-for-the-examples">
    Starting a Python REPL for the Examples
   </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#importing-navabilitysdk">
+     Importing NavAbilitySDK
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -549,17 +558,6 @@ title="Print to PDF"
 </pre></div>
 </div>
 </section>
-<section id="loading-navabilitysdk">
-<h2>Loading NavAbilitySDK<a class="headerlink" href="#loading-navabilitysdk" title="Permalink to this headline">#</a></h2>
-<p>Loading the SDK module:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">navability.entities</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">navability.services</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-</pre></div>
-</div>
-</section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="starting-a-python-repl-for-the-examples">
 <h1>Starting a Python REPL for the Examples<a class="headerlink" href="#starting-a-python-repl-for-the-examples" title="Permalink to this headline">#</a></h1>
@@ -568,10 +566,21 @@ title="Print to PDF"
 </pre></div>
 </div>
 <p>If you don’t, you’ll see <code class="docutils literal notranslate"><span class="pre">SyntaxError:</span> <span class="pre">'await'</span> <span class="pre">outside</span> <span class="pre">function</span></code>.</p>
+<section id="importing-navabilitysdk">
+<h2>Importing NavAbilitySDK<a class="headerlink" href="#importing-navabilitysdk" title="Permalink to this headline">#</a></h2>
+<p>Loading the SDK module:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">navability.entities</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">navability.services</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>The NavAbility and <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/">Caesar.jl</a> design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack <a class="reference external" href="https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw"><img alt="" src="https://img.shields.io/badge/Invite-Slack-green.svg?style=popout" /></a> or <a class="reference external" href="mailto:info&#37;&#52;&#48;navability&#46;io">mailto:info<span>&#64;</span>navability<span>&#46;</span>io</a> for more help.</p>
 </div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -608,10 +617,10 @@ title="Print to PDF"
             <p class="prev-next-title">Introduction</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="variables.html" title="next page">
+    <a class='right-next' id="next-link" href="overview.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Working with Variables</p>
+        <p class="prev-next-title">10,000ft Overview: Data Structure Layout</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

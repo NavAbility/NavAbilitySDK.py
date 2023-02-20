@@ -10,6 +10,7 @@ from navability.common.queries import (
 )
 from navability.common.mutations import (
     GQL_CREATEDOWNLOAD,
+    GQL_ADDBLOBENTRY,
 )
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
@@ -138,3 +139,47 @@ async def getBlob(
     url = await createDownload(client, user, blobId)
     resp = requests.get(url)
     return resp.content
+
+
+async def getData(
+    client: NavAbilityClient,
+    user: str,
+    blobId: str,
+):
+    warnings.warn('getData is deprecated, use getBlob instead.')
+    return await listBlobEntries(client, user, blobId)
+
+
+
+def addBlobEntry(
+    client: NavAbilityClient,
+    userId: str,
+    robotId: str,
+    sessionId: str,
+    variableLabel: str,
+    blobId: str,
+    dataLabel: str,
+    blobSize: int,
+    mimeType: str,
+):
+    params = {
+        "userId": userId,
+        "blobId": blobId,
+        "robotId": robotId,
+        "sessionId": sessionId,
+        "variableLabel": variableLabel,
+        "dataLabel": dataLabel,
+        "blobSize": blobSize,
+        "mimeType": mimeType,
+    }
+    logger.debug(f"Query params: {params}")
+    res = await client.mutate(
+        MutationOptions(
+            gql(GQL_ADDBLOBENTRY),
+            params,
+        )
+    )
+    if 'errors' in res:
+        raise Exception('Unable to addBlobEntry: '+res['errors'])
+
+    return res['addBlobEntry']['context']['eventId']

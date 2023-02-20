@@ -97,26 +97,46 @@ async def listVariables(
     Returns:
         List[str]: Async task returning a list of Variable labels.
     """
-    variables = await getVariables(
-        client,
-        context,
-        detail=QueryDetail.SKELETON,
-        regexFilter=regexFilter,
-        tags=tags,
-        solvable=solvable,
+    params = {
+        "userId": context.userId,
+        "robotId": context.robotId,
+        "sessionId": context.sessionId,
+    }
+    logger.debug(f"Query params: {params}")
+    res = await client.query(
+        QueryOptions(gql(GQL_LISTVARIABLES), params)
     )
-    result = [v.label for v in variables]
-    return result
-    # TODO use new much faster API side listing,
-    # params = {
-    #     "userId": context.userId,
-    #     "robotId": context.robotId,
-    #     "sessionId": context.sessionId,
-    # }
-    # logger.debug(f"Query params: {params}")
-    # res = await client.query(
-    #     QueryOptions(gql(GQL_LISTVARIABLES), params)
+    if (
+        "users" not in res
+        or len(res["users"]) != 1
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "variables" not in res["users"][0]["robots"][0]["sessions"][0]
+    ):
+        # Debugging information
+        if len(res["users"]) != 1:
+            logger.warn("User not found in result, returning empty list")
+        if len(res["users"][0]["robots"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        if len(res["users"][0]["robots"][0]["sessions"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        return []
+    vl = []
+    _lb = lambda s: s['label']
+    resvar = res['users'][0]['robots'][0]['sessions'][0]['variables']
+    [vl.append(_lb(v)) for v in resvar]
+    return vl
+    # # LEGACY
+    # variables = await getVariables(
+    #     client,
+    #     context,
+    #     detail=QueryDetail.SKELETON,
+    #     regexFilter=regexFilter,
+    #     tags=tags,
+    #     solvable=solvable,
     # )
+    # result = [v.label for v in variables]
+    # return result
 
 
 

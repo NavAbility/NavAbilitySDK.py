@@ -5,3 +5,4 @@ from .solve import *
 from .status import *
 from .utils import *
 from .variable import *
+from .blob import *

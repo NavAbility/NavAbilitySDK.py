@@ -8,6 +8,7 @@ parts:
   chapters:
   - file: getting-started
   - file: variables
+  - file: blobs
   - file: factors
 - caption: Add to Graph 🕶️
   chapters:

@@ -59,29 +59,29 @@ getVariable
 
 ### Understanding `solveKey`s
 
-Since various numerical solutions may exists for the same factor graph, we introduce the idea of a `solveKey`.  Different numerical values for different `solveKey`s can exists for any number of reasons.  Using the example from above, we might find:
+Since various numerical solutions may exists for the same factor graph, we introduce the idea of a `solveKey`.  Different numerical values for different `solveKey`s can exists for any number of reasons.  For example, we may find a different situation in each of three `solveKey`s, `('default', 'parametric', 'graphinit')`, where we can explore some of the properties:
 ```python
-v0["solverData"][1]["solveKey"]
-# graphinit
-v0["solverData"][2]["solveKey"]
-# default
-v0["solverData"][3]["solveKey"]
-# parametric
+v0.solverData['default'].variableType
+# 'RoME.Pose3'
+v0.solverData['parametric'].initialized
+# False
+v0.solverData['grahpinit'].vecval
+# [0,0,0...]
 ```
 
-Each of these `solverData`s are unique identified via the `solveKey`.  The `graphinit` solver values are a duplicate of the numerical values for the variable before inference computation was performed.  In this example the `default` key corresponds to the nonparametric solution, and `parametric` represents a Gaussian only parametric solution.
+Each of these `solverData`s are unique identified via the `solveKey`.  The `graphinit` solver values are a duplicate of the numerical values for the variable before inference computation was performed.  In this example the `default` key corresponds to the nonparametric solution, and `parametric` represents a Gaussian only parametric solution.  Repeat solves, or solving via different methods, or solves with different parameter selections can all be supported via `solveKey`s.
 
 The numerical values can be obtained from the `solverData` via:
 ```python
-v0["solverData"][3]["vecval"]
-# [-0.001, 0.002, 0.001]
+v0.solverData['graphinit'].vecval
+# [-0.001, 0.002, 0.001, ...]
 ```
 
 ### Understanding `PPE`s
 
-To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution called the parametric point estimate (`PPE`) for each of the `solveKey`s.  While various forms of `PPE`s can exists---such as mean, max, modes, etc.---a common `suggested` field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (`default`) can be obtained by:
+To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (`PPE`) for each of the `solveKey`s.  While various forms of `PPE`s can exists---such as mean, max, modes, etc.---a common `suggested` field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (`default`) can be obtained by:
 ```python
-xyr = v0.ppes["default"]["suggested"]
+xyr = v0.ppes['default'].suggested
 # [-0.00, 0.00, 0.00]
 ```
 
@@ -102,37 +102,6 @@ The list of variable types currently supported by the SDK are:
 Many more variable types are already supported by the solver, see [additional docs here](https://juliarobotics.org/Caesar.jl/latest/concepts/available_varfacs/).  Reach out to NavAbility for help or support in bringing more variable types to the SDK sooner, or for help in building more variable types that may not yet exist in either libraries.
 :::
 
-## Data `BlobEntry=>Blob`
-
-Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the `BlobEntry`s associated with a particular variable.  For example:
-```python
-de = listBlobEntries(client, context, "x0") |> fetch
-de .|> s->s["blobLabel"]
-# e.g. ["Camera0", "user_calibration", etc.]
-```
-
-Data blobs can be fetched via, e.g. using the unique `blobId` of the first `dataEntry` on this variable:
-```python
-blob = getBlob(client, context, de[1]["blobId"]; checkhash=false)
-# [0x2e, 0x45, ..., 0x2b] # length 1225 bytes
-```
-
-Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to teh stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
-
-See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
-
-:::{tip}
-A blob is owned by a `user` and only accessible by other users if allowed via approved roles or permissions.
-:::
-
-:::{tip}
-All `blobId`s are unique across the entire distributed system and are immutable.
-:::
-
-<!-- ```@docs
-listBlobEntries
-getBlob
-``` -->
 
 [nva-app-auth]: https://app.navability.io/edge/connect
 [cjl-docs-mani]: https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/

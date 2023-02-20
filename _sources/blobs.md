@@ -18,10 +18,10 @@ print([en.id for en in entries])
 Data blobs can be fetched via, e.g. using the unique `id` (or `blobId`) of from a `BlobEntry`:
 ```python
 blob = await getBlob(client, context, entries[1].id]; checkhash=false)
-# [0x2e, 0x45, ..., 0x2b] # length 1225 bytes
+# b'{"latitude":41.7325,"altitude":2.211,"header":{"stamp":{"secs":1670378554,"nsecs":000624417},"seq":91,"frame_id":"gps","_type":"ROS1/std_msgs/Header"},"status":{"status":0,"service":1},"position_covariance":[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],"longitude":-49.946944,"_type":"ROS1/sensor_msgs/NavSatFix","position_covariance_type":2}'
 ```
 
-Data blobs are provided in binary format (i.e. `::Vector{UInt8}`).  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
+Data blobs are provided in binary format.  A blob can be associated via any number of `BlobEntry`s across multiple graph nodes, sessions, or robots.  `BlobEntry` also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.
 
 
 :::{tip}
@@ -46,8 +46,11 @@ To simplify many different requirements, a `BlobEntry` has the following field s
   origin: string
 
   ## planned future fields
+  # blobId: UUID
+  # originId: UUID
   # createdTimestamp: datetime
   # size: int
+  # metadata: string
 }
 ```
 

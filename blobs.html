@@ -143,7 +143,7 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="overview.html">
-   10,000ft Overview: Data Structure Layout
+   10,000ft: Data Overview
   </a>
  </li>
  <li class="toctree-l1">
@@ -465,10 +465,10 @@ title="Print to PDF"
 </div>
 <p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">id</span></code> (or <code class="docutils literal notranslate"><span class="pre">blobId</span></code>) of from a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
-<span class="c1"># [0x2e, 0x45, ..., 0x2b] # length 1225 bytes</span>
+<span class="c1"># b&#39;{&quot;latitude&quot;:41.7325,&quot;altitude&quot;:2.211,&quot;header&quot;:{&quot;stamp&quot;:{&quot;secs&quot;:1670378554,&quot;nsecs&quot;:000624417},&quot;seq&quot;:91,&quot;frame_id&quot;:&quot;gps&quot;,&quot;_type&quot;:&quot;ROS1/std_msgs/Header&quot;},&quot;status&quot;:{&quot;status&quot;:0,&quot;service&quot;:1},&quot;position_covariance&quot;:[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],&quot;longitude&quot;:-49.946944,&quot;_type&quot;:&quot;ROS1/sensor_msgs/NavSatFix&quot;,&quot;position_covariance_type&quot;:2}&#39;</span>
 </pre></div>
 </div>
-<p>Data blobs are provided in binary format (i.e. <code class="docutils literal notranslate"><span class="pre">::Vector{UInt8}</span></code>).  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
+<p>Data blobs are provided in binary format.  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>A blob is owned by a <code class="docutils literal notranslate"><span class="pre">user</span></code> and only accessible by other users if allowed via approved roles or permissions.</p>
@@ -490,8 +490,11 @@ title="Print to PDF"
   <span class="n">origin</span><span class="p">:</span> <span class="n">string</span>
 
   <span class="c1">## planned future fields</span>
+  <span class="c1"># blobId: UUID</span>
+  <span class="c1"># originId: UUID</span>
   <span class="c1"># createdTimestamp: datetime</span>
   <span class="c1"># size: int</span>
+  <span class="c1"># metadata: string</span>
 <span class="p">}</span>
 </pre></div>
 </div>

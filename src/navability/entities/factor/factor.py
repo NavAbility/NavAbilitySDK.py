@@ -1,6 +1,8 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List
+import json
+import base64
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
@@ -176,6 +178,7 @@ class Factor:
 
     @staticmethod
     def load(data):
+        # import pdb; pdb.set_trace()
         return FactorSchema().load(data)
 
 
@@ -213,7 +216,9 @@ class FactorSchema(Schema):
         return obj.data.dump()
 
     def set_data(self, ob):
-        raise Exception("Deserialization not supported yet.")
+        db64 = base64.b64decode(ob)
+        return FactorDataSchema().load(json.loads(db64))
+        
 
     @post_load
     def marshal(self, data, **kwargs):

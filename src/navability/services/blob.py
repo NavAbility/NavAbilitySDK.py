@@ -147,28 +147,40 @@ async def getData(
     blobId: str,
 ):
     warnings.warn('getData is deprecated, use getBlob instead.')
-    return await listBlobEntries(client, user, blobId)
+    return await getBlob(client, user, blobId)
 
 
 
-def addBlobEntry(
+async def addBlobEntry(
     client: NavAbilityClient,
-    userId: str,
-    robotId: str,
-    sessionId: str,
+    context: Client,
     variableLabel: str,
     blobId: str,
-    dataLabel: str,
+    blobLabel: str,
     blobSize: int,
     mimeType: str,
 ):
+    """ Add a BlobEntry to a specific variable node in the graph.
+
+    Args:
+        client (NavAbilityClient): client connection to API server
+        context (Client): Unique context with (user, robot, session)
+        variableLabel (string): list data entries connected to which variable.
+        blobId (String): The unique blob identifier of the data.
+        blobLabel (str): blob label.
+        blobSize (int): number of bytes.
+        mimeType (str): standard MIME definition of data.
+
+    Returns:
+        BlobEntry: coroutine 
+    """
     params = {
-        "userId": userId,
+        "userId": context.userId,
         "blobId": blobId,
-        "robotId": robotId,
-        "sessionId": sessionId,
+        "robotId": context.robotId,
+        "sessionId": context.sessionId,
         "variableLabel": variableLabel,
-        "dataLabel": dataLabel,
+        "dataLabel": blobLabel,
         "blobSize": blobSize,
         "mimeType": mimeType,
     }
@@ -179,7 +191,22 @@ def addBlobEntry(
             params,
         )
     )
-    if 'errors' in res:
-        raise Exception('Unable to addBlobEntry: '+res['errors'])
+    # TODO error handling
+    # if 'errors' in res:
+    #     raise Exception('Unable to addBlobEntry: '+res['errors'])
+    print(res)
 
     return res['addBlobEntry']['context']['eventId']
+
+
+async def addDataEntry(
+    client: NavAbilityClient,
+    context: Client,
+    variableLabel: str,
+    blobId: str,
+    blobLabel: str,
+    blobSize: int,
+    mimeType: str,
+):
+    warnings.warn('addDataEntry is deprecated, use addBlobEntry instead.')
+    return await addBlobEntry(client, context, variableLabel, blobId, blobLabel, blobSize, mimeType)

@@ -180,7 +180,7 @@ async def addBlobEntry(
         "robotId": context.robotId,
         "sessionId": context.sessionId,
         "variableLabel": variableLabel,
-        "dataLabel": blobLabel,
+        "blobLabel": blobLabel,
         "blobSize": blobSize,
         "mimeType": mimeType,
     }

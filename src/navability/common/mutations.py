@@ -149,9 +149,9 @@ mutation completeUpload($fileId: ID!, $uploadId: ID!, $eTag: String) {
 }
 """
 
-
+# TODO deprecate and remove, use GQL_ADDBLOBENTRY instead
 GQL_ADDDATAENTRY = """
-mutation sdk_adddataentry($userId: ResourceId!, $robotId: ResourceId!, $sessionId: ResourceId!, $variableLabel: String!, $dataId: UUID!, $dataLabel: String!, $mimeType: String) {
+mutation sdk_adddataentry($userId: ResourceId!, $robotId: ResourceId!, $sessionId: ResourceId!, $variableLabel: String!, $blobId: UUID!, $dataLabel: String!, $mimeType: String) {
   addDataEntry (
     dataEntry: {
       client: {
@@ -160,7 +160,7 @@ mutation sdk_adddataentry($userId: ResourceId!, $robotId: ResourceId!, $sessionI
         sessionId: $sessionId
       },
       blobStoreEntry: {
-        id: $dataId,
+        id: $blobId,
         label: $dataLabel
         mimetype: $mimeType
       },
@@ -177,14 +177,14 @@ mutation sdk_addblobentry(
   $sessionId: String!
   $variableLabel: String!
   $blobId: UUID!
-  $dataLabel: String!
+  $blobLabel: String!
   $blobSize: Int!
   $mimeType: String
 ) {
   addBlobEntry(
     blob: {
       id: $blobId
-      label: $dataLabel
+      label: $blobLabel
       size: $blobSize
       mimeType: $mimeType
       blobstore: NAVABILITY

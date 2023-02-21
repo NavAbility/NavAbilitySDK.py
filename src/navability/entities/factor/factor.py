@@ -217,7 +217,6 @@ class FactorSchema(Schema):
 
     def set_data(self, ob):
         db64 = base64.b64decode(ob)
-        print(db64)
         return FactorDataSchema().load(json.loads(db64))
         
 

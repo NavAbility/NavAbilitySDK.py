@@ -34,7 +34,7 @@ So for example:
       - pose1
       - pose2
       - ...
-  - HandhelpDevice7
+  - HandheldDevice7
     - Session_sdc9hk2
       - x0
       - tag4

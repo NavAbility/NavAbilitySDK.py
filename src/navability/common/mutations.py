@@ -110,12 +110,12 @@ mutation sdk_url_createdownload ($userId: String!, $blobId: ID!) {
 """
 
 
-GQL_CREATE_UPLOAD = """
-mutation sdk_url_createupload($filename: String!, $filesize: BigInt!, $parts: Int!) {
+GQL_CREATEUPLOAD = """
+mutation sdk_url_createupload($blobLabel: String!, $blobSize: BigInt!, $parts: Int!) {
   createUpload(
     file: {
-      filename: $filename,
-      filesize: $filesize
+      filename: $blobLabel,
+      filesize: $blobSize
     },
     parts: $parts
   ) {
@@ -133,9 +133,9 @@ mutation sdk_url_createupload($filename: String!, $filesize: BigInt!, $parts: In
 
 
 GQL_COMPLETEUPLOAD_SINGLE = """
-mutation completeUpload($fileId: ID!, $uploadId: ID!, $eTag: String) {
+mutation completeUpload($blobId: ID!, $uploadId: ID!, $eTag: String) {
   completeUpload (
-    fileId: $fileId,
+    fileId: $blobId,
     completedUpload: {
       uploadId: $uploadId,
       parts: [

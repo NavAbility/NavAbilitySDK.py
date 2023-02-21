@@ -1,5 +1,7 @@
 # Data `BlobEntry=>Blob`
 
+## Getting BlobEntries
+
 Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the `BlobEntry`s associated with a particular variable.  For example:
 ```python
 entries = await listBlobEntries(client, context, "x0") |> fetch
@@ -30,6 +32,17 @@ A blob is owned by a `user` and only accessible by other users if allowed via ap
 
 :::{tip}
 All `blobId`s are unique across the entire distributed system and are immutable.
+:::
+
+## Adding BlobEntries
+
+Blobs can be linked to any variable (future node) in the graph.  This is easily done by adding a BlobEntry:
+```python
+res = await addBlobEntry(client, context, 'x12', entries[1].id, entries[1].label, len(blob), entries[1].mimeType)
+```
+
+:::{tip}
+More ubiqitous use of `blob` size was recently introduced to `BlobEntry` and will be unified with less user input as part of SDKs v0.6 upgrades.
 :::
 
 ## BlobEntry Structure

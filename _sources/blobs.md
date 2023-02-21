@@ -67,8 +67,18 @@ To simplify many different requirements, a `BlobEntry` has the following field s
 }
 ```
 
-See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
+## Adding New Blobs
 
+It is also possible to push data blobs:
+```python
+blobId = await addBlob(client, "testimage.png", imgblob)
+```
+
+Remember to add at least one BlobEntry somewhere in your session so that you might find it again in the future, see `addBlobEntry` above.
+
+:::{seealso}
+See [Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs](https://app.navability.io/get-started/tutorials/icra-5-marineexample).
+:::
 
 <!-- ```@docs
 listBlobEntries

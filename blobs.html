@@ -423,6 +423,11 @@ title="Print to PDF"
    BlobEntry Structure
   </a>
  </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-new-blobs">
+   Adding New Blobs
+  </a>
+ </li>
 </ul>
 
     </nav>
@@ -455,6 +460,11 @@ title="Print to PDF"
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#blobentry-structure">
    BlobEntry Structure
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#adding-new-blobs">
+   Adding New Blobs
   </a>
  </li>
 </ul>
@@ -532,7 +542,18 @@ title="Print to PDF"
 <span class="p">}</span>
 </pre></div>
 </div>
+</section>
+<section id="adding-new-blobs">
+<h2>Adding New Blobs<a class="headerlink" href="#adding-new-blobs" title="Permalink to this headline">#</a></h2>
+<p>It is also possible to push data blobs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blobId</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Remember to add at least one BlobEntry somewhere in your session so that you might find it again in the future, see <code class="docutils literal notranslate"><span class="pre">addBlobEntry</span></code> above.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
 <p>See <a class="reference external" href="https://app.navability.io/get-started/tutorials/icra-5-marineexample">Tutorial 5 from ICRA 2022 for a more indepth example of working with data blobs</a>.</p>
+</div>
 <!-- ```@docs
 listBlobEntries
 getBlob

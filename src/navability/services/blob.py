@@ -10,6 +10,7 @@ from navability.common.queries import (
 )
 from navability.common.mutations import (
     GQL_CREATEDOWNLOAD,
+    GQL_ADDBLOBENTRY,
 )
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
@@ -138,3 +139,74 @@ async def getBlob(
     url = await createDownload(client, user, blobId)
     resp = requests.get(url)
     return resp.content
+
+
+async def getData(
+    client: NavAbilityClient,
+    user: str,
+    blobId: str,
+):
+    warnings.warn('getData is deprecated, use getBlob instead.')
+    return await getBlob(client, user, blobId)
+
+
+
+async def addBlobEntry(
+    client: NavAbilityClient,
+    context: Client,
+    variableLabel: str,
+    blobId: str,
+    blobLabel: str,
+    blobSize: int,
+    mimeType: str,
+):
+    """ Add a BlobEntry to a specific variable node in the graph.
+
+    Args:
+        client (NavAbilityClient): client connection to API server
+        context (Client): Unique context with (user, robot, session)
+        variableLabel (string): list data entries connected to which variable.
+        blobId (String): The unique blob identifier of the data.
+        blobLabel (str): blob label.
+        blobSize (int): number of bytes.
+        mimeType (str): standard MIME definition of data.
+
+    Returns:
+        BlobEntry: coroutine 
+    """
+    params = {
+        "userId": context.userId,
+        "blobId": blobId,
+        "robotId": context.robotId,
+        "sessionId": context.sessionId,
+        "variableLabel": variableLabel,
+        "blobLabel": blobLabel,
+        "blobSize": blobSize,
+        "mimeType": mimeType,
+    }
+    logger.debug(f"Query params: {params}")
+    res = await client.mutate(
+        MutationOptions(
+            gql(GQL_ADDBLOBENTRY),
+            params,
+        )
+    )
+    # TODO error handling
+    # if 'errors' in res:
+    #     raise Exception('Unable to addBlobEntry: '+res['errors'])
+    print(res)
+
+    return res['addBlobEntry']['context']['eventId']
+
+
+async def addDataEntry(
+    client: NavAbilityClient,
+    context: Client,
+    variableLabel: str,
+    blobId: str,
+    blobLabel: str,
+    blobSize: int,
+    mimeType: str,
+):
+    warnings.warn('addDataEntry is deprecated, use addBlobEntry instead.')
+    return await addBlobEntry(client, context, variableLabel, blobId, blobLabel, blobSize, mimeType)

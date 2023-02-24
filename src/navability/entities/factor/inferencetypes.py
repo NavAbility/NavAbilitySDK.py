@@ -96,6 +96,23 @@ class PriorPose2(InferenceType):
     # TODO: Deserializing this.
 
 
+@dataclass
+class PriorPose3(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+
 """
 Create a prior factor for a Point2 with a distribution Z representing (x,y) prior
 information, e.g. `FullNormal([0.0, 0.0.0], diag([0.01, 0.01]))`.
@@ -127,6 +144,22 @@ Create a Pose2->Pose2 factor with a distribution Z representing the
 
 @dataclass
 class Pose2Pose2(InferenceType):
+    Z: Distribution
+
+    def __repr__(self):
+        return f"<{self.__class__.__name__}(Z={str(self.Z)})>"
+
+    def dump(self):
+        return ZSchema().dump(self)
+
+    def dumps(self):
+        return ZSchema().dumps(self)
+
+    # TODO: Deserializing this.
+
+
+@dataclass
+class Pose3Pose3(InferenceType):
     Z: Distribution
 
     def __repr__(self):

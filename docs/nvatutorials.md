@@ -19,3 +19,4 @@ On the notebook pages, use the Rocket icon in the top right menu bar to launch a
 - [Tutorial 2: Non-Gaussian Measurements](sdkpynb:python/navability-sdk/icra-2-nongaussian)
 - [Tutorial 3: Insufficient Data (3D Range-only)](sdkpynb:python/navability-sdk/icra-3-rangeonly)
 - [Tutorial 4: Leveraging (Contradictory) Prior Data](sdkpynb:python/navability-sdk/icra-4-contradictorydata)
+- [Tutorial 5: Marine Data: Entries and Blobs](sdkpynb:python/navability-sdk/icra-5-marineexample)

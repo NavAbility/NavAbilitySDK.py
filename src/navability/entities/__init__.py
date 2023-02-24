@@ -18,9 +18,11 @@ from .factor.inferencetypes import (
     Pose2Point2BearingRange,
     Pose2Point2Range,
     Pose2Pose2,
+    Pose3Pose3,
     Prior,
     PriorPoint2,
     PriorPose2,
+    PriorPose3,
 )
 from .navabilityclient import (
     NavAbilityClient,

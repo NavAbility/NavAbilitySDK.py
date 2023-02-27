@@ -606,9 +606,13 @@ getVariable
 <span class="c1"># [-0.00, 0.00, 0.00]</span>
 </pre></div>
 </div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-4-contradictorydata.html" title="(in Python)"><span class="xref myst">tutorial on leveraging (contradictory) prior data</span></a> is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.</p>
+</div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>At time of writing these numerical values represent the solution stored in coordinates.  In the future, these values are expected to stored directly as on-manifold point representations.  The internal solver computations are already all on-manifold.  For more information, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/">the on-manifold points, tangent vectors, and coordinates description presented here</a>.</p>
+<p>At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. <code class="docutils literal notranslate"><span class="pre">solverData</span></code>) values are already stored as on-manifold points.  For more information, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/">the on-manifold points, tangent vectors, and coordinates description presented here</a>.</p>
 </div>
 </section>
 </section>

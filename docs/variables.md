@@ -85,8 +85,12 @@ xyr = v0.ppes['default'].suggested
 # [-0.00, 0.00, 0.00]
 ```
 
+:::{seealso}
+The [tutorial on leveraging (contradictory) prior data][nva-tut4] is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.
+:::
+
 :::{warning} 
-At time of writing these numerical values represent the solution stored in coordinates.  In the future, these values are expected to stored directly as on-manifold point representations.  The internal solver computations are already all on-manifold.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
+At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. `solverData`) values are already stored as on-manifold points.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
 :::
 
 ## SDK Supported Variables
@@ -105,3 +109,4 @@ Many more variable types are already supported by the solver, see [additional do
 
 [nva-app-auth]: https://app.navability.io/edge/connect
 [cjl-docs-mani]: https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/
+[nva-tut4]: sdkpynb:python/navability-sdk/icra-4-contradictorydata

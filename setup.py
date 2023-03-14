@@ -25,8 +25,9 @@ setup(
     # entry_points={"console_scripts": ["navability = navability.main:cli"]},
     python_requires=">=3.8",
     download_url=f"https://github.com/NavAbility/NavAbilitySDK.py/archive/refs/tags/v{_version}.tar.gz",  # noqa: E501, B950
-    long_description="""NavAbility SDK: Access NavAbility Cloud factor graph features from Python.
+    long_description="""NavAbility SDK: Access NavAbility Cloud factor graph features from Python. [Documentation can be found on Github here](https://navability.github.io/NavAbilitySDK.py/). 
 Note that this SDK and the related API are in beta. Please let us know if you have any issues at info@navability.io.""",
+    long_description_content_type='text/markdown',
     install_requires=[
         "click==8.0.2",
         "gql[all]==3.0.0a6",

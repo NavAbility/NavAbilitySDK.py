@@ -1,0 +1,3 @@
+[submodule "sdkCommonGQL"]
+	path = sdkCommonGQL
+	url = git@github.com:NavAbility/SDKCommonGQL.git

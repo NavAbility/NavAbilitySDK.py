@@ -3,13 +3,14 @@ from typing import List
 
 from gql import gql
 
-from navability.common.mutations import GQL_ADDVARIABLE
-from navability.common.queries import (
-    GQL_FRAGMENT_VARIABLES,
-    GQL_LISTVARIABLES,
-    GQL_GETVARIABLE,
-    GQL_GETVARIABLES,
-)
+# from navability.common.mutations import GQL_ADDVARIABLE
+from navability.services.loader import GQL_QUERIES
+# from navability.common.queries import (
+#     GQL_FRAGMENT_VARIABLES,
+#     GQL_LISTVARIABLES,
+#     GQL_GETVARIABLE,
+#     GQL_GETVARIABLES,
+# )
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
     MutationOptions,
@@ -39,7 +40,7 @@ logger = logging.getLogger(__name__)
 async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
     result = await navAbilityClient.mutate(
         MutationOptions(
-            gql(GQL_ADDVARIABLE),
+            GQL_QUERIES["GQL_ADDVARIABLE"].data,
             {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
         )
     )
@@ -104,7 +105,7 @@ async def listVariables(
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_LISTVARIABLES), params)
+        QueryOptions(GQL_QUERIES["GQL_LISTVARIABLES"].data, params)
     )
     if (
         "users" not in res
@@ -177,7 +178,7 @@ async def getVariables(
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLES), params)
+        QueryOptions(GQL_QUERIES["GQL_FRAGMENT_VARIABLES"].data+ GQL_GETVARIABLES), params)
     )
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
@@ -215,7 +216,7 @@ async def getVariable(
     params["label"] = label
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLE), params)
+        QueryOptions(GQL_QUERIES["GQL_FRAGMENT_VARIABLES"].data+ GQL_GETVARIABLE), params)
     )
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors

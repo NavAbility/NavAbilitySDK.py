@@ -2,6 +2,8 @@ import os
 import toml
 import re
 
+from gql import gql
+
 class FragmentData:
     def __init__(self, name: str, data: str):
         self.name = name
@@ -44,11 +46,11 @@ def get_fragment_name(fragment_string: str) -> str:
     else:
         return None
 
-def get_queries(folder_path: str) -> list[Query]:
+def get_queries(folder_path: str) -> dict[str, Query]:
     files = get_files(folder_path, ".toml")
 
     fragments = []
-    queries = []
+    queries = {}
 
     for file in files:
         with open(file, "r") as f:
@@ -74,8 +76,14 @@ def get_queries(folder_path: str) -> list[Query]:
                     if fd_name in query_data["data"]:
                         for fd in fd_list:
                             query.data += "\n" + "\n" + fd.data
-                queries.append(query)
+                # GQL interpret the query/mutation
+                query.data = gql(query.data)
+                # Add to dictionary
+                queries[name] = query
 
     return queries
 
 __all__ = ['get_queries']
+
+# Load and export 
+GQL_QUERIES = get_queries(os.path.join(".", "sdkCommonGQL"))

@@ -5,12 +5,12 @@ from marshmallow import Schema, fields, post_load
 
 @dataclass()
 class Client:
-    userId: str
-    robotId: str
-    sessionId: str
+    userLabel: str
+    robotLabel: str
+    sessionLabel: str
 
     def __repr__(self):
-        return f"<Client(userId={self.userId}, robotId={self.robotId}, sessionId={self.sessionId})>"  # noqa: E501, B950
+        return f"<Client(userLabel={self.userLabel}, robotId={self.robotLabel}, sessionId={self.sessionLabel})>"  # noqa: E501, BLabeLabel
 
     def dump(self):
         return ClientSchema().dump(self)
@@ -24,9 +24,9 @@ class Client:
 
 
 class ClientSchema(Schema):
-    userId = fields.String(required=True)
-    robotId = fields.String(required=True)
-    sessionId = fields.String(required=True)
+    userLabel = fields.String(required=True)
+    robotLabel = fields.String(required=True)
+    sessionLabel = fields.String(required=True)
 
     class Meta:
         ordered = True

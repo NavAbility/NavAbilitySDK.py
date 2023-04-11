@@ -1,27 +1,42 @@
+from __future__ import annotations
 import os
 import toml
 import re
 
 from gql import gql  # used to parse GraphQL queries
-from graphql import DocumentNode, GraphQLSyntaxError  # used to handle GraphQL errors
+from graphql import GraphQLSyntaxError  # used to handle GraphQL errors
 
 # Define a class to represent a GraphQL fragment with a name and data
-class FragmentData:
+class Fragment:
     def __init__(self, name: str, data: str):
         self.name = name
         self.data = data
 
-    def __str__(self) -> str:
-        return f"{self.name}\n{self.data}"
-
-# Define a class to represent a group of related GraphQL fragments with a common name
-class Fragment:
-    def __init__(self, name: str, data: list[FragmentData]):
-        self.name = name
-        self.data = data
+    """
+    Get the dependencies for this fragment
+    """
+    def generate_dependencies(self, all_fragments: dict[str, Fragment]) -> list[Fragment]:
+        # Pattern for any fragment starting with an ellipsis
+        pattern = r"\.{3}[a-zA-Z_]*[ \n\r]"
+        dependent_fragment_names = [match[3:-1] for match in re.findall(pattern, self.data)]
+        for d in dependent_fragment_names:
+            if all_fragments.get(d, None) == None:
+                raise Exception(f"Query ${self.name} uses fragment ${d} and this fragment does not exist.")
+        self.dependent_fragments = [all_fragments[d] for d in dependent_fragment_names]
+        return self.dependent_fragments
     
+    # Define a function to extract the name of a fragment from its string representation
+    def get_fragment_name(self) -> str:
+        pattern = r"fragment\s+(\S+)\s+on"
+        match = re.search(pattern, self.data)
+        if match:
+            return match.group(1)
+        else:
+            return None
+
     def __str__(self) -> str:
         return f"{self.name}:\n" + "\n".join([str(d) for d in self.data])
+
 
 # Define a class to represent a GraphQL operation (query, mutation, or subscription) with a type and data
 class Operation:
@@ -31,6 +46,7 @@ class Operation:
     
     def __str__(self) -> str:
         return f"{self.operation_type}:\n{self.data}"
+
 
 # Define a function to get all files with a given extension from a given folder path
 def get_files(folder_path: str, extension: str) -> list[str]:
@@ -43,63 +59,60 @@ def get_files(folder_path: str, extension: str) -> list[str]:
             files.append(file_path)
     return files
 
-# Define a function to extract the name of a fragment from its string representation
-def get_fragment_name(fragment_string: str) -> str:
-    pattern = r"fragment\s+(\S+)\s+on"
-    match = re.search(pattern, fragment_string)
-    if match:
-        return match.group(1)
-    else:
-        return None
 
 # Define a function to read all TOML files in a given folder path and return a dictionary of operation names mapped to their corresponding Operation objects
 def get_operations(folder_path: str) -> dict[str, Operation]:
     files = get_files(folder_path, ".toml")
 
-    fragments = []
+    fragments = {}
     operations = {}
 
+    # Load all fragments
     for file in files:
         with open(file, "r") as f:
             data = toml.load(f)
 
-            fragment_data_map = {}
-
             # Extract and store all fragments from the TOML file
-            for fragment_data in data["fragment"]:
-                name = fragment_data["name"]
-                fragmentData_objects = [FragmentData(get_fragment_name(d["data"]), d["data"]) for d in fragment_data["data"]]
-                fragment = Fragment(name = name, data = fragmentData_objects)
-                fragments.append(fragment)
-                for fd in fragmentData_objects:
-                    if fd.name not in fragment_data_map:
-                        fragment_data_map[fd.name] = []
-                    fragment_data_map[fd.name].append(fd)
+            for (name, frag_string) in data["fragments"].items():
+                fragment = Fragment(name = name, data = frag_string)
+                fragments[name] = fragment
 
+    # Flatten all dependencies
+    for fragment in fragments.values():
+        fragment.generate_dependencies(fragments)
+
+    # Replace all fragment recursion if any exist (expecting "...")
+    while (any([len(f.dependent_fragments) > 0 for f in fragments.values()])):
+        # Go through the list until done.
+        for fragment in fragments.values():
+            if len(fragment.dependent_fragments) > 0: # Else ignore.
+                # If all parents have been resolved, resolve it.
+                if (all([len(f.dependent_fragments) == 0 for f in fragment.dependent_fragments])):
+                    fragment.data = "\r\n".join([df.data for df in fragment.dependent_fragments]) + "\r\n" + fragment.data
+                    # Clear it
+                    fragment.dependent_fragments = []
+
+    # Load all operations and include all fragments
+    for file in files:
+        with open(file, "r") as f:
+            data = toml.load(f)
             # Extract and store all operations from the TOML file
-            for operation_data in data["operation"]:
-                name = operation_data["name"]
-                operation = Operation(operation_type = "", data = operation_data["data"])
-                for fd_name, fd_list in fragment_data_map.items():
-                    if fd_name in operation_data["data"]:
-                        for fd in fd_list:
-                            operation.data += "\n" + "\n" + fd.data
+            for (name, operation_data) in data["operations"].items():
+                operation = Operation(operation_type = "", data = operation_data)
+                # Include any fragments at the bottom of the query if they are used in the query
+                for (fd_name, fragment) in fragments.items():
+                    if fd_name in operation_data:
+                        operation.data += "\n" + "\n" + fragment.data
                 try:
                     # Parse the operation data using the gql function and set the operation type
-
-                    # [Alucard] @GearsAD So we need to make a choice here, either we have Operation contain just a DocumentNode
-                    # or we just use a string, but I'll leave that to you.
-                    parsed_data = gql(operation.data)
-                    operation.operation_type = parsed_data.definitions[0].operation
+                    operation.data = gql(operation.data)
+                    operation.operation_type = operation.data.definitions[0].operation
                     operations[name] = operation
                 except GraphQLSyntaxError as e:
                     # If there is an error parsing the operation data, print an error message
                     print(f"Error: Error parsing operation data: {e} \n {operation.data}")
 
-    return operations
-
-# Define a list of symbols to export from this module
-__all__ = ['get_operations']
+    return (fragments, operations)
 
 # Load all GraphQL operations from the "sdkCommonGQL" folder and export them
-GQL_OPERATIONS = get_operations(os.path.join(".", "sdkCommonGQL"))
+GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(".", "sdkCommonGQL"))

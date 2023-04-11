@@ -11,7 +11,7 @@ if sys.version_info < (3, 0):
 """
     )
 
-_version = "0.5.1"
+_version = "0.6.0"
 
 setup(
     name="navabilitysdk",
@@ -38,5 +38,6 @@ Note that this SDK and the related API are in beta. Please let us know if you ha
         "flake8==4.0.1",
         "pytest==6.2.5",
         "pytest-asyncio==0.18.1",
+        "pyyaml==6.0",
     ],
 )

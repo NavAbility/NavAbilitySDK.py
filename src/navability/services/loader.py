@@ -12,9 +12,6 @@ class Fragment:
         self.name = name
         self.data = data
 
-    """
-    Get the dependencies for this fragment
-    """
     def generate_dependencies(self, all_fragments: dict[str, Fragment]) -> list[Fragment]:
         # Pattern for any fragment starting with an ellipsis
         pattern = r"\.{3}[a-zA-Z_]*[ \n\r]"
@@ -74,20 +71,41 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
 
             # Extract and store all fragments from the TOML file
             for (name, frag_string) in data["fragments"].items():
-                fragment = Fragment(name = name, data = frag_string)
+                fragment = Fragment(name=name, data=frag_string)
                 fragments[name] = fragment
 
     # Flatten all dependencies
     for fragment in fragments.values():
         fragment.generate_dependencies(fragments)
 
+    # [Alucard] Helper to detect cyclic dependencies - @GearsAD - could add in fragment
+    def detect_cycle(fragment: Fragment, visited: set[Fragment], path: list[Fragment]) -> bool:
+        visited.add(fragment)
+        path.append(fragment)
+
+        for dep in fragment.dependent_fragments:
+            if dep not in visited:
+                if detect_cycle(dep, visited, path):
+                    return True
+            elif dep in path:
+                print(f"Warning: Cyclic reference detected in fragments: {', '.join([f.name for f in path])}")
+                return True
+
+        path.pop()
+        return False
+
+    visited = set()
+    for fragment in fragments.values():
+        if fragment not in visited:
+            detect_cycle(fragment, visited, [])
+
     # Replace all fragment recursion if any exist (expecting "...")
-    while (any([len(f.dependent_fragments) > 0 for f in fragments.values()])):
+    while any([len(f.dependent_fragments) > 0 for f in fragments.values()]):
         # Go through the list until done.
         for fragment in fragments.values():
-            if len(fragment.dependent_fragments) > 0: # Else ignore.
+            if len(fragment.dependent_fragments) > 0:  # Else ignore.
                 # If all parents have been resolved, resolve it.
-                if (all([len(f.dependent_fragments) == 0 for f in fragment.dependent_fragments])):
+                if all([len(f.dependent_fragments) == 0 for f in fragment.dependent_fragments]):
                     fragment.data = "\r\n".join([df.data for df in fragment.dependent_fragments]) + "\r\n" + fragment.data
                     # Clear it
                     fragment.dependent_fragments = []
@@ -98,7 +116,7 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
             data = toml.load(f)
             # Extract and store all operations from the TOML file
             for (name, operation_data) in data["operations"].items():
-                operation = Operation(operation_type = "", data = operation_data)
+                operation = Operation(operation_type="", data=operation_data)
                 # Include any fragments at the bottom of the query if they are used in the query
                 for (fd_name, fragment) in fragments.items():
                     if fd_name in operation_data:

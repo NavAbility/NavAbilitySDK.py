@@ -1,0 +1,46 @@
+# =================================================
+# Fragments
+# =================================================
+
+[fragments]
+
+FRAGMENT_A = """
+fragment FRAGMENT_A on Var {
+  ...FRAGMENT_B
+  }
+"""
+
+FRAGMENT_B = """
+fragment FRAGMENT_B on Var {
+  something
+  ...FRAGMENT_C
+  }
+"""
+
+FRAGMENT_C = """
+fragment FRAGMENT_C on Var {
+     a
+  }
+"""
+
+FRAGMENT_INDEP = """
+fragment FRAGMENT_INDEP on Var {
+     something_else
+  }
+"""
+
+
+# =================================================
+# Operations
+# =================================================
+
+[operations]
+
+QUERY_A = """
+query QUERY_A($fields_summary: Boolean! = true) {
+  somethings {
+    ...FRAGMENT_A
+    ...FRAGMENT_INDEP @include(if: $fields_summary)
+  }
+}
+"""

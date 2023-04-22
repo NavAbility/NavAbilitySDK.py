@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List
+from uuid import UUID
 import json
 import base64
 
@@ -12,6 +13,7 @@ from navability.common.versions import payload_version
 
 @dataclass()
 class FactorSkeleton:
+    id: UUID
     label: str
     variableOrderSymbols: List[str]
     tags: List[str]
@@ -34,6 +36,7 @@ class FactorSkeleton:
 
 
 class FactorSkeletonSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
@@ -50,7 +53,8 @@ class FactorSkeletonSchema(Schema):
 
 @dataclass()
 class FactorSummary:
-    label = str
+    id: UUID
+    label: str
     variableOrderSymbols: List[str]
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: datetime = datetime.utcnow()
@@ -74,6 +78,7 @@ class FactorSummary:
 
 
 class FactorSummarySchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
@@ -153,10 +158,11 @@ class FactorDataSchema(Schema):
 
 @dataclass()
 class Factor:
+    id: UUID
     label: str
     fnctype: str
     variableOrderSymbols: List[str]
-    data: FactorData
+    data: str 
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: str = datetime.utcnow()
     nstime: int = 0
@@ -183,6 +189,7 @@ class Factor:
 
 
 class FactorSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     _version = fields.Str(required=True)
     variableOrderSymbols = fields.List(

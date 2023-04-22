@@ -3,6 +3,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Dict, List
+from uuid import UUID
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
@@ -45,6 +46,7 @@ def _getVariableNodeData(variableType: str, solveKey: str):
 
 @dataclass()
 class VariableSkeleton:
+    id: UUID
     label: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
 
@@ -60,6 +62,7 @@ class VariableSkeleton:
 
 
 class VariableSkeletonSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
 
@@ -73,6 +76,7 @@ class VariableSkeletonSchema(Schema):
 
 @dataclass()
 class VariableSummary:
+    id: UUID
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
@@ -99,6 +103,7 @@ class VariableSummary:
 
 
 class VariableSummarySchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     tags = fields.List(fields.Str())
     ppes = fields.Nested(PpeSchema, many=True)
@@ -127,6 +132,7 @@ class VariableSummarySchema(Schema):
 
 @dataclass()
 class Variable:
+    id: UUID
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
@@ -172,6 +178,7 @@ class Variable:
 
 
 class VariableSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
     ppes = fields.Method("get_ppes", "set_ppes")

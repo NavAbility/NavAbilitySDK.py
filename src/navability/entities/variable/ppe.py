@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import List
+from uuid import UUID
 
 from marshmallow import Schema, fields, post_load
 
@@ -9,6 +10,7 @@ from navability.common.timestamps import TS_FORMAT, TS_FORMAT_NO_TZ
 
 @dataclass()
 class Ppe:
+    id: UUID
     solveKey: str
     suggested: List[float]
     max: List[float]
@@ -33,6 +35,7 @@ class Ppe:
 
 
 class PpeSchema(Schema):
+    id = fields.UUID(required=True)
     solveKey = fields.Str(required=True)
     suggested = fields.List(fields.Float(), required=True)
     max = fields.List(fields.Float(), required=True)

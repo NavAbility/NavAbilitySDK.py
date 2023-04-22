@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+from uuid import UUID
 
 import numpy
 from marshmallow import EXCLUDE, Schema, fields, post_load
@@ -9,6 +10,7 @@ from navability.common.versions import payload_version
 
 @dataclass()
 class VariableNodeData:
+    id: UUID
     variableType: str
     solveKey: str
     dims: int
@@ -60,6 +62,7 @@ class VariableNodeData:
 
 
 class VariableNodeDataSchema(Schema):
+    id = fields.UUID(required=True)
     vecval = fields.List(fields.Float(), required=True)  # numpy.zeros(3*100) # 300
     dimval = fields.Integer(required=True)  # 3
     vecbw = fields.List(fields.Float(), required=True)  # numpy.zeros(3)

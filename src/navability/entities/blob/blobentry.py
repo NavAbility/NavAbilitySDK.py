@@ -2,6 +2,7 @@ import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
+from uuid import UUID
 from typing import Dict, List
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
@@ -9,10 +10,47 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
 
+# type BlobEntry {
+#   # This is created by server-side GraphQL #
+#   id: ID! @id
+#   # This is the forced server generated blobId, or the filesystem blobId. #
+#   blobId: ID!
+#   # This is the ID at creation at the edge, do whatever you want with this, but make sure you populate it. #
+#   originId: ID!
+#   label: String!
+#   description: String
+#   hash: String
+#   mimeType: String
+#   blobstore: String
+#   origin: String
+#   metadata: Metadata
+#   timestamp: DateTime
+#   nstime: BigInt
+#   _type: String!
+#   _version: String!
+
+#   createdTimestamp: DateTime! @timestamp(operations: [CREATE])
+#   lastUpdatedTimestamp: DateTime! @timestamp(operations: [CREATE, UPDATE])
+
+#   user: [Variable!]! @relationship(type: "DATA_USER", direction: IN)
+#   robot: [Robot!]! @relationship(type: "DATA_ROBOT", direction: IN)
+#   session: [Session!]! @relationship(type: "DATA_SESSION", direction: IN)
+#   variable: [Variable!]! @relationship(type: "DATA_VARIABLE", direction: IN)
+#   factor: [Factor!]! @relationship(type: "DATA_FACTOR", direction: IN)
+
+#   # NOTE: This is for the unique label constraints
+#   # In this situation, someone has to own this, so cannot be required
+#   userLabel: String
+#   robotLabel: String
+#   sessionLabel: String
+#   variableLabel: String
+#   factorLabel: String
+# }
+
 
 @dataclass()
 class BlobEntry:
-    id: str
+    id: UUID
     label: str
     description: str
     # createdTimestamp: datetime # = datetime.utcnow()
@@ -43,7 +81,7 @@ class BlobEntry:
 
 # Legacy BlobEntry_ contract
 class BlobEntrySchema(Schema):
-    id = fields.Str(required=True)
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     description: str = fields.Str(required=True)
     # createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)

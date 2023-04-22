@@ -1,6 +1,7 @@
 from dataclasses import dataclass
+from datetime import datetime
 from uuid import UUID
-from typing import List
+from typing import Optional, List
 from marshmallow import Schema, fields, post_load
 from navability.entities.map.workflow import ( Workflow, WorkflowSchema )
 from navability.entities.session import Session
@@ -12,14 +13,13 @@ class Map:
     label: str
     description: Optional[str]
     status: str
-    data: B64JSON
+    data: str
     thumbnailId: Optional[UUID]
     exportedMapId: Optional[UUID]
     workflows: List[Workflow]
     sessions: List[Session]
-    createdTimestamp: DateTime
-    lastUpdatedTimestamp: DateTime
-
+    createdTimestamp: datetime
+    lastUpdatedTimestamp: datetime
 
 # Define a Marshmallow schema for VisualizationBlob
 class MapSchema(Schema):
@@ -30,9 +30,8 @@ class MapSchema(Schema):
     status = fields.String(required=True)
     data = fields.String(allow_none=True)
     result = fields.String(allow_none=True)
-    createdTimestamp = fields.String(required=True)
-    lastUpdatedTimestamp = fields.String(required=True)
-    
+    createdTimestamp = fields.DateTime(required=True)
+    lastUpdatedTimestamp = fields.DateTime(required=True)
 
     # Define a method to create a VisualizationBlob object from deserialized data
     @post_load

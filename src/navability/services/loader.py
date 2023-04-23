@@ -12,16 +12,22 @@ class Fragment:
         self.name = name
         self.data = data
 
-    def generate_dependencies(self, all_fragments: dict[str, Fragment]) -> list[Fragment]:
+    def generate_dependencies(
+        self, all_fragments: dict[str, Fragment]
+    ) -> list[Fragment]:
         # Pattern for any fragment starting with an ellipsis
         pattern = r"\.{3}[a-zA-Z_]*[ \n\r]"
-        dependent_fragment_names = [match[3:-1] for match in re.findall(pattern, self.data)]
+        dependent_fragment_names = [
+            match[3:-1] for match in re.findall(pattern, self.data)
+        ]
         for d in dependent_fragment_names:
             if all_fragments.get(d, None) == None:
-                raise Exception(f"Query ${self.name} uses fragment ${d} and this fragment does not exist.")
+                raise Exception(
+                    f"Query ${self.name} uses fragment ${d} and this fragment does not exist."
+                )
         self.dependent_fragments = [all_fragments[d] for d in dependent_fragment_names]
         return self.dependent_fragments
-    
+
     # Define a function to extract the name of a fragment from its string representation
     def get_fragment_name(self) -> str:
         pattern = r"fragment\s+(\S+)\s+on"
@@ -40,7 +46,7 @@ class Operation:
     def __init__(self, operation_type: str, data: str):
         self.operation_type = operation_type
         self.data = data
-    
+
     def __str__(self) -> str:
         return f"{self.operation_type}:\n{self.data}"
 
@@ -79,7 +85,9 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
         fragment.generate_dependencies(fragments)
 
     # [Alucard] Helper to detect cyclic dependencies - @GearsAD - could add in fragment
-    def detect_cycle(fragment: Fragment, visited: set[Fragment], path: list[Fragment]) -> bool:
+    def detect_cycle(
+        fragment: Fragment, visited: set[Fragment], path: list[Fragment]
+    ) -> bool:
         visited.add(fragment)
         path.append(fragment)
 
@@ -88,7 +96,9 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
                 if detect_cycle(dep, visited, path):
                     return True
             elif dep in path:
-                print(f"Warning: Cyclic reference detected in fragments: {', '.join([f.name for f in path])}")
+                print(
+                    f"Warning: Cyclic reference detected in fragments: {', '.join([f.name for f in path])}"
+                )
                 return True
 
         path.pop()
@@ -99,14 +109,28 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
         if fragment not in visited:
             detect_cycle(fragment, visited, [])
 
+    # Remove duplicates
+    # import pdb; pdb.set_trace()
+    for f in fragments.values():
+        pass
+
     # Replace all fragment recursion if any exist (expecting "...")
     while any([len(f.dependent_fragments) > 0 for f in fragments.values()]):
         # Go through the list until done.
         for fragment in fragments.values():
             if len(fragment.dependent_fragments) > 0:  # Else ignore.
                 # If all parents have been resolved, resolve it.
-                if all([len(f.dependent_fragments) == 0 for f in fragment.dependent_fragments]):
-                    fragment.data = "\r\n".join([df.data for df in fragment.dependent_fragments]) + "\r\n" + fragment.data
+                if all(
+                    [
+                        len(f.dependent_fragments) == 0
+                        for f in fragment.dependent_fragments
+                    ]
+                ):
+                    fragment.data = (
+                        "\r\n".join([df.data for df in fragment.dependent_fragments])
+                        + "\r\n"
+                        + fragment.data
+                    )
                     # Clear it
                     fragment.dependent_fragments = []
 
@@ -128,9 +152,12 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
                     operations[name] = operation
                 except GraphQLSyntaxError as e:
                     # If there is an error parsing the operation data, print an error message
-                    print(f"Error: Error parsing operation data: {e} \n {operation.data}")
+                    print(
+                        f"Error: Error parsing operation data: {e} \n {operation.data}"
+                    )
 
     return (fragments, operations)
+
 
 # Load all GraphQL operations from the "sdkCommonGQL" folder and export them
 GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(".", "sdkCommonGQL"))

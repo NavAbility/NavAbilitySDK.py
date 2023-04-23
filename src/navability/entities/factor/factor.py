@@ -164,8 +164,8 @@ class Factor:
     variableOrderSymbols: List[str]
     data: str 
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
-    timestamp: str = datetime.utcnow()
-    nstime: int = 0
+    timestamp: datetime = datetime.utcnow()
+    nstime: str = "0"
     solvable: str = 1
     _version: str = payload_version
 
@@ -200,6 +200,7 @@ class FactorSchema(Schema):
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     nstime = fields.Str(default="0")
     fnctype = fields.Str(required=True)
+    metadata = fields.Method("get_metadata", "set_metadata")
     solvable = fields.Int(required=True)
 
     class Meta:
@@ -220,12 +221,17 @@ class FactorSchema(Schema):
         return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_data(self, obj):
-        return obj.data.dump()
+        return base64.b64encode(obj.data.dumps().encode())
 
-    def set_data(self, ob):
+    def set_data(self, obj):
         db64 = base64.b64decode(ob)
         return FactorDataSchema().load(json.loads(db64))
         
+    def get_metadata(self, obj):
+        return base64.b64encode(json.dumps(obj).encode())
+
+    def set_metadata(self, obj):
+        return json.loads(base64.b64decode(obj))
 
     @post_load
     def marshal(self, data, **kwargs):

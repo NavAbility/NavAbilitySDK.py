@@ -1,9 +1,10 @@
+import base64
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from uuid import UUID
-from typing import Dict, List
+from uuid import UUID, uuid4
+from typing import Dict, List, Optional
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
@@ -50,16 +51,30 @@ from navability.common.versions import payload_version
 
 @dataclass()
 class BlobEntry:
-    id: UUID
+    id: Optional[UUID]
+    blobId: Optional[UUID]
     label: str
     description: str
     # createdTimestamp: datetime # = datetime.utcnow()
     # updatedTimestamp: datetime
     # size: int
     blobstore: str
+    createdTimestamp: Optional[datetime] = None
+    lastUpdatedTimestamp: Optional[datetime] = None
     hash: str = ''
     mimeType: str = 'application/octet-stream'
+    originId: UUID = uuid4()
     origin: str = ''
+    _type: str = "BlobEntry"
+    _version: str = payload_version
+    metadata: dict = field(default_factory=lambda: {})
+
+    # Optional
+    userLabel: Optional[str] = None
+    robotLabel: Optional[str] = None
+    sessionLabel: Optional[str] = None
+    variableLabel: Optional[str] = None
+    factorLabel: Optional[str] = None
 
     def __repr__(self):
         return (
@@ -81,7 +96,7 @@ class BlobEntry:
 
 # Legacy BlobEntry_ contract
 class BlobEntrySchema(Schema):
-    id = fields.UUID(required=True)
+    id = fields.UUID()
     label = fields.Str(required=True)
     description: str = fields.Str(required=True)
     # createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
@@ -91,6 +106,8 @@ class BlobEntrySchema(Schema):
     hash = fields.Str(required=False)
     mimeType = fields.Str(required=False)
     origin = fields.Str(required=False)
+    metadata = fields.Method("get_metadata", "set_metadata")
+    _version = fields.Str(required=True)
 
     class Meta:
         ordered = True
@@ -104,6 +121,12 @@ class BlobEntrySchema(Schema):
 
     def set_timestamp(self, obj):
         return datetime.strptime(obj["formatted"], TS_FORMAT)
+
+    def get_metadata(self, obj):
+        return base64.b64encode(json.dumps(obj).encode())
+
+    def set_metadata(self, obj):
+        return json.loads(base64.b64decode(obj))
 
     @post_load
     def marshal(self, data, **kwargs):

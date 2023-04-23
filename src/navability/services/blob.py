@@ -21,7 +21,7 @@ from navability.entities.navabilityclient import (
     QueryOptions,
 )
 # from navability.entities.querydetail import QueryDetail
-from navability.entities.blob.blob import (
+from navability.entities.blob.blobentry import (
     BlobEntry,
     BlobEntrySchema,
 )

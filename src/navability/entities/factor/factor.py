@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List
+from uuid import UUID
 import json
 import base64
 
@@ -12,6 +13,7 @@ from navability.common.versions import payload_version
 
 @dataclass()
 class FactorSkeleton:
+    id: UUID
     label: str
     variableOrderSymbols: List[str]
     tags: List[str]
@@ -34,6 +36,7 @@ class FactorSkeleton:
 
 
 class FactorSkeletonSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
@@ -50,7 +53,8 @@ class FactorSkeletonSchema(Schema):
 
 @dataclass()
 class FactorSummary:
-    label = str
+    id: UUID
+    label: str
     variableOrderSymbols: List[str]
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: datetime = datetime.utcnow()
@@ -74,6 +78,7 @@ class FactorSummary:
 
 
 class FactorSummarySchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
@@ -153,13 +158,14 @@ class FactorDataSchema(Schema):
 
 @dataclass()
 class Factor:
+    id: UUID
     label: str
     fnctype: str
     variableOrderSymbols: List[str]
-    data: FactorData
+    data: str 
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
-    timestamp: str = datetime.utcnow()
-    nstime: int = 0
+    timestamp: datetime = datetime.utcnow()
+    nstime: str = "0"
     solvable: str = 1
     _version: str = payload_version
 
@@ -183,6 +189,7 @@ class Factor:
 
 
 class FactorSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     _version = fields.Str(required=True)
     variableOrderSymbols = fields.List(
@@ -193,6 +200,7 @@ class FactorSchema(Schema):
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     nstime = fields.Str(default="0")
     fnctype = fields.Str(required=True)
+    metadata = fields.Method("get_metadata", "set_metadata")
     solvable = fields.Int(required=True)
 
     class Meta:
@@ -213,12 +221,17 @@ class FactorSchema(Schema):
         return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_data(self, obj):
-        return obj.data.dump()
+        return base64.b64encode(obj.data.dumps().encode())
 
-    def set_data(self, ob):
+    def set_data(self, obj):
         db64 = base64.b64decode(ob)
         return FactorDataSchema().load(json.loads(db64))
         
+    def get_metadata(self, obj):
+        return base64.b64encode(json.dumps(obj).encode())
+
+    def set_metadata(self, obj):
+        return json.loads(base64.b64decode(obj))
 
     @post_load
     def marshal(self, data, **kwargs):

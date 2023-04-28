@@ -1,8 +1,10 @@
+import base64
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, Optional
+from uuid import UUID
 
 from marshmallow import EXCLUDE, Schema, fields, post_load
 
@@ -45,6 +47,7 @@ def _getVariableNodeData(variableType: str, solveKey: str):
 
 @dataclass()
 class VariableSkeleton:
+    id: Optional[UUID]
     label: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
 
@@ -60,6 +63,7 @@ class VariableSkeleton:
 
 
 class VariableSkeletonSchema(Schema):
+    id = fields.UUID(required=True)
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
 
@@ -73,6 +77,7 @@ class VariableSkeletonSchema(Schema):
 
 @dataclass()
 class VariableSummary:
+    id: Optional[UUID]
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
@@ -99,6 +104,7 @@ class VariableSummary:
 
 
 class VariableSummarySchema(Schema):
+    id = fields.UUID()
     label = fields.Str(required=True)
     tags = fields.List(fields.Str())
     ppes = fields.Nested(PpeSchema, many=True)
@@ -127,16 +133,17 @@ class VariableSummarySchema(Schema):
 
 @dataclass()
 class Variable:
+    id: Optional[UUID]
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
     ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
-    nstime: int = 0
+    nstime: str = "0"
     dataEntry: str = "{}"
     dataEntryType: str = "{}"
     solverData: Dict[str, VariableNodeData] = field(default_factory=lambda: {})
-    smallData: str = "{}"
+    metadata: dict = field(default_factory=lambda: {})
     solvable: str = 1
     _version: str = payload_version
     _id: int = None
@@ -172,17 +179,17 @@ class Variable:
 
 
 class VariableSchema(Schema):
+    id = fields.UUID()
     label = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
     ppes = fields.Method("get_ppes", "set_ppes")
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
+    nstime = fields.Str(default="0")
     variableType = fields.Str(required=True)
     _version = fields.Str(required=True)
     _id: fields.Integer(data_key="_id", required=False)
-    # dataEntry = fields.Str(required=True)
-    # dataEntryType = fields.Str(required=True)
     solverData = fields.Method("get_solverdata", "set_solverdata")
-    smallData = fields.Str(required=True)
+    metadata = fields.Method("get_metadata", "set_metadata")
     solvable = fields.Int(required=True)
 
     class Meta:
@@ -217,6 +224,12 @@ class VariableSchema(Schema):
 
     def set_ppes(self, obj):
         return {ppe["solveKey"]: PpeSchema().load(ppe) for ppe in obj}
+
+    def get_metadata(self, obj):
+        return base64.b64encode(json.dumps(obj).encode())
+
+    def set_metadata(self, obj):
+        return json.loads(base64.b64decode(obj))
 
 
 class PackedVariableSchema(Schema):

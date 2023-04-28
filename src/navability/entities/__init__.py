@@ -37,4 +37,4 @@ from .variable.ppe import Ppe
 from .variable.variable import Variable, VariableSkeleton, VariableSummary, VariableType
 from .variable.variablenodedata import VariableNodeData
 
-from .blob.blob import BlobEntry
+from .blob.blobentry import BlobEntry

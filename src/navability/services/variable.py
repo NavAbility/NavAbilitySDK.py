@@ -1,15 +1,7 @@
 import logging
 from typing import List
 
-from gql import gql
-
-from navability.common.mutations import GQL_ADDVARIABLE
-from navability.common.queries import (
-    GQL_FRAGMENT_VARIABLES,
-    GQL_LISTVARIABLES,
-    GQL_GETVARIABLE,
-    GQL_GETVARIABLES,
-)
+from navability.services.loader import GQL_OPERATIONS
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
     MutationOptions,
@@ -39,7 +31,7 @@ logger = logging.getLogger(__name__)
 async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
     result = await navAbilityClient.mutate(
         MutationOptions(
-            gql(GQL_ADDVARIABLE),
+            GQL_OPERATIONS["GQL_ADDVARIABLE"].data,
             {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
         )
     )
@@ -98,13 +90,13 @@ async def listVariables(
         List[str]: Async task returning a list of Variable labels.
     """
     params = {
-        "userId": context.userId,
-        "robotId": context.robotId,
-        "sessionId": context.sessionId,
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_LISTVARIABLES), params)
+        QueryOptions(GQL_OPERATIONS["QUERY_LIST_VARIABLES"].data, params)
     )
     if (
         "users" not in res
@@ -126,19 +118,6 @@ async def listVariables(
     resvar = res['users'][0]['robots'][0]['sessions'][0]['variables']
     [vl.append(_lb(v)) for v in resvar]
     return vl
-    # # LEGACY
-    # variables = await getVariables(
-    #     client,
-    #     context,
-    #     detail=QueryDetail.SKELETON,
-    #     regexFilter=regexFilter,
-    #     tags=tags,
-    #     solvable=solvable,
-    # )
-    # result = [v.label for v in variables]
-    # return result
-
-
 
 # Alias
 ls = listVariables
@@ -177,8 +156,7 @@ async def getVariables(
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLES), params)
-    )
+        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLES"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     schema = DETAIL_SCHEMA[detail]
@@ -215,8 +193,7 @@ async def getVariable(
     params["label"] = label
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(gql(GQL_FRAGMENT_VARIABLES + GQL_GETVARIABLE), params)
-    )
+        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLE"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     # Using the hierarchy approach, we need to check that we have

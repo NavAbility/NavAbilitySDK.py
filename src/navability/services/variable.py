@@ -1,7 +1,10 @@
 import logging
 from typing import List
 
+import asyncio
+
 from navability.services.loader import GQL_OPERATIONS
+from navability.entities.dfgclient import DFGClient
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
     MutationOptions,
@@ -39,9 +42,8 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
 
 
 def addVariable(
-    client: NavAbilityClient, 
-    context: Client, 
-    variable_or_label, 
+    fgclient: DFGClient,
+    variable_or_label,
     varType=None
 ):
     """ Add a variable to the graph.
@@ -58,6 +60,9 @@ def addVariable(
     Returns:
         _type_: _description_
     """
+    client = fgclient.client
+    context = fgclient.context
+
     if isinstance(variable_or_label, Variable):
         return _addVariable(client, context, variable_or_label)
     # TODO standardise varType to string or VariableType after design discussion
@@ -70,9 +75,8 @@ def addVariable(
     raise NotImplementedError()
 
 
-async def listVariables(
-    client: NavAbilityClient,
-    context: Client,
+async def listVariablesAsync(
+    fgclient: DFGClient,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
@@ -89,6 +93,10 @@ async def listVariables(
     Returns:
         List[str]: Async task returning a list of Variable labels.
     """
+
+    client = fgclient.client
+    context = fgclient.context
+    
     params = {
         "userLabel": context.userLabel,
         "robotLabel": context.robotLabel,
@@ -119,13 +127,23 @@ async def listVariables(
     [vl.append(_lb(v)) for v in resvar]
     return vl
 
+
+def listVariables(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[str]:
+    tsk = listVariablesAsync(fgclient, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
 # Alias
 ls = listVariables
 
 
-async def getVariables(
-    client: NavAbilityClient,
-    context: Client,
+async def getVariablesAsync(
+    fgclient: DFGClient,
     detail: QueryDetail = QueryDetail.SKELETON,
     regexFilter: str = ".*",
     tags: List[str] = None,
@@ -144,10 +162,14 @@ async def getVariables(
     Returns:
         List[VariableSkeleton]: Async task returning a list of VariableSkeleton
     """
+
+    client = fgclient.client
+    context = fgclient.context
+
     params = {
-        "userId": context.userId,
-        "robotIds": [context.robotId],
-        "sessionIds": [context.sessionId],
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
         "variable_label_regexp": regexFilter,
         "variable_tags": tags if tags is not None else ["VARIABLE"],
         "solvable": solvable,
@@ -156,7 +178,7 @@ async def getVariables(
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLES"].data, params))
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_VARIABLES"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     schema = DETAIL_SCHEMA[detail]
@@ -182,6 +204,18 @@ async def getVariables(
     return [
         schema.load(l) for l in res["users"][0]["robots"][0]["sessions"][0]["variables"]
     ]
+
+
+def getVariables(
+    fgclient: DFGClient,
+    detail: QueryDetail = QueryDetail.SKELETON,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+
+    tsk = getVariablesAsync(fgclient, detail, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
 
 
 async def getVariable(

@@ -29,6 +29,9 @@ from .navabilityclient import (
     NavAbilityHttpsClient,
     NavAbilityWebsocketClient,
 )
+
+from .dfgclient import DFGClient
+
 from .querydetail import QueryDetail
 from .scope import Scope
 from .solve import SolveOptions

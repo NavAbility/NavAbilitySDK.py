@@ -29,6 +29,7 @@ from navability.entities.blob.blobentry import (
 
 logger = logging.getLogger(__name__)
 
+
 async def listBlobEntries(
     client: NavAbilityClient,
     context: Client,
@@ -72,7 +73,7 @@ async def listBlobEntries(
         if len(res["users"][0]["robots"][0]["sessions"]) != 1:
             logger.warn("Robot not found in result, returning empty list")
         return []
-    
+
     # extract result
     schema = BlobEntrySchema()
     resdata = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['data']

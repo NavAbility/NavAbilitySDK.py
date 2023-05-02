@@ -5,15 +5,7 @@ from typing import List
 
 from gql import gql
 
-# from navability.common.queries import (
-#     GQL_LISTDATAENTRIES,
-# )
-# from navability.common.mutations import (
-#     GQL_CREATEDOWNLOAD,
-#     GQL_CREATEUPLOAD,
-#     GQL_COMPLETEUPLOAD_SINGLE,
-#     GQL_ADDBLOBENTRY,
-# )
+from dataclasses import dataclass
 
 from navability.services.loader import GQL_OPERATIONS
 
@@ -33,6 +25,18 @@ from navability.entities.blob.blobentry import (
 
 
 logger = logging.getLogger(__name__)
+
+
+
+## ==================================
+## Blobstore
+## ==================================
+
+
+@dataclass()
+class NavAbilityBlobStore:
+    client: Client
+    userLabel: str
 
 
 ## ==================================
@@ -70,7 +74,6 @@ async def createDownload(
     return res['createDownload']
 
 
-
 async def createUpload(
     client: NavAbilityClient,
     blobLabel: str,
@@ -106,21 +109,19 @@ async def createUpload(
 
 
 async def getBlob(
-    client: NavAbilityClient,
-    user: str,
+    store: NavAbilityBlobStore,
     blobId: str,
 ):
     """ If the user has access, retrieve the identified blob of bytes.
 
     Args:
-        client (NavAbilityClient): The NavAbility client for handling requests.
-        userId (String): The userId with access to the data.
+        store (NavAbilityBlobStore): The NavAbility client and user with access to the data.
         blobId (String): The unique blob identifier of the data.
 
     Returns:
         data: coroutine with data blob content
     """
-    url = await createDownload(client, user, blobId)
+    url = await createDownload(store.client, store.userLabel, blobId)
     resp = requests.get(url)
     return resp.content
 

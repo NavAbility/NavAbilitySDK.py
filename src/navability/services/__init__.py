@@ -6,7 +6,7 @@ from .factor import *
 # from .status import *
 # from .utils import *
 from .variable import *
-from .blob import *
+from .blobstore import *
 from .blobentry import *
 from .loader import *
 

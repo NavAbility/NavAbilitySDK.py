@@ -162,7 +162,8 @@ class Factor:
     label: str
     fnctype: str
     variableOrderSymbols: List[str]
-    data: str 
+    data: str
+    metadata: str
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: datetime = datetime.utcnow()
     nstime: str = "0"
@@ -224,14 +225,16 @@ class FactorSchema(Schema):
         return base64.b64encode(obj.data.dumps().encode())
 
     def set_data(self, obj):
-        db64 = base64.b64decode(ob)
-        return FactorDataSchema().load(json.loads(db64))
+        return FactorDataSchema().load(json.loads(obj))
         
     def get_metadata(self, obj):
         return base64.b64encode(json.dumps(obj).encode())
 
     def set_metadata(self, obj):
-        return json.loads(base64.b64decode(obj))
+        if obj == '':
+            return {}
+        else:
+            return json.loads(base64.b64decode(obj))
 
     @post_load
     def marshal(self, data, **kwargs):

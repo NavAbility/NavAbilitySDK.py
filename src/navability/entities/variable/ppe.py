@@ -7,7 +7,7 @@ from marshmallow import Schema, fields, post_load
 
 from navability.common.timestamps import TS_FORMAT, TS_FORMAT_NO_TZ
 
-
+#TODO should we rename to MeanMaxPPE?
 @dataclass()
 class Ppe:
     id: Optional[UUID]
@@ -15,6 +15,9 @@ class Ppe:
     suggested: List[float]
     max: List[float]
     mean: List[float]
+    _type: str
+    _version: str
+    createdTimestamp: datetime
     lastUpdatedTimestamp: datetime
 
     def __repr__(self):
@@ -40,6 +43,11 @@ class PpeSchema(Schema):
     suggested = fields.List(fields.Float(), required=True)
     max = fields.List(fields.Float(), required=True)
     mean = fields.List(fields.Float(), required=True)
+    _type = fields.Str()
+    _version = fields.Str(required=True)
+    createdTimestamp = fields.Method(
+        "get_timestamp", "set_timestamp", required=True
+    )
     lastUpdatedTimestamp = fields.Method(
         "get_timestamp", "set_timestamp", required=True
     )

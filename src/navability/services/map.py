@@ -2,12 +2,9 @@ from typing import List, Optional
 import logging
 from uuid import UUID
 
-from gql import gql
+# from gql import gql
 
-from navability.common.queries import GQL_GETSTATUSLATEST, GQL_GETSTATUSMESSAGES
-from navability.entities.client import Client
 from navability.entities.navabilityclient import NavAbilityClient, QueryOptions
-from navability.entities.statusmessage import StatusMessageSchema
 from navability.entities.map.map import Map, MapSchema
 from navability.services.loader import GQL_OPERATIONS
 

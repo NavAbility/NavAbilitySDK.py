@@ -17,9 +17,12 @@ from navability.entities.variable.variable import (
     VariableSchema,
     VariableSkeleton,
     VariableSkeletonSchema,
+    VariableSummary,
     VariableSummarySchema,
     VariableType,
 )
+
+from navability.entities.variable.ppe import Ppe, PpeSchema
 
 DETAIL_SCHEMA = {
     QueryDetail.LABEL: None,
@@ -144,7 +147,7 @@ ls = listVariables
 
 async def getVariablesAsync(
     fgclient: DFGClient,
-    detail: QueryDetail = QueryDetail.SKELETON,
+    detail: QueryDetail = QueryDetail.FULL,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
@@ -157,7 +160,8 @@ async def getVariablesAsync(
         detail (QueryDetail, optional): Defaults to QueryDetail.SKELETON.
         regexFilter (str, optional): Filter on variable label. Defaults to ".*".
         tags (List[str], optional): Variables can have string tags. Defaults to None.
-        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+        solvable (int, optional): Whether this variable can be used in solving yet.
+        Defaults to 0.
 
     Returns:
         List[VariableSkeleton]: Async task returning a list of VariableSkeleton
@@ -208,7 +212,7 @@ async def getVariablesAsync(
 
 def getVariables(
     fgclient: DFGClient,
-    detail: QueryDetail = QueryDetail.SKELETON,
+    detail: QueryDetail = QueryDetail.FULL,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
@@ -218,16 +222,38 @@ def getVariables(
     return asyncio.run(tsk)
 
 
-async def getVariable(
-    client: NavAbilityClient, 
-    context: Client, 
+def getVariablesSummary(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+    tsk = getVariablesAsync(fgclient, QueryDetail.SUMMARY, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
+def getVariablesSkeleton(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+    tsk = getVariablesAsync(fgclient, QueryDetail.SKELETON, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
+async def getVariableAsync(
+    fgclient: DFGClient,
     label: str
 ):
+    client = fgclient.client
+    context = fgclient.context
+
     params = context.dump()
-    params["label"] = label
+    params["variableLabel"] = label
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLE"].data, params))
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_VARIABLE"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     # Using the hierarchy approach, we need to check that we have
@@ -248,3 +274,62 @@ async def getVariable(
     if len(vs) > 1:
         raise Exception(f"More than one variable named {label} returned")
     return Variable.load(vs[0])
+
+
+def getVariable(
+    fgclient: DFGClient,
+    label: str
+):
+    tsk = getVariableAsync(fgclient, label)
+    return asyncio.run(tsk)
+
+
+# TODO maybe move to seperate ppe.py file
+
+def getPPE(
+    fgclient: DFGClient, 
+    variableLabel: str, 
+    solveKey: str = 'default'
+):
+    client = fgclient.client
+    context = fgclient.context
+
+    params = {
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
+        "variableLabel": variableLabel,
+        "solveKey": solveKey,
+    }
+    logger.debug(f"Query params: {params}")
+    tsk = client.query(QueryOptions(GQL_OPERATIONS["QUERY_GET_PPE"].data, params))
+    res = asyncio.run(tsk)
+    logger.debug(f"Query result: {res}")
+    # TODO: Check for errors
+    # Using the hierarchy approach, we need to check that we have
+    # exactly one user/robot/session in it, otherwise error.
+    if (
+        "users" not in res
+        or len(res["users"]) != 1
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "variables" not in res["users"][0]["robots"][0]["sessions"][0]
+    ):
+        # Debugging information
+        if len(res["users"]) != 1:
+            logger.warn("User not found in result, returning empty list")
+        if len(res["users"][0]["robots"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        if len(res["users"][0]["robots"][0]["sessions"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        return []
+
+    ppes = res["users"][0]["robots"][0]["sessions"][0]["variables"][0]["ppes"]
+    
+    if len(ppes) == 0:
+        return None
+    if len(ppes) > 1:
+        raise Exception(f"More than one variable named {solveKey} returned")
+
+    return Ppe.load(ppes[0])
+    

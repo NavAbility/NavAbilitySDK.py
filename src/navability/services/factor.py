@@ -4,12 +4,12 @@ from uuid import uuid4
 
 from gql import gql
 
-from navability.common.mutations import GQL_ADDFACTOR
-from navability.common.queries import (
-    GQL_FRAGMENT_FACTORS,
-    GQL_GETFACTOR,
-    GQL_GETFACTORS,
-)
+# from navability.common.mutations import GQL_ADDFACTOR
+# from navability.common.queries import (
+#     GQL_FRAGMENT_FACTORS,
+#     GQL_GETFACTOR,
+#     GQL_GETFACTORS,
+# )
 from navability.entities.client import Client
 from navability.entities.factor.factor import (
     Factor,

@@ -4,13 +4,13 @@ from uuid import uuid4
 
 from gql import gql
 
-# from navability.common.mutations import GQL_ADDFACTOR
-# from navability.common.queries import (
-#     GQL_FRAGMENT_FACTORS,
-#     GQL_GETFACTOR,
-#     GQL_GETFACTORS,
-# )
+import asyncio
+
+from navability.entities.dfgclient import DFGClient
+
 from navability.entities.client import Client
+
+from navability.services.loader import GQL_OPERATIONS
 from navability.entities.factor.factor import (
     Factor,
     FactorData,
@@ -35,6 +35,52 @@ DETAIL_SCHEMA = {
 }
 
 logger = logging.getLogger(__name__)
+
+
+async def getFactorAsync(fgclient: DFGClient, label: str):
+
+    client = fgclient.client
+    context = fgclient.context
+
+    params = {
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
+        "label": label,
+        # "fields_summary": detail in [QueryDetail.SUMMARY, QueryDetail.FULL],
+        # "fields_full": detail == QueryDetail.FULL,
+    }
+
+    logger.debug(f"Query params: {params}")
+    res = await client.query(
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_FACTOR"].data, params)
+    )
+
+    logger.debug(f"Query result: {res}")
+    # TODO: Check for errors
+    # Using the hierarchy approach, we need to check that we
+    # have exactly one user/robot/session in it, otherwise error.
+    if (
+        "users" not in res
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "factors" not in res["users"][0]["robots"][0]["sessions"][0]
+    ):
+        raise Exception(
+            "Received an empty data structure, set logger to debug for the payload"
+        )
+    fs = res["users"][0]["robots"][0]["sessions"][0]["factors"]
+    # TODO: Check for errors
+    if len(fs) == 0:
+        return None
+    if len(fs) > 1:
+        raise Exception(f"More than one factor named {label} returned")
+    return Factor.load(fs[0])
+
+
+def getFactor(fgclient: DFGClient, label: str):
+    tsk = getFactorAsync(fgclient, label)
+    return asyncio.run(tsk)
 
 
 def assembleFactorName(xisyms: List[str]):
@@ -152,31 +198,3 @@ async def getFactors(
         schema.load(l) for l in res["users"][0]["robots"][0]["sessions"][0]["factors"]
     ]
 
-
-async def getFactor(navAbilityClient: NavAbilityClient, client: Client, label: str):
-    params = client.dump()
-    params["label"] = label
-    logger.debug(f"Query params: {params}")
-    res = await navAbilityClient.query(
-        QueryOptions(gql(GQL_FRAGMENT_FACTORS + GQL_GETFACTOR), params)
-    )
-    logger.debug(f"Query result: {res}")
-    # TODO: Check for errors
-    # Using the hierarchy approach, we need to check that we
-    # have exactly one user/robot/session in it, otherwise error.
-    if (
-        "users" not in res
-        or len(res["users"][0]["robots"]) != 1
-        or len(res["users"][0]["robots"][0]["sessions"]) != 1
-        or "factors" not in res["users"][0]["robots"][0]["sessions"][0]
-    ):
-        raise Exception(
-            "Received an empty data structure, set logger to debug for the payload"
-        )
-    fs = res["users"][0]["robots"][0]["sessions"][0]["factors"]
-    # TODO: Check for errors
-    if len(fs) == 0:
-        return None
-    if len(fs) > 1:
-        raise Exception(f"More than one factor named {label} returned")
-    return Factor.load(fs[0])

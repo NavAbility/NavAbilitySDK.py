@@ -1,7 +1,10 @@
 import logging
 from typing import List
 
+import asyncio
+
 from navability.services.loader import GQL_OPERATIONS
+from navability.entities.dfgclient import DFGClient
 from navability.entities.client import Client
 from navability.entities.navabilityclient import (
     MutationOptions,
@@ -14,9 +17,12 @@ from navability.entities.variable.variable import (
     VariableSchema,
     VariableSkeleton,
     VariableSkeletonSchema,
+    VariableSummary,
     VariableSummarySchema,
     VariableType,
 )
+
+from navability.entities.variable.ppe import Ppe, PpeSchema
 
 DETAIL_SCHEMA = {
     QueryDetail.LABEL: None,
@@ -39,9 +45,8 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
 
 
 def addVariable(
-    client: NavAbilityClient, 
-    context: Client, 
-    variable_or_label, 
+    fgclient: DFGClient,
+    variable_or_label,
     varType=None
 ):
     """ Add a variable to the graph.
@@ -58,6 +63,9 @@ def addVariable(
     Returns:
         _type_: _description_
     """
+    client = fgclient.client
+    context = fgclient.context
+
     if isinstance(variable_or_label, Variable):
         return _addVariable(client, context, variable_or_label)
     # TODO standardise varType to string or VariableType after design discussion
@@ -70,9 +78,8 @@ def addVariable(
     raise NotImplementedError()
 
 
-async def listVariables(
-    client: NavAbilityClient,
-    context: Client,
+async def listVariablesAsync(
+    fgclient: DFGClient,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
@@ -89,6 +96,10 @@ async def listVariables(
     Returns:
         List[str]: Async task returning a list of Variable labels.
     """
+
+    client = fgclient.client
+    context = fgclient.context
+    
     params = {
         "userLabel": context.userLabel,
         "robotLabel": context.robotLabel,
@@ -119,14 +130,24 @@ async def listVariables(
     [vl.append(_lb(v)) for v in resvar]
     return vl
 
+
+def listVariables(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[str]:
+    tsk = listVariablesAsync(fgclient, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
 # Alias
 ls = listVariables
 
 
-async def getVariables(
-    client: NavAbilityClient,
-    context: Client,
-    detail: QueryDetail = QueryDetail.SKELETON,
+async def getVariablesAsync(
+    fgclient: DFGClient,
+    detail: QueryDetail = QueryDetail.FULL,
     regexFilter: str = ".*",
     tags: List[str] = None,
     solvable: int = 0,
@@ -139,15 +160,20 @@ async def getVariables(
         detail (QueryDetail, optional): Defaults to QueryDetail.SKELETON.
         regexFilter (str, optional): Filter on variable label. Defaults to ".*".
         tags (List[str], optional): Variables can have string tags. Defaults to None.
-        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+        solvable (int, optional): Whether this variable can be used in solving yet.
+        Defaults to 0.
 
     Returns:
         List[VariableSkeleton]: Async task returning a list of VariableSkeleton
     """
+
+    client = fgclient.client
+    context = fgclient.context
+
     params = {
-        "userId": context.userId,
-        "robotIds": [context.robotId],
-        "sessionIds": [context.sessionId],
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
         "variable_label_regexp": regexFilter,
         "variable_tags": tags if tags is not None else ["VARIABLE"],
         "solvable": solvable,
@@ -156,7 +182,7 @@ async def getVariables(
     }
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLES"].data, params))
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_VARIABLES"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     schema = DETAIL_SCHEMA[detail]
@@ -184,16 +210,50 @@ async def getVariables(
     ]
 
 
-async def getVariable(
-    client: NavAbilityClient, 
-    context: Client, 
+def getVariables(
+    fgclient: DFGClient,
+    detail: QueryDetail = QueryDetail.FULL,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+
+    tsk = getVariablesAsync(fgclient, detail, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
+def getVariablesSummary(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+    tsk = getVariablesAsync(fgclient, QueryDetail.SUMMARY, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
+def getVariablesSkeleton(
+    fgclient: DFGClient,
+    regexFilter: str = ".*",
+    tags: List[str] = None,
+    solvable: int = 0,
+) -> List[VariableSkeleton]:
+    tsk = getVariablesAsync(fgclient, QueryDetail.SKELETON, regexFilter, tags, solvable)
+    return asyncio.run(tsk)
+
+
+async def getVariableAsync(
+    fgclient: DFGClient,
     label: str
 ):
+    client = fgclient.client
+    context = fgclient.context
+
     params = context.dump()
-    params["label"] = label
+    params["variableLabel"] = label
     logger.debug(f"Query params: {params}")
     res = await client.query(
-        QueryOptions(GQL_OPERATIONS["GQL_GETVARIABLE"].data, params))
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_VARIABLE"].data, params))
     logger.debug(f"Query result: {res}")
     # TODO: Check for errors
     # Using the hierarchy approach, we need to check that we have
@@ -214,3 +274,62 @@ async def getVariable(
     if len(vs) > 1:
         raise Exception(f"More than one variable named {label} returned")
     return Variable.load(vs[0])
+
+
+def getVariable(
+    fgclient: DFGClient,
+    label: str
+):
+    tsk = getVariableAsync(fgclient, label)
+    return asyncio.run(tsk)
+
+
+# TODO maybe move to seperate ppe.py file
+
+def getPPE(
+    fgclient: DFGClient, 
+    variableLabel: str, 
+    solveKey: str = 'default'
+):
+    client = fgclient.client
+    context = fgclient.context
+
+    params = {
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
+        "variableLabel": variableLabel,
+        "solveKey": solveKey,
+    }
+    logger.debug(f"Query params: {params}")
+    tsk = client.query(QueryOptions(GQL_OPERATIONS["QUERY_GET_PPE"].data, params))
+    res = asyncio.run(tsk)
+    logger.debug(f"Query result: {res}")
+    # TODO: Check for errors
+    # Using the hierarchy approach, we need to check that we have
+    # exactly one user/robot/session in it, otherwise error.
+    if (
+        "users" not in res
+        or len(res["users"]) != 1
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "variables" not in res["users"][0]["robots"][0]["sessions"][0]
+    ):
+        # Debugging information
+        if len(res["users"]) != 1:
+            logger.warn("User not found in result, returning empty list")
+        if len(res["users"][0]["robots"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        if len(res["users"][0]["robots"][0]["sessions"]) != 1:
+            logger.warn("Robot not found in result, returning empty list")
+        return []
+
+    ppes = res["users"][0]["robots"][0]["sessions"][0]["variables"][0]["ppes"]
+    
+    if len(ppes) == 0:
+        return None
+    if len(ppes) > 1:
+        raise Exception(f"More than one variable named {solveKey} returned")
+
+    return Ppe.load(ppes[0])
+    

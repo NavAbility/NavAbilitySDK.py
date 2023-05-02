@@ -11,6 +11,7 @@ from marshmallow import EXCLUDE, Schema, fields, post_load
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
 from navability.entities.variable.ppe import Ppe, PpeSchema
+from navability.entities.blob.blobentry import BlobEntry, BlobEntrySchema
 from navability.entities.variable.variablenodedata import (
     VariableNodeData,
     VariableNodeDataSchema,
@@ -41,6 +42,8 @@ def _getVariableNodeData(variableType: str, solveKey: str):
     if variableType == "RoME.Pose3":
         return VariableNodeData(variableType, solveKey, 6)
     if variableType == "IncrementalInference.ContinuousScalar":
+        return VariableNodeData(variableType, solveKey, 1)
+    if variableType == "Position{1}":
         return VariableNodeData(variableType, solveKey, 1)
     raise Exception(f"Variable type '{variableType}' not supported.")
 
@@ -81,10 +84,13 @@ class VariableSummary:
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
+    nstime: str = "0"
+    # ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
+    ppes: List[Ppe] = field(default_factory=lambda: [])
+    # blobEntries: Dict[str, BlobEntry] = field(default_factory=lambda: {})
+    blobEntries: List[BlobEntry] = field(default_factory=lambda: [])
     _version: str = payload_version
-    _id: int = None
 
     def __repr__(self):
         return (
@@ -106,12 +112,14 @@ class VariableSummary:
 class VariableSummarySchema(Schema):
     id = fields.UUID()
     label = fields.Str(required=True)
-    tags = fields.List(fields.Str())
-    ppes = fields.Nested(PpeSchema, many=True)
-    timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     variableType = fields.Str(required=True)
+    tags = fields.List(fields.Str())
+    timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
+    nstime = fields.Str(default="0")
+    ppes = fields.Nested(PpeSchema, many=True)
+    # ppes = fields.Method("get_ppes", "set_ppes")
+    blobEntries = fields.Nested(BlobEntrySchema, many=True)
     _version = fields.Str(required=True)
-    _id = fields.Integer(data_key="_id", required=False)
 
     class Meta:
         ordered = True
@@ -124,7 +132,8 @@ class VariableSummarySchema(Schema):
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj["formatted"], TS_FORMAT)
+        tsraw = obj if type(obj) == str else obj["formatted"]
+        return datetime.strptime(tsraw, TS_FORMAT)
 
     @post_load
     def marshal(self, data, **kwargs):
@@ -137,23 +146,21 @@ class Variable:
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
-    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
     timestamp: datetime = datetime.utcnow()
     nstime: str = "0"
-    dataEntry: str = "{}"
-    dataEntryType: str = "{}"
+    solvable: str = 1
+    ppes: Dict[str, Ppe] = field(default_factory=lambda: {})
+    blobEntries: Dict[str, BlobEntry] = field(default_factory=lambda: {})
     solverData: Dict[str, VariableNodeData] = field(default_factory=lambda: {})
     metadata: dict = field(default_factory=lambda: {})
-    solvable: str = 1
     _version: str = payload_version
-    _id: int = None
 
-    def __post_init__(self):
-        pass
-        if self.solverData == {}:
-            self.solverData["default"] = _getVariableNodeData(
-                self.variableType, "default"
-            )
+    # def __post_init__(self):
+    #     pass
+    #     if self.solverData == {}:
+    #         self.solverData["default"] = _getVariableNodeData(
+    #             self.variableType, "default"
+    #         )
 
     def __repr__(self):
         return (
@@ -181,16 +188,16 @@ class Variable:
 class VariableSchema(Schema):
     id = fields.UUID()
     label = fields.Str(required=True)
+    variableType = fields.Str(required=True)
     tags = fields.List(fields.Str(), required=True)
-    ppes = fields.Method("get_ppes", "set_ppes")
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     nstime = fields.Str(default="0")
-    variableType = fields.Str(required=True)
-    _version = fields.Str(required=True)
-    _id: fields.Integer(data_key="_id", required=False)
+    solvable = fields.Int(required=True)
+    ppes = fields.Method("get_ppes", "set_ppes")
+    blobEntries = fields.Nested(BlobEntrySchema, many=True)
     solverData = fields.Method("get_solverdata", "set_solverdata")
     metadata = fields.Method("get_metadata", "set_metadata")
-    solvable = fields.Int(required=True)
+    _version = fields.Str(required=True)
 
     class Meta:
         ordered = True
@@ -239,10 +246,8 @@ class PackedVariableSchema(Schema):
     """
 
     label = fields.Str(required=True)
-    dataEntry = fields.Str(required=True)
     nstime = fields.Str(default="0")
     variableType = fields.Str(required=True)
-    dataEntryType = fields.Str(required=True)
     ppeDict = fields.Str(attribute="ppes", required=True)
     solverDataDict = fields.Method("get_solver_data_dict", required=True)
     smallData = fields.Str(required=True)

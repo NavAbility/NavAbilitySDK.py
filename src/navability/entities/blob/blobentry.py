@@ -52,22 +52,25 @@ from navability.common.versions import payload_version
 @dataclass()
 class BlobEntry:
     id: Optional[UUID]
-    blobId: Optional[UUID]
     label: str
+    blobId: Optional[UUID]
+    originId: UUID
+    timestamp: datetime
     description: str
+    blobstore: str
+    hash: str = ''
+    mimeType: str = 'application/octet-stream'
+    origin: str = ''
+    metadata: dict = field(default_factory=lambda: {})
+    
+    createdTimestamp: Optional[datetime] = None
+    lastUpdatedTimestamp: Optional[datetime] = None
+    
+    _type: str = "BlobEntry"
+    _version: str = payload_version
     # createdTimestamp: datetime # = datetime.utcnow()
     # updatedTimestamp: datetime
     # size: int
-    blobstore: str
-    createdTimestamp: Optional[datetime] = None
-    lastUpdatedTimestamp: Optional[datetime] = None
-    hash: str = ''
-    mimeType: str = 'application/octet-stream'
-    originId: UUID = uuid4()
-    origin: str = ''
-    _type: str = "BlobEntry"
-    _version: str = payload_version
-    metadata: dict = field(default_factory=lambda: {})
 
     # Optional
     userLabel: Optional[str] = None
@@ -90,7 +93,6 @@ class BlobEntry:
 
     @staticmethod
     def load(data):
-        import pdb; pdb.set_trace()
         return BlobEntrySchema().load(data)
 
 
@@ -98,17 +100,22 @@ class BlobEntry:
 class BlobEntrySchema(Schema):
     id = fields.UUID()
     label = fields.Str(required=True)
-    description: str = fields.Str(required=True)
-    # createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
-    # updatedTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=True)
-    # size: int  = fields.Integer(required=True)
+    blobId = fields.UUID()
+    originId = fields.UUID()
+    timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
+    description = fields.Str(required=True)
     blobstore: str = fields.Str(required=True)
     hash = fields.Str(required=False)
     mimeType = fields.Str(required=False)
     origin = fields.Str(required=False)
     metadata = fields.Method("get_metadata", "set_metadata")
+    
+    createdTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=False)
+    updatedTimestamp: datetime = fields.Method("get_timestamp", "set_timestamp", required=False)
+    _type = fields.Str()
     _version = fields.Str(required=True)
 
+    # size: int  = fields.Integer(required=True)
     class Meta:
         ordered = True
 
@@ -120,13 +127,17 @@ class BlobEntrySchema(Schema):
         return ts
 
     def set_timestamp(self, obj):
-        return datetime.strptime(obj["formatted"], TS_FORMAT)
+        tsraw = obj if type(obj) == str else obj["formatted"]
+        return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_metadata(self, obj):
         return base64.b64encode(json.dumps(obj).encode())
 
     def set_metadata(self, obj):
-        return json.loads(base64.b64decode(obj))
+        if obj == '':
+            return {}
+        else:
+            return json.loads(base64.b64decode(obj))
 
     @post_load
     def marshal(self, data, **kwargs):

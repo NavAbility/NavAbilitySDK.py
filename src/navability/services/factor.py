@@ -83,6 +83,52 @@ def getFactor(fgclient: DFGClient, label: str):
     return asyncio.run(tsk)
 
 
+async def listFactorsAsync(fgclient: DFGClient) -> List[str]:
+
+    client = fgclient.client
+    context = fgclient.context
+
+    params = {
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
+    }
+
+    logger.debug(f"Query params: {params}")
+    res = await client.query(
+        QueryOptions(GQL_OPERATIONS["QUERY_LISTFACTORS"].data, params)
+    )
+
+    logger.debug(f"Query result: {res}")
+    # TODO: Check for errors
+    # Using the hierarchy approach, we need to check that we
+    # have exactly one user/robot/session in it, otherwise error.
+    if (
+        "users" not in res
+        or len(res["users"][0]["robots"]) != 1
+        or len(res["users"][0]["robots"][0]["sessions"]) != 1
+        or "factors" not in res["users"][0]["robots"][0]["sessions"][0]
+    ):
+        raise Exception(
+            "Received an empty data structure, set logger to debug for the payload"
+        )
+    fs = res["users"][0]["robots"][0]["sessions"][0]["factors"]
+
+    fl = []
+    _lb = lambda s: s['label']
+    [fl.append(_lb(f)) for f in fs]
+    return fl
+
+
+def listFactors(fgclient: DFGClient):
+    tsk = listFactorsAsync(fgclient)
+    return asyncio.run(tsk)
+
+
+# Alias
+lsf = listFactors
+
+
 def assembleFactorName(xisyms: List[str]):
     s = "".join(xisyms) + "f_" + str(uuid4())[0:4]
     return s
@@ -126,28 +172,6 @@ async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Fact
         )
     )
     return result["addFactor"]
-
-
-async def listFactors(
-    navAbilityClient: NavAbilityClient,
-    client: Client,
-    regexFilter: str = ".*",
-    tags: List[str] = None,
-    solvable: int = 0,
-) -> List[str]:
-    factors = await getFactors(
-        navAbilityClient,
-        client,
-        detail=QueryDetail.SKELETON,
-        regexFilter=regexFilter,
-        tags=tags,
-        solvable=solvable,
-    )
-    return [f.label for f in factors]
-
-
-# Alias
-lsf = listFactors
 
 
 async def getFactors(

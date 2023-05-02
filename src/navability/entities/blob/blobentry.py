@@ -93,7 +93,6 @@ class BlobEntry:
 
     @staticmethod
     def load(data):
-        import pdb; pdb.set_trace()
         return BlobEntrySchema().load(data)
 
 

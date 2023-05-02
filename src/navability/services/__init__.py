@@ -7,6 +7,7 @@ from .factor import *
 # from .utils import *
 from .variable import *
 from .blob import *
+from .blobentry import *
 from .loader import *
 
 # Maps

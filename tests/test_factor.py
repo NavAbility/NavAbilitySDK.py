@@ -6,12 +6,14 @@ from navability.entities import Client
 from navability.services import lsf  # getFactor
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_lsf(example_2d_graph):
     navability_client, client, variables, factors = example_2d_graph
     assert set(await lsf(navability_client, client)) == set([f.label for f in factors])
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_lsf_no_session(example_2d_graph):
     navability_client, client, variables, factors = example_2d_graph

@@ -27,7 +27,7 @@ def test_hex_getVariable():
 @pytest.mark.asyncio
 def test_ls(example_2d_graph):
     navability_client, client, variables, factors = example_2d_graph
-    fgclient = DFGClient(navability_client, client)
+    fgclient = DFGClient(client.userLabel, client.robotLabel, client.sessionLabel)
     assert set(ls(fgclient)) == set([v.label for v in variables])
 
 
@@ -35,8 +35,9 @@ def test_ls(example_2d_graph):
 @pytest.mark.asyncio
 async def test_ls_no_session(example_2d_graph):
     navability_client, client, variables, factors = example_2d_graph
-    noSessionClient = Client(client.userId, client.robotId, "DoesntExist")
-    assert (await ls(navability_client, noSessionClient)) == []
+    #TODO I would say that this should already give an error
+    nofgclient =  DFGClient(client.userLabel, client.robotLabel, "DoesntExist")
+    assert (await ls(navability_client, nofgclient)) == []
 
 
 @pytest.mark.skip

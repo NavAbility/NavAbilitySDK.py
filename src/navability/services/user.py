@@ -3,10 +3,8 @@ import logging
 
 from gql import gql
 
-from navability.common.queries import GQL_GETSTATUSLATEST, GQL_GETSTATUSMESSAGES
 from navability.entities.client import Client
 from navability.entities.navabilityclient import NavAbilityClient, QueryOptions
-from navability.entities.statusmessage import StatusMessageSchema
 from navability.entities.user import User, UserSchema
 from navability.services.loader import GQL_OPERATIONS
 

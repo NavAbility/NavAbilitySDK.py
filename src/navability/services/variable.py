@@ -35,13 +35,45 @@ logger = logging.getLogger(__name__)
 
 
 async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
+    # {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}}
+    sessionconnect = {
+        "connect": {
+            "where": {
+                "node": {
+                    "label": client.sessionLabel
+                }
+            }
+        }
+    }
+
+    variableCreateInput = {
+        'label': v.label,
+        'nstime': v.nstime,
+        'variableType': v.variableType,
+        'solvable': v.solvable,
+        'tags': v.tags,
+        '_version': v._version,
+        'timestamp': VariableSchema().get_timestamp(v),
+        'userLabel': client.userLabel,
+        'robotLabel': client.robotLabel,
+        'sessionLabel': client.sessionLabel,
+        'session': sessionconnect,
+        # 'metadata': Optional['Metadata'],
+        # 'ppes': Optional['VariablePpesFieldInput'],
+        # 'blobEntries': Optional['VariableBlobEntriesFieldInput'],
+        # 'solverData': Optional['VariableSolverDataFieldInput'],
+        # 'factors': Optional['VariableFactorsFieldInput'],
+    }
+
+    params = {"variablesToCreate": [variableCreateInput]}
+
     result = await navAbilityClient.mutate(
         MutationOptions(
-            GQL_OPERATIONS["GQL_ADDVARIABLE"].data,
-            {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}},
+            GQL_OPERATIONS["MUTATION_ADD_VARIABLES"].data,
+            params,
         )
     )
-    return result["addVariable"]
+    return result["addVariables"]
 
 
 def addVariable(

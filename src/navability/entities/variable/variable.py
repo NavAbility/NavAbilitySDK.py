@@ -50,9 +50,9 @@ def _getVariableNodeData(variableType: str, solveKey: str):
 
 @dataclass()
 class VariableSkeleton:
-    id: Optional[UUID]
     label: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
+    id: Optional[UUID] = None
 
     def dump(self):
         return VariableSkeletonSchema().dump(self)
@@ -80,7 +80,6 @@ class VariableSkeletonSchema(Schema):
 
 @dataclass()
 class VariableSummary:
-    id: Optional[UUID]
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
@@ -91,6 +90,7 @@ class VariableSummary:
     # blobEntries: Dict[str, BlobEntry] = field(default_factory=lambda: {})
     blobEntries: List[BlobEntry] = field(default_factory=lambda: [])
     _version: str = payload_version
+    id: Optional[UUID] = None
 
     def __repr__(self):
         return (
@@ -142,7 +142,6 @@ class VariableSummarySchema(Schema):
 
 @dataclass()
 class Variable:
-    id: Optional[UUID]
     label: str
     variableType: str
     tags: List[str] = field(default_factory=lambda: ["VARIABLE"])
@@ -154,6 +153,7 @@ class Variable:
     solverData: Dict[str, VariableNodeData] = field(default_factory=lambda: {})
     metadata: dict = field(default_factory=lambda: {})
     _version: str = payload_version
+    id: Optional[UUID] = None
 
     # def __post_init__(self):
     #     pass

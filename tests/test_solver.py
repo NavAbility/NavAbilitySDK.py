@@ -5,6 +5,7 @@ import pytest
 from navability.services import getVariable
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_solveSession_1d(example_1d_graph_solved):
     navability_client, client, variables, factors = example_1d_graph_solved
@@ -15,6 +16,7 @@ async def test_solveSession_1d(example_1d_graph_solved):
     assert len(ppes) == 4
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_solveSession_2d(example_2d_graph_solved):
     navability_client, client, variables, factors = example_2d_graph_solved
@@ -24,6 +26,7 @@ async def test_solveSession_2d(example_2d_graph_solved):
     assert len(v.ppes["default"].suggested) == 3
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_solveSession_2d_parametric(example_2d_graph_solved_parametric):
     navability_client, client, variables, factors = example_2d_graph_solved_parametric

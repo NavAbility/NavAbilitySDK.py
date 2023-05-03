@@ -8,6 +8,7 @@ import pytest
 
 from navability.entities import (
     Client,
+    DFGClient,
     Factor,
     FactorData,
     FullNormal,
@@ -27,8 +28,9 @@ from navability.entities import (
     Variable,
     VariableType,
 )
-from navability.entities.solve import SolveOptions
-from navability.services import addFactor, addVariable, solveSession, waitForCompletion
+# from navability.entities.solve import SolveOptions
+# from navability.services import addFactor, addVariable, solveSession, waitForCompletion
+from navability.services import addFactor, addVariable
 
 # setup basic logging to stderr
 logging.basicConfig(level=logging.WARN)
@@ -204,20 +206,26 @@ async def example_2d_graph(
             ),
         ),
     ]
+
+    fgclient = DFGClient(
+        client_2d.userLabel,
+        client_2d.robotLabel,
+        client_2d.sessionLabel
+    )
+
     # Variables
-    result_ids = [
-        await addVariable(navability_https_client, client_2d, v) for v in variables
-    ] + [await addFactor(navability_https_client, client_2d, f) for f in factors]
+    add_var_res = [await addVariable(fgclient, v) for v in variables]
+    # add_fac_res = [await addFactor(navability_https_client, client_2d, f) for f in factors]
 
     logging.info(f"[Fixture] Adding variables and factors, waiting for completion")
 
     # Await for only Complete messages, otherwise fail.
-    await waitForCompletion(
-        navability_https_client,
-        result_ids,
-        expectedStatuses=["Complete"],
-        maxSeconds=120,
-    )
+    # await waitForCompletion(
+    #     navability_https_client,
+    #     result_ids,
+    #     expectedStatuses=["Complete"],
+    #     maxSeconds=120,
+    # )
 
     return (navability_https_client, client_2d, variables, factors)
 

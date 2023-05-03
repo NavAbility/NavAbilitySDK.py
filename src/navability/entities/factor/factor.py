@@ -158,17 +158,17 @@ class FactorDataSchema(Schema):
 
 @dataclass()
 class Factor:
-    id: UUID
     label: str
     fnctype: str
     variableOrderSymbols: List[str]
     data: str
-    metadata: str
+    metadata: str = "e30="
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
     timestamp: datetime = datetime.utcnow()
     nstime: str = "0"
     solvable: str = 1
     _version: str = payload_version
+    id: UUID = None
 
     def __repr__(self):
         return (

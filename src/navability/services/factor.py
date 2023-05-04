@@ -138,40 +138,40 @@ def getFncTypeName(fnc: InferenceType):
     return type(fnc).__name__
 
 
-def addFactor(
-    client: NavAbilityClient,
-    context: Client,
-    factor_or_labels,
-    fnc=None,
-    multihypo=None,
-    nullhypo=0.0,
-):
-    if isinstance(factor_or_labels, Factor):
-        return _addFactor(client, context, factor_or_labels)
-    elif fnc is not None:
-        fac = Factor(
-            assembleFactorName(factor_or_labels),
-            getFncTypeName(fnc),
-            factor_or_labels,
-            FactorData(
-                fnc=fnc.dump(),
-                multihypo=([] if multihypo is None else multihypo),
-                nullhypo=nullhypo,
-            ),
-        )
-        return _addFactor(client, context, fac)
-    else:
-        raise NotImplementedError()
+# def addFactor(
+#     client: NavAbilityClient,
+#     context: Client,
+#     factor_or_labels,
+#     fnc=None,
+#     multihypo=None,
+#     nullhypo=0.0,
+# ):
+#     if isinstance(factor_or_labels, Factor):
+#         return _addFactor(client, context, factor_or_labels)
+#     elif fnc is not None:
+#         fac = Factor(
+#             assembleFactorName(factor_or_labels),
+#             getFncTypeName(fnc),
+#             factor_or_labels,
+#             FactorData(
+#                 fnc=fnc.dump(),
+#                 multihypo=([] if multihypo is None else multihypo),
+#                 nullhypo=nullhypo,
+#             ),
+#         )
+#         return _addFactor(client, context, fac)
+#     else:
+#         raise NotImplementedError()
 
 
-async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
-    result = await navAbilityClient.mutate(
-        MutationOptions(
-            gql(GQL_ADDFACTOR),
-            {"factor": {"client": client.dump(), "packedData": f.dumps()}},
-        )
-    )
-    return result["addFactor"]
+# async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
+#     result = await navAbilityClient.mutate(
+#         MutationOptions(
+#             gql(GQL_ADDFACTOR),
+#             {"factor": {"client": client.dump(), "packedData": f.dumps()}},
+#         )
+#     )
+#     return result["addFactor"]
 
 
 async def getFactors(

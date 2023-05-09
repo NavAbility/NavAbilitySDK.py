@@ -1,6 +1,11 @@
 import sys
 
-from setuptools import find_packages, setup
+import os, pathlib
+from setuptools.command.develop import develop
+from setuptools.command.install import install
+from setuptools.command.sdist import sdist
+from setuptools import setup, find_packages
+from subprocess import check_call
 
 if sys.version_info < (3, 0):
     sys.exit(
@@ -13,7 +18,55 @@ if sys.version_info < (3, 0):
 
 _version = "0.6.0"
 
+HERE = pathlib.Path(__file__).parent
+
+## USING SUBMODULE https://oak-tree.tech/blog/python-packaging-primer
+
+def gitcmd_update_submodules():
+	'''	Check if the package is being deployed as a git repository. If so, recursively
+		update all dependencies.
+
+		@returns True if the package is a git repository and the modules were updated.
+			False otherwise.
+	'''
+	if os.path.exists(os.path.join(HERE, '.git')):
+		check_call(['git', 'submodule', 'update', '--init', '--recursive'])
+		return True
+
+	return False
+
+
+class gitcmd_develop(develop):
+	'''	Specialized packaging class that runs git submodule update --init --recursive
+		as part of the update/install procedure.
+	'''
+	def run(self):
+		gitcmd_update_submodules()
+		develop.run(self)
+
+
+class gitcmd_install(install):
+	'''	Specialized packaging class that runs git submodule update --init --recursive
+		as part of the update/install procedure.
+	'''
+	def run(self):
+		gitcmd_update_submodules()
+		install.run(self)
+
+class gitcmd_sdist(sdist):
+	'''	Specialized packaging class that runs git submodule update --init --recursive
+		as part of the update/install procedure;.
+	'''
+	def run(self):
+		gitcmd_update_submodules()
+		sdist.run(self)
+
 setup(
+    cmdclass={
+		'develop': gitcmd_develop, 
+		'install': gitcmd_install, 
+		'sdist': gitcmd_sdist,
+	}, 
     name="navabilitysdk",
     version=_version,
     license="Apache-2.0",

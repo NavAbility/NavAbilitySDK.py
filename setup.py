@@ -18,6 +18,7 @@ if sys.version_info < (3, 0):
 
 _version = "0.6.0"
 
+HERE = pathlib.Path(__file__).parent
 
 ## USING SUBMODULE https://oak-tree.tech/blog/python-packaging-primer
 

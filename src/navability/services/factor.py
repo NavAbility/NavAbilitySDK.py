@@ -138,40 +138,103 @@ def getFncTypeName(fnc: InferenceType):
     return type(fnc).__name__
 
 
-# def addFactor(
-#     client: NavAbilityClient,
-#     context: Client,
-#     factor_or_labels,
-#     fnc=None,
-#     multihypo=None,
-#     nullhypo=0.0,
-# ):
-#     if isinstance(factor_or_labels, Factor):
-#         return _addFactor(client, context, factor_or_labels)
-#     elif fnc is not None:
-#         fac = Factor(
-#             assembleFactorName(factor_or_labels),
-#             getFncTypeName(fnc),
-#             factor_or_labels,
-#             FactorData(
-#                 fnc=fnc.dump(),
-#                 multihypo=([] if multihypo is None else multihypo),
-#                 nullhypo=nullhypo,
-#             ),
-#         )
-#         return _addFactor(client, context, fac)
-#     else:
-#         raise NotImplementedError()
+async def _addFactorAsync(
+    client: NavAbilityClient,
+    context: Client,
+    f: Factor,
+):
+    sessionconnect = {
+        "connect": {
+            "where": {
+                "node": {
+                    "label": context.sessionLabel
+                }
+            }
+        }
+    }
+
+    variables = {
+        "connect": [
+            {
+                "where": {
+                    "node": {
+                        "sessionConnection": {"node": {"label": context.sessionLabel}},
+                        "label": vlink
+                    }
+                }
+            }
+            for vlink in f.variableOrderSymbols
+        ]
+    }
+
+    factorCreateInput = {
+        'label': f.label,
+        'nstime': f.nstime,
+        'fnctype': f.fnctype,
+        'tags': f.tags,
+        'solvable': f.solvable,
+        'data': FactorSchema().get_data(f),
+        '_variableOrderSymbols': f.variableOrderSymbols,
+        'timestamp': FactorSchema().get_timestamp(f),
+        '_type': f.fnctype,
+        '_version': f._version,
+        'userLabel': context.userLabel,
+        'robotLabel': context.robotLabel,
+        'sessionLabel': context.sessionLabel,
+        'variables': variables,
+        'session': sessionconnect,
+        # 'metadata': Optional['Metadata'],
+        # 'blobEntries': Optional['FactorBlobEntriesFieldInput'],
+    }
+
+    params = {"factorsToCreate": [factorCreateInput]}
+
+    result = await client.mutate(
+        MutationOptions(
+            GQL_OPERATIONS["MUTATION_ADD_FACTORS"].data,
+            params,
+        )
+    )
+    return result["addFactors"]
 
 
-# async def _addFactor(navAbilityClient: NavAbilityClient, client: Client, f: Factor):
-#     result = await navAbilityClient.mutate(
-#         MutationOptions(
-#             gql(GQL_ADDFACTOR),
-#             {"factor": {"client": client.dump(), "packedData": f.dumps()}},
-#         )
-#     )
-#     return result["addFactor"]
+def addFactorAsync(
+    fgclient: DFGClient,
+    factor_or_labels,
+    fnc=None,
+    multihypo=None,
+    nullhypo=0.0,
+):
+    client = fgclient.client
+    context = fgclient.context
+
+    if isinstance(factor_or_labels, Factor):
+        return _addFactorAsync(client, context, factor_or_labels)
+    elif fnc is not None:
+        fac = Factor(
+            assembleFactorName(factor_or_labels),
+            getFncTypeName(fnc),
+            factor_or_labels,
+            FactorData(
+                fnc=fnc.dump(),
+                multihypo=([] if multihypo is None else multihypo),
+                nullhypo=nullhypo,
+            ),
+        )
+        return _addFactorAsync(client, context, fac)
+    else:
+        raise NotImplementedError()
+
+
+def addFactor(
+    fgclient: DFGClient,
+    factor_or_labels,
+    fnc=None,
+    multihypo=None,
+    nullhypo=0.0,
+):
+    tsk = addFactorAsync(fgclient, factor_or_labels, fnc, multihypo, nullhypo)
+    return asyncio.run(tsk)
 
 
 async def getFactors(

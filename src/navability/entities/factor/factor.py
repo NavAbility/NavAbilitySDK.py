@@ -222,11 +222,11 @@ class FactorSchema(Schema):
         return datetime.strptime(tsraw, TS_FORMAT)
 
     def get_data(self, obj):
-        return base64.b64encode(obj.data.dumps().encode())
+        return json.dumps(obj.data.dumps())
 
     def set_data(self, obj):
         return FactorDataSchema().load(json.loads(obj))
-        
+
     def get_metadata(self, obj):
         return base64.b64encode(json.dumps(obj).encode())
 

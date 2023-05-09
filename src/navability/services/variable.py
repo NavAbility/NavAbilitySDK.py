@@ -366,11 +366,11 @@ def getPPE(
         return []
 
     ppes = res["users"][0]["robots"][0]["sessions"][0]["variables"][0]["ppes"]
-    
+
     if len(ppes) == 0:
         return None
     if len(ppes) > 1:
         raise Exception(f"More than one variable named {solveKey} returned")
 
     return Ppe.load(ppes[0])
-    
+

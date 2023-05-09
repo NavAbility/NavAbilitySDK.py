@@ -2,8 +2,8 @@ import asyncio
 
 import pytest
 
-from navability.entities import Client, DFGClient
-from navability.services.variable import getVariable, ls
+from navability.entities import DFGClient
+from navability.services.variable import getVariable, getVariables, ls, getPPE
 
 
 def test_hex_ls():
@@ -23,6 +23,24 @@ def test_hex_getVariable():
     assert var.label == "x1" and 'default' in var.solverData.keys()
 
 
+def test_hex_getVariables():
+    userLabel = "guest@navability.io"
+    robotLabel = "TestRobot"
+    sessionLabel = "TestHex"
+    fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+    variables = getVariables(fgclient)
+    assert len(variables) == 8
+
+
+def test_hex_getPPE():
+    userLabel = "guest@navability.io"
+    robotLabel = "TestRobot"
+    sessionLabel = "TestHex"
+    fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+    ppe = getPPE(fgclient, "x1", "default")
+    assert ppe.solveKey == "default"
+
+
 @pytest.mark.skip
 @pytest.mark.asyncio
 def test_ls(example_2d_graph):
@@ -36,7 +54,7 @@ def test_ls(example_2d_graph):
 async def test_ls_no_session(example_2d_graph):
     navability_client, client, variables, factors = example_2d_graph
     #TODO I would say that this should already give an error
-    nofgclient =  DFGClient(client.userLabel, client.robotLabel, "DoesntExist")
+    nofgclient = DFGClient(client.userLabel, client.robotLabel, "DoesntExist")
     assert (await ls(navability_client, nofgclient)) == []
 
 

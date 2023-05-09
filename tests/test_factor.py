@@ -2,8 +2,36 @@ import asyncio
 
 import pytest
 
-from navability.entities import Client
-from navability.services import lsf  # getFactor
+from navability.entities import Client, DFGClient
+from navability.services import lsf, getFactor, getFactors
+
+
+def test_hex_lsf():
+    userLabel = "guest@navability.io"
+    robotLabel = "TestRobot"
+    sessionLabel = "TestHex"
+    fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+    assert set(['x6l1f1', 'x0l1f1', 'x5x6f1', 'x4x5f1', 'x3x4f1', 'x2x3f1', 'x1x2f1', 'x0x1f1', 'x0f1']).issubset(set(lsf(fgclient)))
+
+
+def test_hex_getFactor():
+    userLabel = "guest@navability.io"
+    robotLabel = "TestRobot"
+    sessionLabel = "TestHex"
+    fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+    fac = getFactor(fgclient, "x0x1f1")
+    assert fac.label == "x0x1f1"
+
+
+# getFactors broken
+@pytest.mark.skip
+def test_hex_getFactors():
+    userLabel = "guest@navability.io"
+    robotLabel = "TestRobot"
+    sessionLabel = "TestHex"
+    fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+    facs = getFactors(fgclient)
+    assert len(facs) >= 9
 
 
 @pytest.mark.skip

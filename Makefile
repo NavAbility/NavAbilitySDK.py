@@ -2,6 +2,7 @@
 
 PYTHON_VERSION?=python3
 VIRTUAL_ENV_DIR?=venv_test
+SDKPY_DOCS_BUILDER?=jupyter-book
 
 install: $(VIRTUAL_ENV_DIR)
 $(VIRTUAL_ENV_DIR):
@@ -14,6 +15,9 @@ release: $(VIRTUAL_ENV_DIR)
 	# Assuming you have twine already in the sdist
 	$(VIRTUAL_ENV_DIR)/bin/pip install twine
 	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*
+
+docs: install
+	$(SDKPY_DOCS_BUILDER) build docs/
 
 # typically, phony make targets are imperatives.
 lint: install

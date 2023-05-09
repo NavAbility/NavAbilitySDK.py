@@ -34,7 +34,11 @@ DETAIL_SCHEMA = {
 logger = logging.getLogger(__name__)
 
 
-async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
+async def _addVariableAsync(
+    navAbilityClient: NavAbilityClient,
+    client: Client,
+    v: Variable
+):
     # {"variable": {"client": client.dump(), "packedData": v.dumpsPacked()}}
     sessionconnect = {
         "connect": {
@@ -74,6 +78,11 @@ async def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Va
         )
     )
     return result["addVariables"]
+
+
+def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):
+    tsk = _addVariableAsync(navAbilityClient, client, v)
+    return asyncio.run(tsk)
 
 
 def addVariable(

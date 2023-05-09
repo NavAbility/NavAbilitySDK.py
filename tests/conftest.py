@@ -30,7 +30,8 @@ from navability.entities import (
 )
 # from navability.entities.solve import SolveOptions
 # from navability.services import addFactor, addVariable, solveSession, waitForCompletion
-from navability.services import addFactor, addVariable
+# from navability.services import addFactor, addVariable
+from navability.services import addVariable
 
 # setup basic logging to stderr
 logging.basicConfig(level=logging.WARN)

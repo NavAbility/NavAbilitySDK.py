@@ -27,7 +27,7 @@ parts:
 - caption: Summary
   chapters:
   - file: summary
-- caption: Developr
-  chapter:
+- caption: Developer
+  chapters:
   - file: developer
 

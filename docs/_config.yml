@@ -33,6 +33,7 @@ html:
   use_repository_button: true
 
 sphinx:
+  recursive_update: true
   config:
     intersphinx_mapping:
       sdkpynb:
@@ -68,7 +69,9 @@ sphinx:
           "floor": ["\\lfloor#1\\rfloor", 1]
           "bmat": ["\\left[\\begin{array}"]
           "emat": ["\\end{array}\\right]"]
-        
+    html_theme_options:
+      repository_provider: github  
+
   extra_extensions:
     - sphinx.ext.intersphinx
     - sphinx.ext.autodoc

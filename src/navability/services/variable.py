@@ -62,7 +62,7 @@ async def _addVariableAsync(
         'robotLabel': client.robotLabel,
         'sessionLabel': client.sessionLabel,
         'session': sessionconnect,
-        # 'metadata': Optional['Metadata'],
+        'metadata': "e30=", #FIXME
         # 'ppes': Optional['VariablePpesFieldInput'],
         # 'blobEntries': Optional['VariableBlobEntriesFieldInput'],
         # 'solverData': Optional['VariableSolverDataFieldInput'],
@@ -77,7 +77,7 @@ async def _addVariableAsync(
             params,
         )
     )
-    return result["addVariables"]
+    return VariableSchema().load(result["addVariables"]["variables"][0])
 
 
 def _addVariable(navAbilityClient: NavAbilityClient, client: Client, v: Variable):

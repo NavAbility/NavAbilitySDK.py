@@ -183,7 +183,7 @@ async def _addFactorAsync(
         'sessionLabel': context.sessionLabel,
         'variables': variables,
         'session': sessionconnect,
-        # 'metadata': Optional['Metadata'],
+        'metadata': "e30=", #FIXME
         # 'blobEntries': Optional['FactorBlobEntriesFieldInput'],
     }
 
@@ -195,7 +195,9 @@ async def _addFactorAsync(
             params,
         )
     )
-    return result["addFactors"]
+    #FIXME
+    # return FactorSchema().load(result["addFactors"]["factors"][0])
+    return result["addFactors"]["factors"][0]
 
 
 def addFactorAsync(

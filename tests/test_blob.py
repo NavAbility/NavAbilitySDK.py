@@ -31,4 +31,3 @@ def test_hex_getBlob():
     store = NavAbilityBlobStore(fgclient.client, userLabel)
     blob = getBlob(store, "ffd789e8-480a-4c38-8b84-2081b661e592")
     assert len(blob) == 20
-

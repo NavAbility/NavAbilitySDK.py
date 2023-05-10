@@ -237,31 +237,32 @@ def addFactor(
     return asyncio.run(tsk)
 
 
-async def getFactors(
-    navAbilityClient: NavAbilityClient,
-    client: Client,
-    detail: QueryDetail = QueryDetail.SKELETON,
-    regexFilter: str = ".*",
-    tags: List[str] = None,
-    solvable: int = 0,
-) -> List[FactorSkeleton]:
+async def getFactorsAsync(
+    fgclient: DFGClient,
+    # regexFilter: str = ".*",
+    # tags: List[str] = None,
+    # solvable: int = 0,
+):
+    client = fgclient.client
+    context = fgclient.context
+
     params = {
-        "userId": client.userId,
-        "robotIds": [client.robotId],
-        "sessionIds": [client.sessionId],
-        "factor_label_regexp": regexFilter,
-        "factor_tags": tags if tags is not None else ["FACTOR"],
-        "solvable": solvable,
-        "fields_summary": detail in [QueryDetail.SUMMARY, QueryDetail.FULL],
-        "fields_full": detail == QueryDetail.FULL,
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
+        # "factor_label_regexp": regexFilter,
+        # "factor_tags": tags if tags is not None else ["FACTOR"],
+        # "solvable": solvable,
+        # "fields_summary": detail in [QueryDetail.SUMMARY, QueryDetail.FULL],
+        # "fields_full": detail == QueryDetail.FULL,
     }
+
     logger.debug(f"Query params: {params}")
-    res = await navAbilityClient.query(
-        QueryOptions(gql(GQL_FRAGMENT_FACTORS + GQL_GETFACTORS), params)
+    res = await client.query(
+        QueryOptions(GQL_OPERATIONS["QUERY_GET_FACTORS"].data, params)
     )
     logger.debug(f"Query result: {res}")
-    # TODO: Check for errors
-    schema = DETAIL_SCHEMA[detail]
+
     # Using the hierarchy approach, we need to check that
     # we have exactly one user/robot/session in it, otherwise error.
     if (
@@ -279,9 +280,10 @@ async def getFactors(
         if len(res["users"][0]["robots"][0]["sessions"]) != 1:
             logger.warn("Robot not found in result, returning empty list")
         return []
-    if schema is None:
-        return res["users"][0]["robots"][0]["sessions"][0]["factors"]
-    return [
-        schema.load(l) for l in res["users"][0]["robots"][0]["sessions"][0]["factors"]
-    ]
 
+    return [Factor.load(fac) for fac in res["users"][0]["robots"][0]["sessions"][0]["factors"]]
+
+
+def getFactors(fgclient: DFGClient):
+    tsk = getFactorsAsync(fgclient)
+    return asyncio.run(tsk)

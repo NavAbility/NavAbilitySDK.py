@@ -23,8 +23,6 @@ def test_hex_getFactor():
     assert fac.label == "x0x1f1"
 
 
-# getFactors broken
-@pytest.mark.skip
 def test_hex_getFactors():
     userLabel = "guest@navability.io"
     robotLabel = "TestRobot"

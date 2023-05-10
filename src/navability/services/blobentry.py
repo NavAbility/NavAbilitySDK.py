@@ -65,35 +65,34 @@ def getBlobEntry(
     return BlobEntry.load(entries[0])
 
 
-# TODO below
-
-
-async def listBlobEntries(
-    client: NavAbilityClient,
-    context: Client,
-    variableLabel,
+def listBlobEntries(
+    fgclient: DFGClient,
+    variableLabel: str,
 ):
+    client = fgclient.client
+    context = fgclient.context
+
     """ List the blob entries associated with a particular variable.
 
     Args:
-        client (NavAbilityClient): client connection to API server
-        context (Client): Unique context with (user, robot, session)
+        fgclient (NavAbilityClient): client connection to API server
+            and unique context with (user, robot, session)
         variableLabel (string): list data entries connected to which variable
 
     Returns:
-        BlobEntry: coroutine containing a list of `BlobEntry`s
+        List[String]: A list of `BlobEntry` labels
 
     """
     params = {
-        "userId": context.userId,
-        "robotId": context.robotId,
-        "sessionId": context.sessionId,
+        "userLabel": context.userLabel,
+        "robotLabel": context.robotLabel,
+        "sessionLabel": context.sessionLabel,
         "variableLabel": variableLabel,
     }
     logger.debug(f"Query params: {params}")
-    res = await client.query(
-        QueryOptions(gql(GQL_LISTDATAENTRIES), params)
-    )
+
+    tsk = client.query(QueryOptions(GQL_OPERATIONS["QUERY_LIST_BLOBENTRIES"].data, params))
+    res = asyncio.run(tsk)
     # Using the hierarchy approach, we need to check that we have
     # exactly one user/robot/session in it, otherwise error.
     if (
@@ -113,82 +112,58 @@ async def listBlobEntries(
         return []
 
     # extract result
-    schema = BlobEntrySchema()
-    resdata = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['data']
+    entries = res['users'][0]['robots'][0]['sessions'][0]['variables'][0]['blobEntries']
 
     return [
-        schema.load(l) for l in resdata
+        entry['label'] for entry in entries
     ]
 
 
-async def listDataEntries(
-    client: NavAbilityClient,
-    context: Client,
-    variableLabel,
-):
-    warnings.warn('listDataEntries is deprecated, use listBlobEntries instead.')
-    return await listBlobEntries(client, context, variableLabel)
+# TODO 
+# async def addBlobEntry(
+#     client: NavAbilityClient,
+#     context: Client,
+#     variableLabel: str,
+#     blobId: str,
+#     blobLabel: str,
+#     blobSize: int,
+#     mimeType: str,
+# ):
+#     """ Add a BlobEntry to a specific variable node in the graph.
 
+#     Args:
+#         client (NavAbilityClient): client connection to API server
+#         context (Client): Unique context with (user, robot, session)
+#         variableLabel (string): list data entries connected to which variable.
+#         blobId (String): The unique blob identifier of the data.
+#         blobLabel (str): blob label.
+#         blobSize (int): number of bytes.
+#         mimeType (str): standard MIME definition of data.
 
+#     Returns:
+#         BlobEntry: coroutine 
+#     """
+#     params = {
+#         "userId": context.userId,
+#         "blobId": blobId,
+#         "robotId": context.robotId,
+#         "sessionId": context.sessionId,
+#         "variableLabel": variableLabel,
+#         "blobLabel": blobLabel,
+#         "blobSize": blobSize,
+#         "mimeType": mimeType,
+#     }
+#     logger.debug(f"Query params: {params}")
+#     res = await client.mutate(
+#         MutationOptions(
+#             gql(GQL_ADDBLOBENTRY),
+#             params,
+#         )
+#     )
+#     # TODO error handling
+#     # if 'errors' in res:
+#     #     raise Exception('Unable to addBlobEntry: '+res['errors'])
+#     print(res)
 
-
-async def addBlobEntry(
-    client: NavAbilityClient,
-    context: Client,
-    variableLabel: str,
-    blobId: str,
-    blobLabel: str,
-    blobSize: int,
-    mimeType: str,
-):
-    """ Add a BlobEntry to a specific variable node in the graph.
-
-    Args:
-        client (NavAbilityClient): client connection to API server
-        context (Client): Unique context with (user, robot, session)
-        variableLabel (string): list data entries connected to which variable.
-        blobId (String): The unique blob identifier of the data.
-        blobLabel (str): blob label.
-        blobSize (int): number of bytes.
-        mimeType (str): standard MIME definition of data.
-
-    Returns:
-        BlobEntry: coroutine 
-    """
-    params = {
-        "userId": context.userId,
-        "blobId": blobId,
-        "robotId": context.robotId,
-        "sessionId": context.sessionId,
-        "variableLabel": variableLabel,
-        "blobLabel": blobLabel,
-        "blobSize": blobSize,
-        "mimeType": mimeType,
-    }
-    logger.debug(f"Query params: {params}")
-    res = await client.mutate(
-        MutationOptions(
-            gql(GQL_ADDBLOBENTRY),
-            params,
-        )
-    )
-    # TODO error handling
-    # if 'errors' in res:
-    #     raise Exception('Unable to addBlobEntry: '+res['errors'])
-    print(res)
-
-    return res['addBlobEntry']['context']['eventId']
-
-
-async def addDataEntry(
-    client: NavAbilityClient,
-    context: Client,
-    variableLabel: str,
-    blobId: str,
-    blobLabel: str,
-    blobSize: int,
-    mimeType: str,
-):
-    warnings.warn('addDataEntry is deprecated, use addBlobEntry instead.')
-    return await addBlobEntry(client, context, variableLabel, blobId, blobLabel, blobSize, mimeType)
+#     return res['addBlobEntry']['context']['eventId']
 

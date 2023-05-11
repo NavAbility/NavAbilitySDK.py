@@ -14,6 +14,9 @@ from navability.entities.navabilityclient import (
 
 from navability.entities.client import Client
 
+import nest_asyncio
+nest_asyncio.apply()
+
 logger = logging.getLogger(__name__)
 
 

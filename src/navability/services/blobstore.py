@@ -16,8 +16,10 @@ from navability.entities.navabilityclient import (
     QueryOptions,
 )
 
-logger = logging.getLogger(__name__)
+import nest_asyncio
+nest_asyncio.apply()
 
+logger = logging.getLogger(__name__)
 
 
 ## ==================================

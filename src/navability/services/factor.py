@@ -27,6 +27,9 @@ from navability.entities.navabilityclient import (
 )
 from navability.entities.querydetail import QueryDetail
 
+import nest_asyncio
+nest_asyncio.apply()
+
 DETAIL_SCHEMA = {
     QueryDetail.LABEL: None,
     QueryDetail.SKELETON: FactorSkeletonSchema(),

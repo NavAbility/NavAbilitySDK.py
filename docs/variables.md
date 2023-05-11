@@ -4,41 +4,37 @@
 
 Most use cases will involve retrieving information from a factor graph session already available on the server.  Setup the API server connection, and if not `guest` use an [auth token][nva-app-auth]:
 ```python
-# copy the auth token from the NavAbility App
-auth_token = "r3ft ... eo7_" # e.g. if not guest
+# Define user, robot, session
+userLabel = "guest@navability.io"
+robotLabel = "TestRobot"
+sessionLabel = "TestHex"
 
 # create an authorized client connection
-client = NavAbilityHttpsClient(auth_token=auth_token) 
 # leave out the auth_token if using `guest@navability.io`
+fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
 
-# create a unique context for the client, i.e. (user, robot, session)
-context = Client(
-  "my@user.com", # user specific auth
-  "ExampleRobot",
-  "Hexagonal",
-)
+# For authorized users, copy the auth token from the NavAbility App "Connect" page
+# auth_token = "r3ft ... eo7_" # e.g. if not guest
+# fgclient = DFGClient(userLabel, robotLabel, sessionLabel, auth_token=auth_token)
 ```
 
-The `client` is used to make requests to the system, and `context` is used to describe a specific session graph.
-
-<!-- ```@docs
-NavAbilityHttpsClient
-Client
-``` -->
+```{eval-rst}
+.. autoclass:: navability.entities.DFGClient
+```
 
 ### Variables
 
 Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let's start by listing all the variables in the session:
 ```python
-varLbls = await listVariables(client, context)
+varLbls = await listVariablesAsync(fgclient)
 # ["l1","x0","x1","x2","x3","x4","x5","x6"]
 ```
 
 The await call is used to wait on the underlying asynchronous call.
 
-<!-- ```{eval-rst}
-.. autofunction:: navability.services.listVariables
-``` -->
+```{eval-rst}
+.. autofunction:: navability.services.listVariablesAsync
+```
 <!-- ```{eval-rst}
 .. autoclass:: myst_parser.mocking.MockRSTParser
     :show-inheritance:
@@ -46,18 +42,25 @@ The await call is used to wait on the underlying asynchronous call.
 ``` -->
 
 
-## Numerical Solution
+## Variable Values
 
 The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables `solverData` field, such that either parametric or non-parametric inference results can be used:
 ```python
-v0 = await getVariable(client, context, "x0")
+v0 = await getVariableAsync(fgclient, "x0")
 ```
 
-<!-- ```@docs
-getVariable
-``` -->
+### Tags on Variable Node
 
-### Understanding `solveKey`s
+We can readily check which tags have been added to this variable with:
+```python
+print('The tags on this variable are', v0.tags)
+```
+
+```{eval-rst}
+.. autofunction:: navability.services.getVariableAsync
+```
+
+### Numerical values, & `solveKey`s
 
 Since various numerical solutions may exists for the same factor graph, we introduce the idea of a `solveKey`.  Different numerical values for different `solveKey`s can exists for any number of reasons.  For example, we may find a different situation in each of three `solveKey`s, `('default', 'parametric', 'graphinit')`, where we can explore some of the properties:
 ```python

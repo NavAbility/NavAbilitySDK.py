@@ -116,5 +116,8 @@ cython_debug/
 
 venv/
 venv_test/
+venv_docs/
 
 sandbox.py
+
+dev/

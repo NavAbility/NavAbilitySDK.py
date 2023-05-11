@@ -16,12 +16,15 @@ release: $(VIRTUAL_ENV_DIR)
 	$(VIRTUAL_ENV_DIR)/bin/pip install twine
 	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*
 
-docs: 
+docs_cicd:
 	$(PYTHON_VERSION) -m venv venv_docs
 	. venv_docs/bin/activate
 	pip install --upgrade pip
 	pip install -r docs/requirements.txt
 	pip install .
+	$(SDKPY_DOCS_BUILDER) build docs/
+
+docs: 
 	$(SDKPY_DOCS_BUILDER) build docs/
 
 docs_firefox: docs

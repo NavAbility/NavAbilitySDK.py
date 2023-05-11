@@ -21,7 +21,7 @@ jobs:
       # to my _config.yml extensions list. that fixes the broken uploads
       - name: Run JupyterBook
         run: |
-          make docs
+          make docs_cicd
       #    jupyter-book build docs/
       #    jupyter-book build docs/
 

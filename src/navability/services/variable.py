@@ -24,6 +24,9 @@ from navability.entities.variable.variable import (
 
 from navability.entities.variable.ppe import Ppe, PpeSchema
 
+import nest_asyncio
+nest_asyncio.apply()
+
 DETAIL_SCHEMA = {
     QueryDetail.LABEL: None,
     QueryDetail.SKELETON: VariableSkeletonSchema(),

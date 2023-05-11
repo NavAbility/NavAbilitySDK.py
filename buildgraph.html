@@ -439,6 +439,23 @@ document.write(`
 </pre></div>
 </div>
 <p>Note that asynchronous tasks are used to increase the upload performance.  Each of these events are queued on the server for processing.  While the variable is being created, let’s also add a prior factor.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.addVariable">
+<span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">addVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_or_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addVariable" title="Permalink to this definition">#</a></dt>
+<dd><p>Add a variable to the graph.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>client (NavAbilityClient): client connection to API server
+context (Client): Unique context with (user, robot, session)
+variable_or_label (Variable or string): The variable to add.
+varType (VariableType, optional): Pose2, Pose3, etc. Defaults to None.</p>
+</dd>
+<dt>Raises:</dt><dd><p>NotImplementedError: _description_</p>
+</dd>
+<dt>Returns:</dt><dd><p>_type_: _description_</p>
+</dd>
+</dl>
+</dd></dl>
+
 <section id="and-zero-prior">
 <h3>And Zero-Prior<a class="headerlink" href="#and-zero-prior" title="Permalink to this heading">#</a></h3>
 <p>We now have a factor graph with one variable, but to solve it we need some additional information.  In this example, we need the estimated starting point of our robot.
@@ -463,6 +480,11 @@ Since factors represent a probabilistic interaction between variables, we need t
 .. automodule:: navability.services
    :members: addVariable
 ``` -->
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.addFactor">
+<span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">addFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_or_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fnc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multihypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullhypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addFactor" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
 </section>
 </section>
 <section id="odometry-factor">

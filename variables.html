@@ -440,6 +440,28 @@ document.write(`
 <span class="c1"># fgclient = DFGClient(userLabel, robotLabel, sessionLabel, auth_token=auth_token)</span>
 </pre></div>
 </div>
+<dl class="py class">
+<dt class="sig sig-object py" id="navability.entities.DFGClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.entities.</span></span><span class="sig-name descname"><span class="pre">DFGClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.DFGClient" title="Permalink to this definition">#</a></dt>
+<dd><p>DFGClient is used to make requests to the system and internally holds a <cite>context</cite> 
+which is used to describe a specific session graph according to the <cite>userLabel</cite>, <cite>robotLabel</cite>, 
+and <cite>sessionLabel</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>userLabel</strong> (<em>str</em>) – <a class="reference external" href="mailto:guest&#37;&#52;&#48;navability&#46;io">guest<span>&#64;</span>navability<span>&#46;</span>io</a></p></li>
+<li><p><strong>robotLabel</strong> (<em>str</em>) – TestRobot</p></li>
+<li><p><strong>sessionLabel</strong> (<em>str</em>) – TestHex</p></li>
+<li><p><strong>[</strong><strong>auth_token=</strong><strong>]</strong> (<em>str</em>) – for authorized access, get a temporary token from app.navability.io Connect page.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>_type_: DFGClient</p>
+</dd>
+</dl>
+</dd></dl>
+
 <section id="variables">
 <h3>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h3>
 <p>Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let’s start by listing all the variables in the session:</p>
@@ -448,6 +470,26 @@ document.write(`
 </pre></div>
 </div>
 <p>The await call is used to wait on the underlying asynchronous call.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.listVariablesAsync">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">listVariablesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#navability.services.listVariablesAsync" title="Permalink to this definition">#</a></dt>
+<dd><p>Get a list of Variable labels in the graph.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server with unique (user, robot, session) context.</p></li>
+<li><p><strong>[</strong><strong>regexFilter</strong><strong>]</strong> (<em>str</em>) – Filter on variable label. Defaults to “.*”.</p></li>
+<li><p><strong>[</strong><strong>tags</strong><strong>]</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Variables can have string tags. Defaults to None.</p></li>
+<li><p><strong>[</strong><strong>solvable</strong><strong>]</strong> (<em>int</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[str]: Async task returning a list of Variable labels.</p>
+</dd>
+</dl>
+</dd></dl>
+
 <!-- ```{eval-rst}
 .. autoclass:: myst_parser.mocking.MockRSTParser
     :show-inheritance:
@@ -467,6 +509,24 @@ document.write(`
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
 </pre></div>
 </div>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.getVariableAsync">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">getVariableAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.getVariableAsync" title="Permalink to this definition">#</a></dt>
+<dd><p>Get a Variable object from the server as connect to via fgclient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – connection to servers, containing (user, robot, session) context.</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – Variable label to retrieve.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Variable: Multilanguage standardized Variable format.</p>
+</dd>
+</dl>
+</dd></dl>
+
 </section>
 <section id="numerical-values-solvekeys">
 <h3>Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#numerical-values-solvekeys" title="Permalink to this heading">#</a></h3>

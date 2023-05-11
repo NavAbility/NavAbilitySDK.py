@@ -26,8 +26,9 @@ jobs:
       # to my _config.yml extensions list. that fixes the broken uploads
       - name: Run JupyterBook
         run: |
-          jupyter-book build docs/
-          jupyter-book build docs/
+          make docs
+      #    jupyter-book build docs/
+      #    jupyter-book build docs/
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3

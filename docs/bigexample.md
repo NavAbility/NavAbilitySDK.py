@@ -1,4 +1,27 @@
-# Example
+# Full Example
+
+## SDK.py v0.6 Example
+
+```python
+from navability.entities import *
+from navability.services import *
+import asyncio
+from uuid import uuid4
+import numpy as np
+
+
+userLabel = "guest@navability.io"
+robotLabel = "TestRobot"
+sessionLabel = "TestHex"
+fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+
+variables = await listVariablesAsync(fgclient)
+
+entries = await listBlobEntriesAsync(fgclient, "x1")
+
+```
+
+## Legacy Example
 
 This script will create variables and factors, list the graph, and solve the session for SLAM estimates.
 

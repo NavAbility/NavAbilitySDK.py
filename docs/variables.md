@@ -42,18 +42,26 @@ The await call is used to wait on the underlying asynchronous call.
 ``` -->
 
 
-## Numerical Solution
+## Variable Values
 
 The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables `solverData` field, such that either parametric or non-parametric inference results can be used:
 ```python
-v0 = await getVariable(client, context, "x0")
+v0 = await getVariableAsync(fgclient, "x0")
 ```
+
+### Tags on Variable Node
+
+We can readily check which tags have been added to this variable with:
+```python
+print('The tags on this variable are', v0.tags)
+```
+
 
 <!-- ```@docs
 getVariable
 ``` -->
 
-### Understanding `solveKey`s
+### Numerical values, & `solveKey`s
 
 Since various numerical solutions may exists for the same factor graph, we introduce the idea of a `solveKey`.  Different numerical values for different `solveKey`s can exists for any number of reasons.  For example, we may find a different situation in each of three `solveKey`s, `('default', 'parametric', 'graphinit')`, where we can explore some of the properties:
 ```python

@@ -65,7 +65,7 @@ def getBlobEntry(
     return BlobEntry.load(entries[0])
 
 
-def listBlobEntries(
+async def listBlobEntriesAsync(
     fgclient: DFGClient,
     variableLabel: str,
 ):
@@ -91,8 +91,10 @@ def listBlobEntries(
     }
     logger.debug(f"Query params: {params}")
 
-    tsk = client.query(QueryOptions(GQL_OPERATIONS["QUERY_LIST_BLOBENTRIES"].data, params))
-    res = asyncio.run(tsk)
+    res = await client.query(
+        QueryOptions(GQL_OPERATIONS["QUERY_LIST_BLOBENTRIES"].data, params)
+    )
+    # res = # asyncio.run(tsk)
     # Using the hierarchy approach, we need to check that we have
     # exactly one user/robot/session in it, otherwise error.
     if (
@@ -118,6 +120,12 @@ def listBlobEntries(
         entry['label'] for entry in entries
     ]
 
+def listBlobEntries(
+    fgclient: DFGClient,
+    variableLabel: str,
+):
+    tsk = listBlobEntriesAsync(fgclient, variableLabel)
+    return asyncio.run(tsk)
 
 # TODO 
 # async def addBlobEntry(

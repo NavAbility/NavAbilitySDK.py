@@ -30,4 +30,4 @@ See the Documentation link above for more details.
 [nva-slack-badge]: https://img.shields.io/badge/Invite-Slack-green.svg?style=popout
 [nva-slack]: https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw
 [sdk-py-cov-img]: https://codecov.io/github/NavAbility/NavAbilitySDK.py/coverage.svg?branch=main
-[sdk-py-cov-url]: https://codecov.io/github/NavAbility/NavAbility.SDK?branch=master
+[sdk-py-cov-url]: https://codecov.io/github/NavAbility/NavAbility.SDK?branch=main

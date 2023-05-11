@@ -285,6 +285,15 @@ async def getVariableAsync(
     fgclient: DFGClient,
     label: str
 ):
+    """Get a Variable object from the server as connect to via fgclient.
+    
+    :param DFGClient fgclient: connection to servers, containing (user, robot, session) context.
+    :param str label: Variable label to retrieve.
+
+
+    Returns:
+        Variable: Multilanguage standardized Variable format.
+    """
     client = fgclient.client
     context = fgclient.context
 

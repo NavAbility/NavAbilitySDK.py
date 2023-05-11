@@ -56,10 +56,9 @@ We can readily check which tags have been added to this variable with:
 print('The tags on this variable are', v0.tags)
 ```
 
-
-<!-- ```@docs
-getVariable
-``` -->
+```{eval-rst}
+.. autofunction:: navability.services.getVariableAsync
+```
 
 ### Numerical values, & `solveKey`s
 

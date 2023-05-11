@@ -1,4 +1,4 @@
-.PHONY: help install test release lint clean
+.PHONY: help install test docs release lint clean
 
 PYTHON_VERSION?=python3
 VIRTUAL_ENV_DIR?=venv_test
@@ -16,8 +16,12 @@ release: $(VIRTUAL_ENV_DIR)
 	$(VIRTUAL_ENV_DIR)/bin/pip install twine
 	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*
 
-docs: install
-	$(SDKPY_DOCS_BUILDER) build docs/
+docs: 
+	$(PYTHON_VERSION) -m venv venv_docs
+	. venv_docs/bin/activate
+	pip install --upgrade pip
+	pip install -r docs/requirements.txt
+	pip install .
 	$(SDKPY_DOCS_BUILDER) build docs/
 
 docs_firefox: docs

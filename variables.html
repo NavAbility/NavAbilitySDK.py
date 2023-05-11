@@ -403,8 +403,9 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solution">Numerical Solution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-solvekeys">Understanding <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-values">Variable Values</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tags-on-variable-node">Tags on Variable Node</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ppes">Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s</a></li>
 </ul>
 </li>
@@ -425,37 +426,28 @@ document.write(`
 <section id="inspect-an-existing-graph">
 <h2>Inspect an Existing Graph<a class="headerlink" href="#inspect-an-existing-graph" title="Permalink to this heading">#</a></h2>
 <p>Most use cases will involve retrieving information from a factor graph session already available on the server.  Setup the API server connection, and if not <code class="docutils literal notranslate"><span class="pre">guest</span></code> use an <a class="reference external" href="https://app.navability.io/edge/connect">auth token</a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># copy the auth token from the NavAbility App</span>
-<span class="n">auth_token</span> <span class="o">=</span> <span class="s2">&quot;r3ft ... eo7_&quot;</span> <span class="c1"># e.g. if not guest</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define user, robot, session</span>
+<span class="n">userLabel</span> <span class="o">=</span> <span class="s2">&quot;guest@navability.io&quot;</span>
+<span class="n">robotLabel</span> <span class="o">=</span> <span class="s2">&quot;TestRobot&quot;</span>
+<span class="n">sessionLabel</span> <span class="o">=</span> <span class="s2">&quot;TestHex&quot;</span>
 
 <span class="c1"># create an authorized client connection</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">(</span><span class="n">auth_token</span><span class="o">=</span><span class="n">auth_token</span><span class="p">)</span> 
 <span class="c1"># leave out the auth_token if using `guest@navability.io`</span>
+<span class="n">fgclient</span> <span class="o">=</span> <span class="n">DFGClient</span><span class="p">(</span><span class="n">userLabel</span><span class="p">,</span> <span class="n">robotLabel</span><span class="p">,</span> <span class="n">sessionLabel</span><span class="p">)</span>
 
-<span class="c1"># create a unique context for the client, i.e. (user, robot, session)</span>
-<span class="n">context</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span>
-  <span class="s2">&quot;my@user.com&quot;</span><span class="p">,</span> <span class="c1"># user specific auth</span>
-  <span class="s2">&quot;ExampleRobot&quot;</span><span class="p">,</span>
-  <span class="s2">&quot;Hexagonal&quot;</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="c1"># For authorized users, copy the auth token from the NavAbility App &quot;Connect&quot; page</span>
+<span class="c1"># auth_token = &quot;r3ft ... eo7_&quot; # e.g. if not guest</span>
+<span class="c1"># fgclient = DFGClient(userLabel, robotLabel, sessionLabel, auth_token=auth_token)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">client</span></code> is used to make requests to the system, and <code class="docutils literal notranslate"><span class="pre">context</span></code> is used to describe a specific session graph.</p>
-<!-- ```@docs
-NavAbilityHttpsClient
-Client
-``` -->
 <section id="variables">
 <h3>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h3>
 <p>Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let’s start by listing all the variables in the session:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">varLbls</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listVariables</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">varLbls</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listVariablesAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
 <span class="c1"># [&quot;l1&quot;,&quot;x0&quot;,&quot;x1&quot;,&quot;x2&quot;,&quot;x3&quot;,&quot;x4&quot;,&quot;x5&quot;,&quot;x6&quot;]</span>
 </pre></div>
 </div>
 <p>The await call is used to wait on the underlying asynchronous call.</p>
-<!-- ```{eval-rst}
-.. autofunction:: navability.services.listVariables
-``` -->
 <!-- ```{eval-rst}
 .. autoclass:: myst_parser.mocking.MockRSTParser
     :show-inheritance:
@@ -463,17 +455,21 @@ Client
 ``` -->
 </section>
 </section>
-<section id="numerical-solution">
-<h2>Numerical Solution<a class="headerlink" href="#numerical-solution" title="Permalink to this heading">#</a></h2>
+<section id="variable-values">
+<h2>Variable Values<a class="headerlink" href="#variable-values" title="Permalink to this heading">#</a></h2>
 <p>The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables <code class="docutils literal notranslate"><span class="pre">solverData</span></code> field, such that either parametric or non-parametric inference results can be used:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getVariableAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<!-- ```@docs
-getVariable
-``` -->
-<section id="understanding-solvekeys">
-<h3>Understanding <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#understanding-solvekeys" title="Permalink to this heading">#</a></h3>
+<section id="tags-on-variable-node">
+<h3>Tags on Variable Node<a class="headerlink" href="#tags-on-variable-node" title="Permalink to this heading">#</a></h3>
+<p>We can readily check which tags have been added to this variable with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="numerical-values-solvekeys">
+<h3>Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#numerical-values-solvekeys" title="Permalink to this heading">#</a></h3>
 <p>Since various numerical solutions may exists for the same factor graph, we introduce the idea of a <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  Different numerical values for different <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s can exists for any number of reasons.  For example, we may find a different situation in each of three <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s, <code class="docutils literal notranslate"><span class="pre">('default',</span> <span class="pre">'parametric',</span> <span class="pre">'graphinit')</span></code>, where we can explore some of the properties:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">variableType</span>
 <span class="c1"># &#39;RoME.Pose3&#39;</span>
@@ -595,8 +591,9 @@ getVariable
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-solution">Numerical Solution</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-solvekeys">Understanding <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-values">Variable Values</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tags-on-variable-node">Tags on Variable Node</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ppes">Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s</a></li>
 </ul>
 </li>

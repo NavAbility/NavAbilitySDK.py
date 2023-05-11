@@ -127,12 +127,10 @@ async def listVariablesAsync(
 ) -> List[str]:
     """Get a list of Variable labels in the graph.
 
-    Args:
-        client (NavAbilityClient): client connection to API server
-        context (Client): Unique context with (user, robot, session)
-        regexFilter (str, optional): Filter on variable label. Defaults to ".*".
-        tags (List[str], optional): Variables can have string tags. Defaults to None.
-        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+    :param DFGClient fgclient: client connection to API server with unique (user, robot, session) context.
+    :param str [regexFilter]: Filter on variable label. Defaults to ".*".
+    :param List[str] [tags]: Variables can have string tags. Defaults to None.
+    :param int [solvable]: Whether this variable can be used in solving yet. Defaults to 0.
 
     Returns:
         List[str]: Async task returning a list of Variable labels.

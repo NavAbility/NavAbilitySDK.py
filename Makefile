@@ -18,6 +18,10 @@ release: $(VIRTUAL_ENV_DIR)
 
 docs: install
 	$(SDKPY_DOCS_BUILDER) build docs/
+	$(SDKPY_DOCS_BUILDER) build docs/
+
+docs_firefox: docs
+	firefox docs/_build/html/index.html
 
 # typically, phony make targets are imperatives.
 lint: install

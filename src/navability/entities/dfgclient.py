@@ -7,6 +7,18 @@ from navability.entities.client import Client
 
 @dataclass
 class DFGClient:
+    """DFGClient is used to make requests to the system and internally holds a `context` 
+    which is used to describe a specific session graph according to the `userLabel`, `robotLabel`, 
+    and `sessionLabel`.
+    
+    :param str userLabel: guest@navability.io
+    :param str robotLabel: TestRobot
+    :param str sessionLabel: TestHex
+    :param str [auth_token=]: for authorized access, get a temporary token from app.navability.io Connect page.
+
+    Returns:
+        _type_: DFGClient
+    """
     client: NavAbilityHttpsClient
     context: Client
 

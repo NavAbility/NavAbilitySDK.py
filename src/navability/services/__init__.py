@@ -9,6 +9,7 @@ from .variable import *
 from .blobstore import *
 from .blobentry import *
 from .loader import *
+from .graph import *
 
 # Maps
 from .map import *

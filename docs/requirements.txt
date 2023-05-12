@@ -5,5 +5,4 @@ sphinx-inline-tabs
 sphinx-examples
 sphinx-proof
 sphinx-hoverxref
-sphinx-autodoc
 sphinx-autodoc-napoleon-typehints

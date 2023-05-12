@@ -441,17 +441,26 @@ document.write(`
 <p>Note that asynchronous tasks are used to increase the upload performance.  Each of these events are queued on the server for processing.  While the variable is being created, let’s also add a prior factor.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="navability.services.addVariable">
-<span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">addVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_or_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addVariable" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">addVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_or_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addVariable" title="Permalink to this definition">#</a></dt>
 <dd><p>Add a variable to the graph.</p>
-<dl class="simple">
-<dt>Args:</dt><dd><p>client (NavAbilityClient): client connection to API server
-context (Client): Unique context with (user, robot, session)
-variable_or_label (Variable or string): The variable to add.
-varType (VariableType, optional): Pose2, Pose3, etc. Defaults to None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>client</strong> (<em>NavAbilityClient</em>) – client connection to API server</p></li>
+<li><p><strong>context</strong> (<em>Client</em>) – Unique context with (user, robot, session)</p></li>
+<li><p><strong>variable_or_label</strong> (<a class="reference internal" href="variables.html#navability.entities.Variable" title="navability.entities.Variable"><em>Variable</em></a><em> or </em><em>string</em>) – The variable to add.</p></li>
+<li><p><strong>varType</strong> (<em>VariableType</em><em>, </em><em>optional</em>) – Pose2, Pose3, etc. Defaults to None.</p></li>
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><em>DFGClient</em></a>) – </p></li>
+</ul>
 </dd>
-<dt>Raises:</dt><dd><p>NotImplementedError: _description_</p>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – _description_</p>
 </dd>
-<dt>Returns:</dt><dd><p>_type_: _description_</p>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_description_</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>_type_</p>
 </dd>
 </dl>
 </dd></dl>
@@ -482,8 +491,13 @@ Since factors represent a probabilistic interaction between variables, we need t
 ``` -->
 <dl class="py function">
 <dt class="sig sig-object py" id="navability.services.addFactor">
-<span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">addFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_or_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fnc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multihypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullhypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addFactor" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">addFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_or_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fnc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multihypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullhypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addFactor" title="Permalink to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><em>DFGClient</em></a>) – </p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 </section>

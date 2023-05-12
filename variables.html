@@ -399,14 +399,12 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-values">Variable Values</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tags-on-variable-node">Tags on Variable Node</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-variable">Getting a Variable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametric-point-estimates-ppes">Parametric Point Estimates (PPEs)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ppes">Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdk-supported-variables">SDK Supported Variables</a></li>
@@ -442,9 +440,9 @@ document.write(`
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="navability.entities.DFGClient">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.entities.</span></span><span class="sig-name descname"><span class="pre">DFGClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.DFGClient" title="Permalink to this definition">#</a></dt>
-<dd><p>DFGClient is used to make requests to the system and internally holds a <cite>context</cite> 
-which is used to describe a specific session graph according to the <cite>userLabel</cite>, <cite>robotLabel</cite>, 
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DFGClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.DFGClient" title="Permalink to this definition">#</a></dt>
+<dd><p>DFGClient is used to make requests to the system and internally holds a <cite>context</cite>
+which is used to describe a specific session graph according to the <cite>userLabel</cite>, <cite>robotLabel</cite>,
 and <cite>sessionLabel</cite>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -455,63 +453,72 @@ and <cite>sessionLabel</cite>.</p>
 <li><p><strong>[</strong><strong>auth_token=</strong><strong>]</strong> (<em>str</em>) – for authorized access, get a temporary token from app.navability.io Connect page.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>_type_: DFGClient</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>DFGClient</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>_type_</p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
 <section id="variables">
-<h3>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h3>
+<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h2>
 <p>Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let’s start by listing all the variables in the session:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">varLbls</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listVariablesAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
-<span class="c1"># [&quot;l1&quot;,&quot;x0&quot;,&quot;x1&quot;,&quot;x2&quot;,&quot;x3&quot;,&quot;x4&quot;,&quot;x5&quot;,&quot;x6&quot;]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">varLbls</span> <span class="o">=</span> <span class="n">listVariables</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
+<span class="c1"># varLbls = await listVariablesAsync(fgclient)</span>
 </pre></div>
 </div>
-<p>The await call is used to wait on the underlying asynchronous call.</p>
+<p>Returns <code class="docutils literal notranslate"><span class="pre">[&quot;l1&quot;,&quot;x0&quot;,&quot;x1&quot;,&quot;x2&quot;,&quot;x3&quot;,&quot;x4&quot;,&quot;x5&quot;,&quot;x6&quot;]</span></code>.  The <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">...</span> <span class="pre">Async</span></code> version of the function starts a task which can conducted according to parallelism of this host language.  Some NavAbilitySDKs in other languages may have better or worse support for parallelism, depending on host language features and capabilities – e.g. the NavAbilitySDK.jl has a more advanced parallism design than <a class="reference external" href="http://NavAbilitySDK.py">NavAbilitySDK.py</a> owing advances made in compiler technology.</p>
 <dl class="py function">
-<dt class="sig sig-object py" id="navability.services.listVariablesAsync">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">listVariablesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#navability.services.listVariablesAsync" title="Permalink to this definition">#</a></dt>
-<dd><p>Get a list of Variable labels in the graph.</p>
+<dt class="sig sig-object py" id="navability.services.listVariables">
+<span class="sig-name descname"><span class="pre">listVariables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listVariables" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a string list of Variable labels.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server with unique (user, robot, session) context.</p></li>
-<li><p><strong>[</strong><strong>regexFilter</strong><strong>]</strong> (<em>str</em>) – Filter on variable label. Defaults to “.*”.</p></li>
-<li><p><strong>[</strong><strong>tags</strong><strong>]</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Variables can have string tags. Defaults to None.</p></li>
-<li><p><strong>[</strong><strong>solvable</strong><strong>]</strong> (<em>int</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
+<li><p><strong>regexFilter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter on variable label. Defaults to “.*”.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Variables can have string tags. Defaults to None.</p></li>
+<li><p><strong>solvable</strong> (<em>int</em><em>, </em><em>optional</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>List[str]: Async task returning a list of Variable labels.</p>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[str]</p>
 </dd>
 </dl>
 </dd></dl>
 
-<!-- ```{eval-rst}
-.. autoclass:: myst_parser.mocking.MockRSTParser
-    :show-inheritance:
-    :members: parse
-``` -->
-</section>
-</section>
-<section id="variable-values">
-<h2>Variable Values<a class="headerlink" href="#variable-values" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.listVariablesAsync">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listVariablesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listVariablesAsync" title="Permalink to this definition">#</a></dt>
+<dd><p>Asynchronous version of listVariables.  Async task returning a string list of Variable labels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server with unique (user, robot, session) context.</p></li>
+<li><p><strong>regexFilter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter on variable label. Defaults to “.*”.</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Variables can have string tags. Defaults to None.</p></li>
+<li><p><strong>solvable</strong> (<em>int</em><em>, </em><em>optional</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>List</em>[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<section id="getting-a-variable">
+<h3>Getting a Variable<a class="headerlink" href="#getting-a-variable" title="Permalink to this heading">#</a></h3>
 <p>The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables <code class="docutils literal notranslate"><span class="pre">solverData</span></code> field, such that either parametric or non-parametric inference results can be used:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getVariableAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<section id="tags-on-variable-node">
-<h3>Tags on Variable Node<a class="headerlink" href="#tags-on-variable-node" title="Permalink to this heading">#</a></h3>
-<p>We can readily check which tags have been added to this variable with:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
+<span class="c1"># v0 = await getVariableAsync(fgclient, &quot;x0&quot;)</span>
 </pre></div>
 </div>
 <dl class="py function">
 <dt class="sig sig-object py" id="navability.services.getVariableAsync">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">navability.services.</span></span><span class="sig-name descname"><span class="pre">getVariableAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><span class="pre">DFGClient</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.getVariableAsync" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getVariableAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.getVariableAsync" title="Permalink to this definition">#</a></dt>
 <dd><p>Get a Variable object from the server as connect to via fgclient.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -520,13 +527,66 @@ and <cite>sessionLabel</cite>.</p>
 <li><p><strong>label</strong> (<em>str</em>) – Variable label to retrieve.</p></li>
 </ul>
 </dd>
-</dl>
-<dl class="simple">
-<dt>Returns:</dt><dd><p>Variable: Multilanguage standardized Variable format.</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Multilanguage standardized Variable format.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#navability.entities.Variable" title="navability.entities.Variable">Variable</a></p>
 </dd>
 </dl>
 </dd></dl>
 
+</section>
+<section id="e-g-variable-node-tags">
+<h3>E.g. Variable (Node) Tags<a class="headerlink" href="#e-g-variable-node-tags" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">getVariable</span></code> call returns a <code class="docutils literal notranslate"><span class="pre">Variable</span></code> object containing many fields.  For example, one can readily check which tags have been added to this variable with:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>which would print the list of tags similar to:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">The</span> <span class="n">tags</span> <span class="n">on</span> <span class="n">this</span> <span class="n">variable</span> <span class="n">are</span> <span class="p">[</span><span class="s2">&quot;VARIABLE&quot;</span><span class="p">,</span> <span class="s2">&quot;POSE&quot;</span><span class="p">,</span> <span class="s2">&quot;DOCS_EXAMPLE&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="navability.entities.Variable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp=datetime.datetime(2023</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">19</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">47</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">867110)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstime='0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppes=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobEntries=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solverData=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.Variable" title="Permalink to this definition">#</a></dt>
+<dd><p>A factor graph variable node as well as data carrying object that can serialized and distributed across computing nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>label</strong> (<em>str</em>) – The variable label, such as “x1” or “pose_7”</p></li>
+<li><p><strong>variableType</strong> (<em>str</em>) – For example “Pose2” or “Pose3”</p></li>
+<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – A string list of tags for annotating and later searching through nodes, e.g. [“POSE”, “VARIABLE”, “AUTO”]</p></li>
+<li><p><strong>timestamp</strong> (<em>datetime</em>) – When the variable instance occurred.</p></li>
+<li><p><strong>nstime</strong> (<em>str</em>) – duplicate ns scale time information which does not store full unix time, but rather only the nanosecond portion for higher resolution.</p></li>
+<li><p><strong>solvable</strong> (<em>str</em>) – indicate whether the variable is ready to be incldued in a solve.</p></li>
+<li><p><strong>ppes</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>Ppe</em><em>]</em>) – Parametric point estimate solutions which summarize the possibly non-Gaussian solution contained in <cite>.solverData</cite>.</p></li>
+<li><p><strong>blobEntries</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>BlobEntry</em><em>]</em>) – A list of <cite>BlobEntry`s which holds contextual information for (data) `Blob`s stored in a separate `BlobStore</cite>.</p></li>
+<li><p><strong>solverData</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>VariableNodeData</em><em>]</em>) – In depth solver information used for numerical solutions of the factor graph, including non-Gaussian and multiple <cite>solveKeys</cite>.</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – To store opportunistic “small data” that migth be useful to keep.  Use BlobEntries and Blobs as main mechanism for storing heavy lift data.</p></li>
+<li><p><strong>_version</strong> (<em>str</em>) – Serialization support of Variable objects benefit from knowing the library version used for this object.</p></li>
+<li><p><strong>id</strong> (<em>Optional</em><em>[</em><em>UUID</em><em>]</em>) – Autogenerated uuid4 for use in a distributed system, do not self assign.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="parametric-point-estimates-ppes">
+<h3>Parametric Point Estimates (PPEs)<a class="headerlink" href="#parametric-point-estimates-ppes" title="Permalink to this heading">#</a></h3>
+<p>To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (<code class="docutils literal notranslate"><span class="pre">PPE</span></code>) for each of the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.  While various forms of <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s can exists—such as mean, max, modes, etc.—a common <code class="docutils literal notranslate"><span class="pre">suggested</span></code> field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (<code class="docutils literal notranslate"><span class="pre">default</span></code>) can be obtained by:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xyr</span> <span class="o">=</span> <span class="n">v0</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span>
+<span class="c1"># [-0.00, 0.00, 0.00]</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-4-contradictorydata.html" title="(in Python)"><span class="xref myst">tutorial on leveraging (contradictory) prior data</span></a> is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. <code class="docutils literal notranslate"><span class="pre">solverData</span></code>) values are already stored as on-manifold points.  For more information, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/">the on-manifold points, tangent vectors, and coordinates description presented here</a>.</p>
+</div>
 </section>
 <section id="numerical-values-solvekeys">
 <h3>Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#numerical-values-solvekeys" title="Permalink to this heading">#</a></h3>
@@ -544,22 +604,6 @@ and <cite>sessionLabel</cite>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;graphinit&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">vecval</span>
 <span class="c1"># [-0.001, 0.002, 0.001, ...]</span>
 </pre></div>
-</div>
-</section>
-<section id="understanding-ppes">
-<h3>Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s<a class="headerlink" href="#understanding-ppes" title="Permalink to this heading">#</a></h3>
-<p>To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (<code class="docutils literal notranslate"><span class="pre">PPE</span></code>) for each of the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.  While various forms of <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s can exists—such as mean, max, modes, etc.—a common <code class="docutils literal notranslate"><span class="pre">suggested</span></code> field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (<code class="docutils literal notranslate"><span class="pre">default</span></code>) can be obtained by:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xyr</span> <span class="o">=</span> <span class="n">v0</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span>
-<span class="c1"># [-0.00, 0.00, 0.00]</span>
-</pre></div>
-</div>
-<div class="admonition seealso">
-<p class="admonition-title">See also</p>
-<p>The <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-4-contradictorydata.html" title="(in Python)"><span class="xref myst">tutorial on leveraging (contradictory) prior data</span></a> is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.</p>
-</div>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. <code class="docutils literal notranslate"><span class="pre">solverData</span></code>) values are already stored as on-manifold points.  For more information, see <a class="reference external" href="https://juliarobotics.org/Caesar.jl/latest/concepts/using_manifolds/">the on-manifold points, tangent vectors, and coordinates description presented here</a>.</p>
 </div>
 </section>
 </section>
@@ -647,14 +691,12 @@ and <cite>sessionLabel</cite>.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variable-values">Variable Values</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tags-on-variable-node">Tags on Variable Node</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-variable">Getting a Variable</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametric-point-estimates-ppes">Parametric Point Estimates (PPEs)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#understanding-ppes">Understanding <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdk-supported-variables">SDK Supported Variables</a></li>

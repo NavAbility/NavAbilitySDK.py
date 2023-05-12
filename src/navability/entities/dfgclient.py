@@ -15,9 +15,6 @@ class DFGClient:
     :param str robotLabel: TestRobot
     :param str sessionLabel: TestHex
     :param str [auth_token=]: for authorized access, get a temporary token from app.navability.io Connect page.
-
-    Returns:
-        _type_: DFGClient
     """
     client: NavAbilityHttpsClient
     context: Client

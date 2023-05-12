@@ -28,8 +28,7 @@ python3 -m venv venv
 source venv/bin/activate
 ```
 
-**OR** to system environment
-
+and install the package to current active environment (or tosystem global if not in an venv)
 ```
 pip install navabilitysdk
 ```

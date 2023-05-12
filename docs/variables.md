@@ -22,43 +22,63 @@ fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
 .. autoclass:: navability.entities.DFGClient
 ```
 
-### Variables
+## Variables
 
 Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let's start by listing all the variables in the session:
 ```python
-varLbls = await listVariablesAsync(fgclient)
-# ["l1","x0","x1","x2","x3","x4","x5","x6"]
+varLbls = listVariables(fgclient)
+# varLbls = await listVariablesAsync(fgclient)
 ```
 
-The await call is used to wait on the underlying asynchronous call.
+Returns `["l1","x0","x1","x2","x3","x4","x5","x6"]`.  The `await ... Async` version of the function starts a task which can conducted according to parallelism of this host language.  Some NavAbilitySDKs in other languages may have better or worse support for parallelism, depending on host language features and capabilities -- e.g. the NavAbilitySDK.jl has a more advanced parallism design than NavAbilitySDK.py owing advances made in compiler technology.
 
 ```{eval-rst}
+.. autofunction:: navability.services.listVariables
 .. autofunction:: navability.services.listVariablesAsync
 ```
-<!-- ```{eval-rst}
-.. autoclass:: myst_parser.mocking.MockRSTParser
-    :show-inheritance:
-    :members: parse
-``` -->
 
-
-## Variable Values
+### Getting a Variable
 
 The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables `solverData` field, such that either parametric or non-parametric inference results can be used:
 ```python
-v0 = await getVariableAsync(fgclient, "x0")
-```
-
-### Tags on Variable Node
-
-We can readily check which tags have been added to this variable with:
-```python
-print('The tags on this variable are', v0.tags)
+v0 = getVariable(fgclient, "x0")
+# v0 = await getVariableAsync(fgclient, "x0")
 ```
 
 ```{eval-rst}
 .. autofunction:: navability.services.getVariableAsync
 ```
+
+### E.g. Variable (Node) Tags
+
+The `getVariable` call returns a `Variable` object containing many fields.  For example, one can readily check which tags have been added to this variable with:
+```python
+print('The tags on this variable are', v0.tags)
+```
+which would print the list of tags similar to:
+```
+The tags on this variable are ["VARIABLE", "POSE", "DOCS_EXAMPLE"]
+```
+
+```{eval-rst}
+.. autoclass:: navability.entities.Variable
+```
+
+### Parametric Point Estimates (PPEs)
+
+To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (`PPE`) for each of the `solveKey`s.  While various forms of `PPE`s can exists---such as mean, max, modes, etc.---a common `suggested` field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (`default`) can be obtained by:
+```python
+xyr = v0.ppes['default'].suggested
+# [-0.00, 0.00, 0.00]
+```
+
+:::{seealso}
+The [tutorial on leveraging (contradictory) prior data][nva-tut4] is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.
+:::
+
+:::{warning} 
+At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. `solverData`) values are already stored as on-manifold points.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
+:::
 
 ### Numerical values, & `solveKey`s
 
@@ -79,22 +99,6 @@ The numerical values can be obtained from the `solverData` via:
 v0.solverData['graphinit'].vecval
 # [-0.001, 0.002, 0.001, ...]
 ```
-
-### Understanding `PPE`s
-
-To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (`PPE`) for each of the `solveKey`s.  While various forms of `PPE`s can exists---such as mean, max, modes, etc.---a common `suggested` field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (`default`) can be obtained by:
-```python
-xyr = v0.ppes['default'].suggested
-# [-0.00, 0.00, 0.00]
-```
-
-:::{seealso}
-The [tutorial on leveraging (contradictory) prior data][nva-tut4] is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.
-:::
-
-:::{warning} 
-At time of writing, the PPE numerical values are stored in coordinates.  These values change to change to on-manifold point representations.  Note that the internal solver computations (i.e. `solverData`) values are already stored as on-manifold points.  For more information, see [the on-manifold points, tangent vectors, and coordinates description presented here][cjl-docs-mani].
-:::
 
 ## SDK Supported Variables
 

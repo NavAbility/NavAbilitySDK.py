@@ -20,7 +20,16 @@ You can login via the [NavAbility App](https://app.navability.io/get-started/int
 
 ## Installing
 
-The NavAbilitySDK can be installed as a usual Julia package:
+The NavAbilitySDK can be installed as a usual Python pip package to a virtual environment ([more info venv and pip info here][py-venv-pip]):
+
+```
+cd ~/my/working/dir
+python3 -m venv venv
+source venv/bin/activate
+```
+
+**OR** to system environment
+
 ```
 pip install navabilitysdk
 ```
@@ -33,7 +42,7 @@ Installing from within a Python kernel can also be done using:
 ```
 
 
-# Starting a Python REPL for the Examples
+# Starting a Python REPL and Importing
 
 To use the NavAbility SDK example in a REPL you need to start it with `asyncio`, i.e. run `python -m asyncio`.  Together with a [virtual environment][py-venv], the entire call becomes:
 ```python
@@ -41,8 +50,6 @@ python3 -m asyncio venv /path/to/user/venv
 ```
 
 If you don't, you'll see `SyntaxError: 'await' outside function`. 
-
-## Importing NavAbilitySDK
 
 Loading the SDK module:
 ```python
@@ -62,3 +69,4 @@ The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph
 [slack-invite]: https://join.slack.com/t/caesarjl/shared_invite/zt-ucs06bwg-y2tEbddwX1vR18MASnOLsw
 [nva-app-auth]: https://app.navability.io/edge/connect
 [py-venv]: https://docs.python.org/dev/library/venv.html
+[py-venv-pip]: https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/

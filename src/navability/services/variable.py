@@ -128,15 +128,13 @@ async def listVariablesAsync(
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[str]:
-    """Get a list of Variable labels in the graph.
+    """Asynchronous version of listVariables.  Async task returning a string list of Variable labels.
 
-    :param DFGClient fgclient: client connection to API server with unique (user, robot, session) context.
-    :param str [regexFilter]: Filter on variable label. Defaults to ".*".
-    :param List[str] [tags]: Variables can have string tags. Defaults to None.
-    :param int [solvable]: Whether this variable can be used in solving yet. Defaults to 0.
-
-    Returns:
-        List[str]: Async task returning a list of Variable labels.
+    Args:
+        fgclient (DFGClient): client connection to API server with unique (user, robot, session) context.
+        regexFilter (str, optional): Filter on variable label. Defaults to ".*".
+        tags (List[str], optional): Variables can have string tags. Defaults to None.
+        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
     """
 
     client = fgclient.client
@@ -179,8 +177,19 @@ def listVariables(
     tags: List[str] = None,
     solvable: int = 0,
 ) -> List[str]:
+    """Returns a string list of Variable labels.
+
+    Args:
+        fgclient (DFGClient): client connection to API server with unique (user, robot, session) context.
+        regexFilter (str, optional): Filter on variable label. Defaults to ".*".
+        tags (List[str], optional): Variables can have string tags. Defaults to None.
+        solvable (int, optional): Whether this variable can be used in solving yet. Defaults to 0.
+    """
     tsk = listVariablesAsync(fgclient, regexFilter, tags, solvable)
     return asyncio.run(tsk)
+
+
+
 
 
 # Alias
@@ -292,7 +301,6 @@ async def getVariableAsync(
     
     :param DFGClient fgclient: connection to servers, containing (user, robot, session) context.
     :param str label: Variable label to retrieve.
-
 
     Returns:
         Variable: Multilanguage standardized Variable format.

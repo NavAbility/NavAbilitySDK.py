@@ -61,7 +61,7 @@ sphinx:
         - "https://sphinx-proof.readthedocs.io/en/latest/"
         - null
     hoverxref_intersphinx:
-     - "sphinxproof"
+      - "sphinxproof"
     mathjax3_config:
       tex:
         macros:
@@ -71,10 +71,15 @@ sphinx:
           "emat": ["\\end{array}\\right]"]
     html_theme_options:
       repository_provider: github  
+    napoleon_use_param: True
+    add_module_names: False
+    autodoc_typehints: "description"
 
   extra_extensions:
     - sphinx.ext.intersphinx
+    - sphinx.ext.napoleon
     - sphinx.ext.autodoc
+    - sphinx.ext.autodoc.typehints
     - sphinx_inline_tabs
     - sphinx_proof
     - sphinx_examples

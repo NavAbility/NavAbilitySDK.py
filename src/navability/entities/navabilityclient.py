@@ -57,10 +57,12 @@ class NavAbilityWebsocketClient(NavAbilityClient):
 
 
 class NavAbilityHttpsClient(NavAbilityClient):
-    """Connection object for queries and mutations to API server.
+    """Connection object for queries and mutations to API server.  Note, this is used but higher level objects such as DFGClient.
 
     Args:
-        NavAbilityClient (NavAbilityClient): the connection object
+        NavAbilityClient: the connection object to a server (cloud our deployed).
+        url: Network path to the API (cloud or deployed).
+        auth_token: Token for auth, likely provided by NavAbility App Connect page.
     """
     def __init__(self, url: str = "https://api.navability.io", auth_token: str = "") -> None:
         super().__init__()

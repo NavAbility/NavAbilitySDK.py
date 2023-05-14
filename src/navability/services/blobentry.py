@@ -72,20 +72,16 @@ async def listBlobEntriesAsync(
     fgclient: DFGClient,
     variableLabel: str,
 ):
+    """ Return a list of `BlobEntry` labels (asynchronous version).
+
+    Args:
+        fgclient (DFGClient): client connection to API server
+            with unique context (user, robot, session)
+        variableLabel (string): list data entries connected to which variable
+    """
     client = fgclient.client
     context = fgclient.context
 
-    """ List the blob entries associated with a particular variable.
-
-    Args:
-        fgclient (NavAbilityClient): client connection to API server
-            and unique context with (user, robot, session)
-        variableLabel (string): list data entries connected to which variable
-
-    Returns:
-        List[String]: A list of `BlobEntry` labels
-
-    """
     params = {
         "userLabel": context.userLabel,
         "robotLabel": context.robotLabel,
@@ -127,6 +123,13 @@ def listBlobEntries(
     fgclient: DFGClient,
     variableLabel: str,
 ):
+    """ Return a list of `BlobEntry` labels (synchronous version).
+
+    Args:
+        fgclient (DFGClient): client connection to API server
+            with unique context (user, robot, session)
+        variableLabel (string): list data entries connected to which variable
+    """
     tsk = listBlobEntriesAsync(fgclient, variableLabel)
     return asyncio.run(tsk)
 

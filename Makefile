@@ -14,7 +14,7 @@ release: $(VIRTUAL_ENV_DIR)
 	$(VIRTUAL_ENV_DIR)/bin/$(PYTHON_VERSION) setup.py sdist
 	# Assuming you have twine already in the sdist
 	$(VIRTUAL_ENV_DIR)/bin/pip install twine
-	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*
+	$(VIRTUAL_ENV_DIR)/bin/twine upload dist/*.tar.gz
 
 docs_cicd:
 	$(PYTHON_VERSION) -m venv venv_docs

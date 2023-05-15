@@ -196,7 +196,7 @@ class FactorSchema(Schema):
     _variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
     )
-    data = fields.Method("serialize_data", "deserialize_data", required=True)
+    data = fields.Method("get_data", "set_data", required=True)
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     nstime = fields.Str(default="0")
@@ -234,10 +234,10 @@ class FactorSchema(Schema):
         tsraw = obj if type(obj) == str else obj["formatted"]
         return datetime.strptime(tsraw, TS_FORMAT)
 
-    def serialize_data(self, obj):
+    def get_data(self, obj):
         return json.dumps(obj.data.dumps())
 
-    def deserialize_data(self, obj):
+    def set_data(self, obj):
         return FactorDataSchema().load(json.loads(obj))
 
     def get_metadata(self, obj):

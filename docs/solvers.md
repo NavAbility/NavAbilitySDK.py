@@ -24,7 +24,7 @@ Non parametric solving can support a much wider range of measurement probability
 - as well as multihypothesis features per factor -- i.e. `Categorical`.
 
 Many more probability types are natively supported by the solver and yet directly exposed through the SDK, including
-- Manifold Kernel Densities,
+- `ManifoldKernelDensities`,
 - Heatmaps or Intensity maps,
 - Levelsets,
 - Most common parametric probability models.

@@ -4,61 +4,67 @@ The NavAbilitySDK provides variables and factors useful to robotics.  We start w
 
 As before, let's setup a new client-context to talk with the NavAbility platform:
 ```python
+from navability.entities import DFGClient, VariableType, PriorPose2, FullNormal
+from navability.services import addVariable, ls, addFactor, lsf
+import uuid, random, string
+
+userLabel = "guest@navability.io"
+robotLabel = "TestRobot"
+sessionLabel = "TestPy"
+
 # also create a client connection
-client = NavAbilityHttpsClient()
-
-# create a client context user, robot, session
-context = Client(
-  "guest@navability.io",
-  "ExampleRobot",
-  "SDKpy_"*(string(uuid4())[1:4]),
-)
+fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
 ```
 
-## First Pose
+## Adding Variables
 
-The `addVariable` function with a label `"x0"` and type `:Pose2` adds that variable to  to the factor graph.
+:::{warning}
+SDK.py@v0.6.0 currently does not support creating new sessions from "guest", but variables and factors can be added to an existing session.
+:::
 
-```python
-result_v0 = await addVariable(client, context, "x0", VariableType.Pose2)
-```
-
-Note that asynchronous tasks are used to increase the upload performance.  Each of these events are queued on the server for processing.  While the variable is being created, let's also add a prior factor.
-
+Let's start with `addVariable`
 ```{eval-rst}
 .. autofunction:: navability.services.addVariable
 ```
 
-### And Zero-Prior
+by adding a randomly named variable an existing graph.  Here we call `addVariable` as type `VariableTypes.Pose2`.  Pose2 here refers to position an orientation on a flat 2D plane -- i.e. the variable represents the estimation problem to find the state of variable with freedoms `[x,y,theta]`:
+```python
+# generate a random variable label
+vlabel = 'x_'+''.join(random.choices(string.ascii_letters + string.digits, k=4))
 
-We now have a factor graph with one variable, but to solve it we need some additional information.  In this example, we need the estimated starting point of our robot.
+# add the variable to the existing session under guest
+v = addVariable(fgclient, vlabel, VariableType.Pose2)
+# result_v0 = await addVariable(fgclient, "x0", VariableType.Pose2)
+```
+
+:::{tip}
+Note that asynchronous tasks could increase client side upload performance.  Each of these events are queued on the server for processing.  While the variable is being created.
+:::
+
+## Adding Factors
+
+Next, we can also add a factor.  Have a look at the `addFactor` function followed by how a user defines the factor measurement and observation model in the next section.
+
+```{eval-rst}
+.. autofunction:: navability.services.addFactor
+```
+
+### A Zero-Prior
+
+Let's first add a Prior.  Priors are absolute information about variables.  
+:::{tip}
+NavAbility factor graph solutions at this time require a gauge to exist for the graph being solved, hence enough prior information must be included in the graph to constrain the solution (bundles/orbits/locii) to a single solution.  **Note** that this does not imply solutions are necessarily unimodal (Gaussian).
+:::
+
+In this example, we'll use the estimated starting point of our robot.
 We use unary factors called priors to represent absolute information to be introduced.  In this case we use `PriorPose2`, as our variable type is also `Pose2`.
 Since factors represent a probabilistic interaction between variables, we need to specify the distribution our factor will represent. Here we use `FullNormal` which is a [multivariate normal distribution](https://en.wikipedia.org/wiki/Multivariate_normal_distribution). 
 
 Let's create a `PriorPose2` unary factor with zero mean and a covariance matrix of (`diagm([0.05,0.05,0.01].^2)`):
 ```python
 prior_distribution = FullNormal(mu=np.zeros(3), cov=np.power(np.diag([0.1, 0.1, 0.1]),2))
-result_f0 = await addFactor(client, context, ["x0"], PriorPose2(Z=prior_distribution)) 
-```
-
-After adding a batch of variables and factors, we can wait on the upload status to ensure the new graph elements have been processed:
-```python
-# Wait for variable and factor to be loaded to be loaded.
-await waitForCompletion(client, [result_v0, result_f0])
-```
-
-As before, we can use the NavAbility App to visualize the factor graph
-```python
-# Click on the generated URL or graphic to open the NavAbility App Graph visualization page for this session
-GraphVizApp(context, variableStartsWith="")
-```
-
-<!-- ```{eval-rst}
-.. automodule:: navability.services
-   :members: addVariable
-``` -->
-```{eval-rst}
-.. autofunction:: navability.services.addFactor
+result_f0 = addFactor(fgclient, ["x0"], PriorPose2(Z=prior_distribution)) 
+result_f0 = await addFactorAsync(fgclient, ["x0"], PriorPose2(Z=prior_distribution)) 
 ```
 
 ## Odometry Factor

@@ -14,7 +14,7 @@ parts:
 - caption: Add to Graph 🕶️
   chapters:
   - file: buildgraph
-- caption: Graph Solvers
+- caption: Solving Graphs
   chapters:
   - file: solvers
 - caption: Tutorials

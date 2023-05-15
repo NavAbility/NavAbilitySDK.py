@@ -168,7 +168,7 @@ async def _addFactorAsync(
                     }
                 }
             }
-            for vlink in f.variableOrderSymbols
+            for vlink in f._variableOrderSymbols
         ]
     }
 
@@ -179,7 +179,7 @@ async def _addFactorAsync(
         'tags': f.tags,
         'solvable': f.solvable,
         'data': FactorSchema().get_data(f),
-        '_variableOrderSymbols': f.variableOrderSymbols,
+        '_variableOrderSymbols': f._variableOrderSymbols,
         'timestamp': FactorSchema().get_timestamp(f),
         '_type': f.fnctype,
         '_version': f._version,

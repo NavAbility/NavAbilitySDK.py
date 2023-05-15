@@ -40,7 +40,7 @@ DETAIL_SCHEMA = {
 logger = logging.getLogger(__name__)
 
 
-async def getFactorAsync(fgclient: DFGClient, label: str):
+async def getFactorAsync(fgclient: DFGClient, label: str, debug=False):
 
     client = fgclient.client
     context = fgclient.context
@@ -78,11 +78,13 @@ async def getFactorAsync(fgclient: DFGClient, label: str):
         return None
     if len(fs) > 1:
         raise Exception(f"More than one factor named {label} returned")
+    if debug:
+        return fs[0]
     return Factor.load(fs[0])
 
 
-def getFactor(fgclient: DFGClient, label: str):
-    tsk = getFactorAsync(fgclient, label)
+def getFactor(fgclient: DFGClient, label: str, debug=False):
+    tsk = getFactorAsync(fgclient, label, debug=debug)
     return asyncio.run(tsk)
 
 

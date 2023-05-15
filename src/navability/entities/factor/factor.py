@@ -5,7 +5,7 @@ from uuid import UUID
 import json
 import base64
 
-from marshmallow import EXCLUDE, Schema, fields, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_load, pre_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
@@ -21,7 +21,7 @@ class FactorSkeleton:
     def __repr__(self):
         return (
             f"<FactorSkeleton(label={self.label},"
-            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
+            f"variableOrderSymbols={self._variableOrderSymbols},tags={self.tags})>"
         )
 
     def dump(self):
@@ -63,7 +63,7 @@ class FactorSummary:
     def __repr__(self):
         return (
             f"<FactorSkeleton(label={self.label},"
-            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
+            f"variableOrderSymbols={self._variableOrderSymbols},tags={self.tags})>"
         )
 
     def dump(self):
@@ -160,7 +160,7 @@ class FactorDataSchema(Schema):
 class Factor:
     label: str
     fnctype: str
-    variableOrderSymbols: List[str]
+    _variableOrderSymbols: List[str]
     data: str
     metadata: str = "e30="
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
@@ -174,7 +174,7 @@ class Factor:
         return (
             f"<{self.__class__.__name__}"
             f"(label={self.label},"
-            f"variables={self.variableOrderSymbols})>"
+            f"variables={self._variableOrderSymbols})>"
         )
 
     def dump(self):
@@ -193,16 +193,27 @@ class FactorSchema(Schema):
     id = fields.UUID(required=True)
     label = fields.Str(required=True)
     _version = fields.Str(required=True)
-    variableOrderSymbols = fields.List(
+    _variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
     )
-    data = fields.Method("get_data", "set_data", required=True)
+    data = fields.Method("serialize_data", "deserialize_data", required=True)
     tags = fields.List(fields.Str(), required=True)
     timestamp = fields.Method("get_timestamp", "set_timestamp", required=True)
     nstime = fields.Str(default="0")
     fnctype = fields.Str(required=True)
     metadata = fields.Method("get_metadata", "set_metadata")
     solvable = fields.Int(required=True)
+
+    @pre_load
+    def b64_data_duel(self, data, many=None, partial=None):
+        # yes, it's a duel here in SDK.py@v0.6.0
+        try:
+            json.load(data['data'])
+        except:
+            # discrepancy between DFG@v0.21.1 and SDK.jl@v0.6.0 in 
+            data['data'] = base64.b64decode(data['data'])
+
+        return data
 
     class Meta:
         ordered = True
@@ -221,10 +232,10 @@ class FactorSchema(Schema):
         tsraw = obj if type(obj) == str else obj["formatted"]
         return datetime.strptime(tsraw, TS_FORMAT)
 
-    def get_data(self, obj):
+    def serialize_data(self, obj):
         return json.dumps(obj.data.dumps())
 
-    def set_data(self, obj):
+    def deserialize_data(self, obj):
         return FactorDataSchema().load(json.loads(obj))
 
     def get_metadata(self, obj):

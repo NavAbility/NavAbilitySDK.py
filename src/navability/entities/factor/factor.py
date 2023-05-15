@@ -205,15 +205,17 @@ class FactorSchema(Schema):
     solvable = fields.Int(required=True)
 
     @pre_load
-    def b64_data_duel(self, data, many=None, partial=None):
+    def b64_data_duel(self, factor, many=None, partial=None):
+        # print(type(factor['data']), isinstance(factor['data'], dict))
         # yes, it's a duel here in SDK.py@v0.6.0
         try:
-            json.load(data['data'])
-        except:
+            json.loads(factor['data'])
+        except json.JSONDecodeError as err:
             # discrepancy between DFG@v0.21.1 and SDK.jl@v0.6.0 in 
-            data['data'] = base64.b64decode(data['data'])
+            #  assume .data was b64 encoded by one of the other SDKs (expected in future)
+            factor['data'] = base64.b64decode(factor['data'])
 
-        return data
+        return factor
 
     class Meta:
         ordered = True

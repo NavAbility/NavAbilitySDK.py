@@ -5,7 +5,7 @@ from uuid import UUID
 import json
 import base64
 
-from marshmallow import EXCLUDE, Schema, fields, post_load
+from marshmallow import EXCLUDE, Schema, fields, post_load, pre_load
 
 from navability.common.timestamps import TS_FORMAT
 from navability.common.versions import payload_version
@@ -21,7 +21,7 @@ class FactorSkeleton:
     def __repr__(self):
         return (
             f"<FactorSkeleton(label={self.label},"
-            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
+            f"variableOrderSymbols={self._variableOrderSymbols},tags={self.tags})>"
         )
 
     def dump(self):
@@ -63,7 +63,7 @@ class FactorSummary:
     def __repr__(self):
         return (
             f"<FactorSkeleton(label={self.label},"
-            f"variableOrderSymbols={self.variableOrderSymbols},tags={self.tags})>"
+            f"variableOrderSymbols={self._variableOrderSymbols},tags={self.tags})>"
         )
 
     def dump(self):
@@ -160,7 +160,7 @@ class FactorDataSchema(Schema):
 class Factor:
     label: str
     fnctype: str
-    variableOrderSymbols: List[str]
+    _variableOrderSymbols: List[str]
     data: str
     metadata: str = "e30="
     tags: List[str] = field(default_factory=lambda: ["FACTOR"])
@@ -174,7 +174,7 @@ class Factor:
         return (
             f"<{self.__class__.__name__}"
             f"(label={self.label},"
-            f"variables={self.variableOrderSymbols})>"
+            f"variables={self._variableOrderSymbols})>"
         )
 
     def dump(self):
@@ -193,7 +193,7 @@ class FactorSchema(Schema):
     id = fields.UUID(required=True)
     label = fields.Str(required=True)
     _version = fields.Str(required=True)
-    variableOrderSymbols = fields.List(
+    _variableOrderSymbols = fields.List(
         fields.Str, data_key="_variableOrderSymbols", required=True
     )
     data = fields.Method("get_data", "set_data", required=True)
@@ -203,6 +203,19 @@ class FactorSchema(Schema):
     fnctype = fields.Str(required=True)
     metadata = fields.Method("get_metadata", "set_metadata")
     solvable = fields.Int(required=True)
+
+    @pre_load
+    def b64_data_duel(self, factor, many=None, partial=None):
+        # print(type(factor['data']), isinstance(factor['data'], dict))
+        # yes, it's a duel here in SDK.py@v0.6.0
+        try:
+            json.loads(factor['data'])
+        except json.JSONDecodeError as err:
+            # discrepancy between DFG@v0.21.1 and SDK.jl@v0.6.0 in 
+            #  assume .data was b64 encoded by one of the other SDKs (expected in future)
+            factor['data'] = base64.b64decode(factor['data'])
+
+        return factor
 
     class Meta:
         ordered = True

@@ -55,6 +55,7 @@ The `getVariable` call returns a `Variable` object containing many fields.  For 
 ```python
 print('The tags on this variable are', v0.tags)
 ```
+
 which would print the list of tags similar to:
 ```
 The tags on this variable are ["VARIABLE", "POSE", "DOCS_EXAMPLE"]

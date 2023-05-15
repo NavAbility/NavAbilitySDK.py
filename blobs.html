@@ -399,9 +399,13 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-blobentries">Getting BlobEntries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-blobentry">What is a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#listing-blobentries-on-a-node">Listing BlobEntries on a Node</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-blobentry">Getting a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-associated-blob">Getting the associated <code class="docutils literal notranslate"><span class="pre">Blob</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-blobentries">Adding BlobEntries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blobentry-structure">BlobEntry Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-blobs">Adding New Blobs</a></li>
 </ul>
             </nav>
@@ -416,85 +420,171 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-blobentry-blob">
 <h1>Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code><a class="headerlink" href="#data-blobentry-blob" title="Permalink to this heading">#</a></h1>
-<section id="getting-blobentries">
-<h2>Getting BlobEntries<a class="headerlink" href="#getting-blobentries" title="Permalink to this heading">#</a></h2>
-<p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data blobs with a variable, is to look at the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s associated with a particular variable.  For example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entries</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span> <span class="o">|&gt;</span> <span class="n">fetch</span>
-<span class="c1"># human friendly labels</span>
-<span class="nb">print</span><span class="p">([</span><span class="n">en</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">])</span>
-<span class="c1"># e.g. [&#39;Camera0&#39;, &#39;UserCalib&#39;, &#39;GPS&#39;, &#39;JoystickCmds&#39;]</span>
-
-<span class="c1"># machine friendly system wide unique identifier</span>
-<span class="nb">print</span><span class="p">([</span><span class="n">en</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">en</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">])</span>
-</pre></div>
-</div>
+<p>Many <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from various location can all reference the same large and heavy binary data <code class="docutils literal notranslate"><span class="pre">Blob</span></code>.  Furthermore, this system allows a distributed usage over a large networked system.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p><code class="docutils literal notranslate"><span class="pre">Blob</span></code>s are separate from <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s.  Various nodes on the graph can have any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s (including duplicates), but the user does not necessary have the need to pull the bandwidth heavy blobs across all parts of the system network.</p>
 </div>
-<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">id</span></code> (or <code class="docutils literal notranslate"><span class="pre">blobId</span></code>) of from a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="k">await</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span>
-<span class="c1"># b&#39;{&quot;latitude&quot;:41.7325,&quot;altitude&quot;:2.211,&quot;header&quot;:{&quot;stamp&quot;:{&quot;secs&quot;:1670378554,&quot;nsecs&quot;:000624417},&quot;seq&quot;:91,&quot;frame_id&quot;:&quot;gps&quot;,&quot;_type&quot;:&quot;ROS1/std_msgs/Header&quot;},&quot;status&quot;:{&quot;status&quot;:0,&quot;service&quot;:1},&quot;position_covariance&quot;:[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],&quot;longitude&quot;:-49.946944,&quot;_type&quot;:&quot;ROS1/sensor_msgs/NavSatFix&quot;,&quot;position_covariance_type&quot;:2}&#39;</span>
+<section id="what-is-a-blobentry">
+<h2>What is a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code><a class="headerlink" href="#what-is-a-blobentry" title="Permalink to this heading">#</a></h2>
+<p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data as a <code class="docutils literal notranslate"><span class="pre">Blob</span></code>, however, a blob just “barcoded” binary blob.  we use <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s to organize, find, share, distribute, make available and useful across the divergent network how a <code class="docutils literal notranslate"><span class="pre">Blob</span></code> is associated with the graph.</p>
+<p>A blob entry is small about of structed data that holds reference information to find an actual binary blob which is possibly a massive amount of data.</p>
+<section id="listing-blobentries-on-a-node">
+<h3>Listing BlobEntries on a Node<a class="headerlink" href="#listing-blobentries-on-a-node" title="Permalink to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">list</span></code> verb is purposefully limited to just returning a list of labels (i.e. <code class="docutils literal notranslate"><span class="pre">List[string]</span></code>), and therefore the following call only returns the labels of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s attached a particular node (variable, session, robot, etc.):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ent_labels</span> <span class="o">=</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x0&#39;</span><span class="p">)</span>
+<span class="c1"># ent_labels = await listBlobEntriesAsync(fgclient, &#39;x0&#39;)</span>
+
+<span class="c1"># human friendly labels</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Human friendly BlobEntry labels on x0 are&#39;</span><span class="p">,</span> <span class="n">ent_labels</span><span class="p">)</span>
+<span class="c1"># e.g. [&#39;LEFTCAM_1002&#39;, &#39;LEFTCAM_1003&#39;, &#39;UserCalib&#39;, &#39;GPS&#39;, &#39;JoystickCmds&#39;]</span>
 </pre></div>
 </div>
-<p>Data blobs are provided in binary format.  A blob can be associated via any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s across multiple graph nodes, sessions, or robots.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> also stores a hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  The check can be skipped as indicated by the option in the function call above.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.listBlobEntries">
+<span class="sig-name descname"><span class="pre">listBlobEntries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableLabel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listBlobEntries" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a list of <cite>BlobEntry</cite> labels (synchronous version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server
+with unique context (user, robot, session)</p></li>
+<li><p><strong>variableLabel</strong> (<em>string</em>) – list data entries connected to which variable</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.services.listBlobEntriesAsync">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listBlobEntriesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableLabel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listBlobEntriesAsync" title="Permalink to this definition">#</a></dt>
+<dd><p>Return a list of <cite>BlobEntry</cite> labels (asynchronous version).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server
+with unique context (user, robot, session)</p></li>
+<li><p><strong>variableLabel</strong> (<em>string</em>) – list data entries connected to which variable</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="getting-a-blobentry">
+<h3>Getting a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code><a class="headerlink" href="#getting-a-blobentry" title="Permalink to this heading">#</a></h3>
+<p>Using the human friendly label from the <code class="docutils literal notranslate"><span class="pre">listBlobEntries</span></code> above, we can fetch the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">entry</span> <span class="o">=</span> <span class="n">getBlobEntry</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;LEFTCAM_1002&#39;</span><span class="p">)</span>
+<span class="c1"># entry = await getBlobEntryAsync(fgclient, &#39;LEFTCAM_1002&#39;)</span>
+</pre></div>
+</div>
+<p>The entry object is well structured</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="navability.entities.BlobEntry">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">BlobEntry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">originId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobstore</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mimeType='application/octet-stream'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">origin=''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">createdTimestamp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lastUpdatedTimestamp=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_type='BlobEntry'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userLabel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableLabel=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factorLabel=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.BlobEntry" title="Permalink to this definition">#</a></dt>
+<dd><p>A <cite>BlobEntry</cite> is a small about of structured data that holds reference information to find an actual blob. Many <cite>BlobEntry`s
+can exist on different graph nodes spanning Robots, and Sessions which can all reference the same `Blob</cite>.  A <cite>BlobEntry</cite>
+is also a equivalent to a bridging entry between local <cite>.originId</cite> and a remotely assigned <cite>.blobIds</cite>.</p>
+<p>All <cite>.blobId`s are unique across the entire distributed system and are immutable.  The `.originId</cite> should be
+globally unique except for stochastic <cite>uuid4</cite> collisions that cannot be checked from a main reference owing to practical limitations such as network connectivity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>Optional</em><em>[</em><em>UUID</em><em>]</em>) – Remotely assigned and globally unique identifier for the <cite>BlobEntry</cite> itself (not the <cite>.blobId</cite>).</p></li>
+<li><p><strong>label</strong> (<em>str</em>) – Human friendly label of the <cite>Blob</cite> and also used as unique identifier per node on which a <cite>BlobEntry</cite> is added.  E.g. do “LEFTCAM_1”, “LEFTCAM_2”, … of you need to repeat a label on the same variable.</p></li>
+<li><p><strong>blobId</strong> (<em>Optional</em><em>[</em><em>UUID</em><em>]</em>) – Machine friendly and globally unique identifier of the ‘Blob’, usually assigned from a common point in the system.  This can be used to guarantee unique retrieval of the large data blob.</p></li>
+<li><p><strong>originId</strong> (<em>UUID</em>) – Machine friendly and locally assigned identifier of the ‘Blob’.  <cite>.originId`s are mandatory upon first creation at the origin regardless of network access.  Separate from `.blobId</cite> since some architectures do not allow edge processes to assign a uuid to data store elements.</p></li>
+<li><p><strong>timestamp</strong> (<em>datetime</em>) – When the Blob itself was first created.</p></li>
+<li><p><strong>description</strong> (<em>str</em>) – Additional information that can help a different user of the Blob.</p></li>
+<li><p><strong>blobstore</strong> (<em>str</em>) – A hint about where the <cite>Blob</cite> itself might be stored.  Remember that a Blob may be duplicated over multiple blobstores.</p></li>
+<li><p><strong>hash</strong> (<em>str</em>) – A hash value to ensure data consistency which must correspond to the stored hash upon retrieval.  [Legacy: some usage functions allow the check to be skipped if needed.]</p></li>
+<li><p><strong>mimeType</strong> (<em>str</em>) – MIME description describing the format of binary data in the <cite>Blob</cite>, e.g. ‘image/png’ or ‘application/json; _type=CameraModel’.</p></li>
+<li><p><strong>origin</strong> (<em>str</em>) – Context from which a BlobEntry=&gt;Blob was first created. E.g. user|robot|session|varlabel.</p></li>
+<li><p><strong>metadata</strong> (<em>dict</em>) – Additional storage for functional metadata used in some scenarios, e.g. to support advanced features such as <cite>parsejson(base64decode(entry.metadata))[‘time_sync’]</cite>.</p></li>
+<li><p><strong>createdTimestamp</strong> (<em>Optional</em><em>[</em><em>datetime</em><em>]</em>) – When the BlobEntry was created.</p></li>
+<li><p><strong>lastUpdatedTimestamp</strong> (<em>Optional</em><em>[</em><em>datetime</em><em>]</em>) – Use carefully, but necessary to support advanced usage such as time synchronization over Blob data.</p></li>
+<li><p><strong>_type</strong> (<em>str</em>) – Self type declaration for when duck-typing happens.</p></li>
+<li><p><strong>_version</strong> (<em>str</em>) – Type version of this BlobEntry.</p></li>
+<li><p><strong>userLabel</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>robotLabel</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>sessionLabel</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>variableLabel</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+<li><p><strong>factorLabel</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+<section id="getting-the-associated-blob">
+<h2>Getting the associated <code class="docutils literal notranslate"><span class="pre">Blob</span></code><a class="headerlink" href="#getting-the-associated-blob" title="Permalink to this heading">#</a></h2>
+<p>A binary <code class="docutils literal notranslate"><span class="pre">Blob</span></code> is basically just a “barcoded” piece of data that can be associated (via individual <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s) multiple times across multiple graph nodes, sessions, or robots.</p>
+<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">.blobId</span></code> as primary (or <code class="docutils literal notranslate"><span class="pre">.originId</span></code> as secondary) reference.  Also note that the blob itself may also be replicated across any number of blob stores, depending on the application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">blobId</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span> <span class="c1"># legacy versions did not use .hash check</span>
+<span class="c1"># blob = await getBlobAsync(fgclient, entry.blobId]; checkhash=false)</span>
+</pre></div>
+</div>
+<p>The blob contains binary information, for example this <code class="docutils literal notranslate"><span class="pre">mimeType</span> <span class="pre">=</span> <span class="pre">application/octet-stream/json;</span> <span class="pre">_type=ROS.sensor_msgs.NavSatFix</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sa">b</span><span class="s1">&#39;{&quot;latitude&quot;:41.7325,&quot;altitude&quot;:2.211,&quot;header&quot;:{&quot;stamp&quot;:{&quot;secs&quot;:1670378554,&quot;nsecs&quot;:000624417},&quot;seq&quot;:91,&quot;frame_id&quot;:&quot;gps&quot;,&quot;_type&quot;:&quot;ROS1/std_msgs/Header&quot;},&quot;status&quot;:{&quot;status&quot;:0,&quot;service&quot;:1},&quot;position_covariance&quot;:[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],&quot;longitude&quot;:-49.946944,&quot;_type&quot;:&quot;ROS1/sensor_msgs/NavSatFix&quot;,&quot;position_covariance_type&quot;:2}&#39;</span>
+</pre></div>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Depending on the blob store, it may also be possible to retrieve a blob using the <code class="docutils literal notranslate"><span class="pre">.originId</span></code> rather than <code class="docutils literal notranslate"><span class="pre">.blobId</span></code>.</p>
+</div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>A blob is owned by a <code class="docutils literal notranslate"><span class="pre">user</span></code> and only accessible by other users if allowed via approved roles or permissions.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>All <code class="docutils literal notranslate"><span class="pre">blobId</span></code>s are unique across the entire distributed system and are immutable.</p>
+<p><code class="docutils literal notranslate"><span class="pre">BlobEntry.hash</span></code> helps ensure data consistency by rehasing the retrieved blob binary data itself.</p>
 </div>
 </section>
 <section id="adding-blobentries">
 <h2>Adding BlobEntries<a class="headerlink" href="#adding-blobentries" title="Permalink to this heading">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">Blob</span></code> or <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from the Python SDK are under construction and expected to be part of the v0.6.1 release.  This functionality has already been released with the JuliaLang SDK.</p>
+</div>
 <p>Blobs can be linked to any variable (future node) in the graph.  This is easily done by adding a BlobEntry:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlobEntry</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s1">&#39;x12&#39;</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mimeType</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>More ubiqitous use of <code class="docutils literal notranslate"><span class="pre">blob</span></code> size was recently introduced to <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> and will be unified with less user input as part of SDKs v0.6 upgrades.</p>
-</div>
-</section>
-<section id="blobentry-structure">
-<h2>BlobEntry Structure<a class="headerlink" href="#blobentry-structure" title="Permalink to this heading">#</a></h2>
-<p>To simplify many different requirements, a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code> has the following field structure:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-  <span class="nb">id</span><span class="p">:</span> <span class="n">UUID</span>
-  <span class="n">label</span><span class="p">:</span> <span class="n">string</span>
-  <span class="n">description</span><span class="p">:</span> <span class="n">string</span>
-  <span class="n">blobstore</span><span class="p">:</span> <span class="n">string</span>
-  <span class="nb">hash</span><span class="p">:</span> <span class="n">string</span>
-  <span class="n">mimeType</span><span class="p">:</span> <span class="n">string</span>
-  <span class="n">origin</span><span class="p">:</span> <span class="n">string</span>
-
-  <span class="c1">## planned future fields</span>
-  <span class="c1"># blobId: UUID</span>
-  <span class="c1"># originId: UUID</span>
-  <span class="c1"># createdTimestamp: datetime</span>
-  <span class="c1"># size: int</span>
-  <span class="c1"># metadata: string</span>
-<span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">addBlobEntry</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x12&#39;</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mimeType</span><span class="p">)</span>
+<span class="c1"># res = await addBlobEntryAsync(fgclient, &#39;x12&#39;, entries[1].id, entries[1].label, len(blob), entries[1].mimeType)</span>
 </pre></div>
 </div>
 </section>
 <section id="adding-new-blobs">
 <h2>Adding New Blobs<a class="headerlink" href="#adding-new-blobs" title="Permalink to this heading">#</a></h2>
 <p>It is also possible to push data blobs:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blobId</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span>
+<span class="n">blobId</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Remember to add at least one BlobEntry somewhere in your session so that you might find it again in the future, see <code class="docutils literal notranslate"><span class="pre">addBlobEntry</span></code> above.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="navability.entities.NavAbilityHttpsClient">
+<span class="sig-name descname"><span class="pre">NavAbilityHttpsClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://api.navability.io'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.NavAbilityHttpsClient" title="Permalink to this definition">#</a></dt>
+<dd><p>Connection object for queries and mutations to API server.  Note, this is used but higher level objects such as DFGClient.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NavAbilityClient</strong> – the connection object to a server (cloud our deployed).</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – Network path to the API (cloud or deployed).</p></li>
+<li><p><strong>auth_token</strong> (<em>str</em>) – Token for auth, likely provided by NavAbility App Connect page.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>See <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-5-marineexample.html" title="(in Python)"><span class="xref myst">Tutorial 5 from ICRA 2022 for a more in-depth example of working with data blobs</span></a>.</p>
 </div>
-<!-- ```@docs
-listBlobEntries
-getBlob
-``` --></section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -564,9 +654,13 @@ getBlob
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-blobentries">Getting BlobEntries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-a-blobentry">What is a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#listing-blobentries-on-a-node">Listing BlobEntries on a Node</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-blobentry">Getting a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-the-associated-blob">Getting the associated <code class="docutils literal notranslate"><span class="pre">Blob</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-blobentries">Adding BlobEntries</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blobentry-structure">BlobEntry Structure</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-new-blobs">Adding New Blobs</a></li>
 </ul>
   </nav></div>

@@ -37,6 +37,10 @@ Returns `["l1","x0","x1","x2","x3","x4","x5","x6"]`.  The `await ... Async` vers
 .. autofunction:: navability.services.listVariablesAsync
 ```
 
+:::{tip}
+There is a handy alias familiar to Linux, `ls = listVariables`, e.g. `ls(fgclient)` returns all the variables in the graph.
+:::
+
 ### Getting a Variable
 
 The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables `solverData` field, such that either parametric or non-parametric inference results can be used:

@@ -186,7 +186,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="buildgraph.html">Build a Graph</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Graph Solvers</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Solving Graphs</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="solvers.html">Graph Solvers</a></li>
 </ul>
@@ -420,15 +420,14 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-blobentry-blob">
 <h1>Data <code class="docutils literal notranslate"><span class="pre">BlobEntry=&gt;Blob</span></code><a class="headerlink" href="#data-blobentry-blob" title="Permalink to this heading">#</a></h1>
-<p>Many <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from various location can all reference the same large and heavy binary data <code class="docutils literal notranslate"><span class="pre">Blob</span></code>.  Furthermore, this system allows a distributed usage over a large networked system.</p>
+<p>Many <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from various nodes in the graph can reference the <code class="docutils literal notranslate"><span class="pre">Blob</span></code>.  A blob is simply just binary data that is uniquely identified through a uuid.  This approach allows for distributed usage over a large networked system including limited connectivity situations.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p><code class="docutils literal notranslate"><span class="pre">Blob</span></code>s are separate from <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s.  Various nodes on the graph can have any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s (including duplicates), but the user does not necessary have the need to pull the bandwidth heavy blobs across all parts of the system network.</p>
+<p><code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s and <code class="docutils literal notranslate"><span class="pre">Blob</span></code>s are separate separate by related objects.  Various nodes on the graph can have any number of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s (except for duplicate <code class="docutils literal notranslate"><span class="pre">blobentry.labels</span></code>).  A user more likely to work the <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s, and only pull bandwidth heavy binary <code class="docutils literal notranslate"><span class="pre">Blob</span></code>s to differemt parts of the system network when needed.  Similarly, these data blobs can be readily cached across the network, since blobs are immutable.</p>
 </div>
 <section id="what-is-a-blobentry">
 <h2>What is a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code><a class="headerlink" href="#what-is-a-blobentry" title="Permalink to this heading">#</a></h2>
-<p>Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data as a <code class="docutils literal notranslate"><span class="pre">Blob</span></code>, however, a blob just “barcoded” binary blob.  we use <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s to organize, find, share, distribute, make available and useful across the divergent network how a <code class="docutils literal notranslate"><span class="pre">Blob</span></code> is associated with the graph.</p>
-<p>A blob entry is small about of structed data that holds reference information to find an actual binary blob which is possibly a massive amount of data.</p>
+<p>A blob entry is a small amount of structed data that holds reference information to find an actual binary blob which is possibly a massive amount of data.  <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s are plentiful, lightweight, and allow users to more easily organize, find, share, distribute, the contextual information about a data blob over a divergent network how a <code class="docutils literal notranslate"><span class="pre">Blob</span></code> is associated with the graph.  The primary method for storing additional large data as a <code class="docutils literal notranslate"><span class="pre">Blob</span></code>, however, a blob just “barcoded” binary blob of data with little context or meaning.</p>
 <section id="listing-blobentries-on-a-node">
 <h3>Listing BlobEntries on a Node<a class="headerlink" href="#listing-blobentries-on-a-node" title="Permalink to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">list</span></code> verb is purposefully limited to just returning a list of labels (i.e. <code class="docutils literal notranslate"><span class="pre">List[string]</span></code>), and therefore the following call only returns the labels of <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s attached a particular node (variable, session, robot, etc.):</p>
@@ -520,7 +519,7 @@ globally unique except for stochastic <cite>uuid4</cite> collisions that cannot 
 <section id="getting-the-associated-blob">
 <h2>Getting the associated <code class="docutils literal notranslate"><span class="pre">Blob</span></code><a class="headerlink" href="#getting-the-associated-blob" title="Permalink to this heading">#</a></h2>
 <p>A binary <code class="docutils literal notranslate"><span class="pre">Blob</span></code> is basically just a “barcoded” piece of data that can be associated (via individual <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s) multiple times across multiple graph nodes, sessions, or robots.</p>
-<p>Data blobs can be fetched via, e.g. using the unique <code class="docutils literal notranslate"><span class="pre">.blobId</span></code> as primary (or <code class="docutils literal notranslate"><span class="pre">.originId</span></code> as secondary) reference.  Also note that the blob itself may also be replicated across any number of blob stores, depending on the application:</p>
+<p>Data blobs can be fetched using the unique <code class="docutils literal notranslate"><span class="pre">.blobId</span></code> as primary (or <code class="docutils literal notranslate"><span class="pre">.originId</span></code> as secondary) reference.  Also note that the blob itself may also be replicated across any number of blob stores, depending on the application:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">blobId</span><span class="p">];</span> <span class="n">checkhash</span><span class="o">=</span><span class="n">false</span><span class="p">)</span> <span class="c1"># legacy versions did not use .hash check</span>
 <span class="c1"># blob = await getBlobAsync(fgclient, entry.blobId]; checkhash=false)</span>
 </pre></div>
@@ -528,10 +527,6 @@ globally unique except for stochastic <cite>uuid4</cite> collisions that cannot 
 <p>The blob contains binary information, for example this <code class="docutils literal notranslate"><span class="pre">mimeType</span> <span class="pre">=</span> <span class="pre">application/octet-stream/json;</span> <span class="pre">_type=ROS.sensor_msgs.NavSatFix</span></code>:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="sa">b</span><span class="s1">&#39;{&quot;latitude&quot;:41.7325,&quot;altitude&quot;:2.211,&quot;header&quot;:{&quot;stamp&quot;:{&quot;secs&quot;:1670378554,&quot;nsecs&quot;:000624417},&quot;seq&quot;:91,&quot;frame_id&quot;:&quot;gps&quot;,&quot;_type&quot;:&quot;ROS1/std_msgs/Header&quot;},&quot;status&quot;:{&quot;status&quot;:0,&quot;service&quot;:1},&quot;position_covariance&quot;:[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],&quot;longitude&quot;:-49.946944,&quot;_type&quot;:&quot;ROS1/sensor_msgs/NavSatFix&quot;,&quot;position_covariance_type&quot;:2}&#39;</span>
 </pre></div>
-</div>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>Depending on the blob store, it may also be possible to retrieve a blob using the <code class="docutils literal notranslate"><span class="pre">.originId</span></code> rather than <code class="docutils literal notranslate"><span class="pre">.blobId</span></code>.</p>
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
@@ -546,7 +541,7 @@ globally unique except for stochastic <cite>uuid4</cite> collisions that cannot 
 <h2>Adding BlobEntries<a class="headerlink" href="#adding-blobentries" title="Permalink to this heading">#</a></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Adding <code class="docutils literal notranslate"><span class="pre">Blob</span></code> or <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from the Python SDK are under construction and expected to be part of the v0.6.1 release.  This functionality has already been released with the JuliaLang SDK.</p>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">Blob</span></code> or <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from the Python SDK are under construction and <a class="reference external" href="https://github.com/NavAbility/NavAbilitySDK.py/milestone/6">expected to be part of the v0.6.1 release</a>.  This functionality has already been released with the JuliaLang SDK.</p>
 </div>
 <p>Blobs can be linked to any variable (future node) in the graph.  This is easily done by adding a BlobEntry:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">res</span> <span class="o">=</span> <span class="n">addBlobEntry</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x12&#39;</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blob</span><span class="p">),</span> <span class="n">entries</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mimeType</span><span class="p">)</span>
@@ -556,6 +551,10 @@ globally unique except for stochastic <cite>uuid4</cite> collisions that cannot 
 </section>
 <section id="adding-new-blobs">
 <h2>Adding New Blobs<a class="headerlink" href="#adding-new-blobs" title="Permalink to this heading">#</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Adding <code class="docutils literal notranslate"><span class="pre">Blob</span></code> or <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from the Python SDK are under construction and <a class="reference external" href="https://github.com/NavAbility/NavAbilitySDK.py/milestone/6">expected to be part of the v0.6.1 release</a>.  This functionality has already been released with the JuliaLang SDK.</p>
+</div>
 <p>It is also possible to push data blobs:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span>
 <span class="n">blobId</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>

@@ -1,16 +1,14 @@
 # Data `BlobEntry=>Blob`
 
-Many `BlobEntry`s from various location can all reference the same large and heavy binary data `Blob`.  Furthermore, this system allows a distributed usage over a large networked system.
+Many `BlobEntry`s from various nodes in the graph can reference the `Blob`.  A blob is simply just binary data that is uniquely identified through a uuid.  This approach allows for distributed usage over a large networked system including limited connectivity situations.
 
 :::{tip}
-`Blob`s are separate from `BlobEntry`s.  Various nodes on the graph can have any number of `BlobEntry`s (including duplicates), but the user does not necessary have the need to pull the bandwidth heavy blobs across all parts of the system network.
+`BlobEntry`s and `Blob`s are separate separate by related objects.  Various nodes on the graph can have any number of `BlobEntry`s (except for duplicate `blobentry.labels`).  A user more likely to work the `BlobEntry`s, and only pull bandwidth heavy binary `Blob`s to differemt parts of the system network when needed.  Similarly, these data blobs can be readily cached across the network, since blobs are immutable.
 :::
 
-## What is a `BlobEntry`
+## What is a `BlobEntry` 
 
-Additional (large) data attached to variables exist in a few different ways.  The primary method for storing additional large data as a `Blob`, however, a blob just "barcoded" binary blob.  we use `BlobEntry`s to organize, find, share, distribute, make available and useful across the divergent network how a `Blob` is associated with the graph.
-
-A blob entry is small about of structed data that holds reference information to find an actual binary blob which is possibly a massive amount of data.
+A blob entry is a small amount of structed data that holds reference information to find an actual binary blob which is possibly a massive amount of data.  `BlobEntry`s are plentiful, lightweight, and allow users to more easily organize, find, share, distribute, the contextual information about a data blob over a divergent network how a `Blob` is associated with the graph.  The primary method for storing additional large data as a `Blob`, however, a blob just "barcoded" binary blob of data with little context or meaning. 
 
 ### Listing BlobEntries on a Node
 
@@ -46,7 +44,7 @@ The entry object is well structured
 
 A binary `Blob` is basically just a "barcoded" piece of data that can be associated (via individual `BlobEntry`s) multiple times across multiple graph nodes, sessions, or robots.
 
-Data blobs can be fetched via, e.g. using the unique `.blobId` as primary (or `.originId` as secondary) reference.  Also note that the blob itself may also be replicated across any number of blob stores, depending on the application:
+Data blobs can be fetched using the unique `.blobId` as primary (or `.originId` as secondary) reference.  Also note that the blob itself may also be replicated across any number of blob stores, depending on the application:
 ```python
 blob = getBlob(fgclient, entry.blobId]; checkhash=false) # legacy versions did not use .hash check
 # blob = await getBlobAsync(fgclient, entry.blobId]; checkhash=false)
@@ -56,10 +54,6 @@ The blob contains binary information, for example this `mimeType = application/o
 ```
 b'{"latitude":41.7325,"altitude":2.211,"header":{"stamp":{"secs":1670378554,"nsecs":000624417},"seq":91,"frame_id":"gps","_type":"ROS1/std_msgs/Header"},"status":{"status":0,"service":1},"position_covariance":[0.265225,0.0,0.0,0.0,0.265225,0.0,0.0,0.0,0.556516],"longitude":-49.946944,"_type":"ROS1/sensor_msgs/NavSatFix","position_covariance_type":2}'
 ```
-
-:::{tip}
-Depending on the blob store, it may also be possible to retrieve a blob using the `.originId` rather than `.blobId`.
-:::
 
 :::{tip}
 A blob is owned by a `user` and only accessible by other users if allowed via approved roles or permissions.
@@ -72,7 +66,7 @@ A blob is owned by a `user` and only accessible by other users if allowed via ap
 ## Adding BlobEntries
 
 :::{warning}
-Adding `Blob` or `BlobEntry`s from the Python SDK are under construction and expected to be part of the v0.6.1 release.  This functionality has already been released with the JuliaLang SDK.
+Adding `Blob` or `BlobEntry`s from the Python SDK are under construction and [expected to be part of the v0.6.1 release](https://github.com/NavAbility/NavAbilitySDK.py/milestone/6).  This functionality has already been released with the JuliaLang SDK.
 :::
 
 Blobs can be linked to any variable (future node) in the graph.  This is easily done by adding a BlobEntry:
@@ -82,6 +76,10 @@ res = addBlobEntry(fgclient, 'x12', entries[1].id, entries[1].label, len(blob), 
 ```
 
 ## Adding New Blobs
+
+:::{warning}
+Adding `Blob` or `BlobEntry`s from the Python SDK are under construction and [expected to be part of the v0.6.1 release](https://github.com/NavAbility/NavAbilitySDK.py/milestone/6).  This functionality has already been released with the JuliaLang SDK.
+:::
 
 It is also possible to push data blobs:
 ```python

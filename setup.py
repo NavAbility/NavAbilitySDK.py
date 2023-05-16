@@ -17,7 +17,7 @@ if sys.version_info < (3, 0):
 """
     )
 
-_version = "0.6.0"
+_version = "0.6.0-1"
 
 HERE = pathlib.Path(__file__).parent
 
@@ -76,6 +76,7 @@ setup(
     author="NavAbility",
     author_email="info@navability.io",
     package_dir={"": "src"},
+    package_data={"navabilitysdk": ["sdkCommonGQL/*.toml",]},
     include_package_data=True,
     packages=find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
     # entry_points={"console_scripts": ["navability = navability.main:cli"]},

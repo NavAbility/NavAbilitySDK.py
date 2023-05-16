@@ -19,3 +19,14 @@ make docs_firefox
 ```
 
 The latter also builds the docs.
+
+## Release to PyPi
+
+Have login credentials and push access to pypi.org.
+
+Run
+```
+make release
+```
+
+Do manual release tag on Github.com/NavAbility/NavAbilitySDK.py.

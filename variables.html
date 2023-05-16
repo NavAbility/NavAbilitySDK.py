@@ -192,8 +192,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bigexample.html">Full Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notes and FAQ</span></p>
 <ul class="nav bd-sidenav">
@@ -465,44 +465,6 @@ and <cite>sessionLabel</cite>.</p>
 </pre></div>
 </div>
 <p>Returns <code class="docutils literal notranslate"><span class="pre">[&quot;l1&quot;,&quot;x0&quot;,&quot;x1&quot;,&quot;x2&quot;,&quot;x3&quot;,&quot;x4&quot;,&quot;x5&quot;,&quot;x6&quot;]</span></code>.  The <code class="docutils literal notranslate"><span class="pre">await</span> <span class="pre">...</span> <span class="pre">Async</span></code> version of the function starts a task which can conducted according to parallelism of this host language.  Some NavAbilitySDKs in other languages may have better or worse support for parallelism, depending on host language features and capabilities – e.g. the NavAbilitySDK.jl has a more advanced parallism design than <a class="reference external" href="http://NavAbilitySDK.py">NavAbilitySDK.py</a> owing advances made in compiler technology.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.listVariables">
-<span class="sig-name descname"><span class="pre">listVariables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listVariables" title="Permalink to this definition">#</a></dt>
-<dd><p>Returns a string list of Variable labels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server with unique (user, robot, session) context.</p></li>
-<li><p><strong>regexFilter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter on variable label. Defaults to “.*”.</p></li>
-<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Variables can have string tags. Defaults to None.</p></li>
-<li><p><strong>solvable</strong> (<em>int</em><em>, </em><em>optional</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List</em>[str]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.listVariablesAsync">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listVariablesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regexFilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listVariablesAsync" title="Permalink to this definition">#</a></dt>
-<dd><p>Asynchronous version of listVariables.  Async task returning a string list of Variable labels.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server with unique (user, robot, session) context.</p></li>
-<li><p><strong>regexFilter</strong> (<em>str</em><em>, </em><em>optional</em>) – Filter on variable label. Defaults to “.*”.</p></li>
-<li><p><strong>tags</strong> (<em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>optional</em>) – Variables can have string tags. Defaults to None.</p></li>
-<li><p><strong>solvable</strong> (<em>int</em><em>, </em><em>optional</em>) – Whether this variable can be used in solving yet. Defaults to 0.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>List</em>[str]</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
 <p>There is a handy alias familiar to Linux, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">=</span> <span class="pre">listVariables</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">ls(fgclient)</span></code> returns all the variables in the graph.</p>
@@ -514,26 +476,6 @@ and <cite>sessionLabel</cite>.</p>
 <span class="c1"># v0 = await getVariableAsync(fgclient, &quot;x0&quot;)</span>
 </pre></div>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.getVariableAsync">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getVariableAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.getVariableAsync" title="Permalink to this definition">#</a></dt>
-<dd><p>Get a Variable object from the server as connect to via fgclient.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – connection to servers, containing (user, robot, session) context.</p></li>
-<li><p><strong>label</strong> (<em>str</em>) – Variable label to retrieve.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Multilanguage standardized Variable format.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#navability.entities.Variable" title="navability.entities.Variable">Variable</a></p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="e-g-variable-node-tags">
 <h3>E.g. Variable (Node) Tags<a class="headerlink" href="#e-g-variable-node-tags" title="Permalink to this heading">#</a></h3>
@@ -547,7 +489,7 @@ and <cite>sessionLabel</cite>.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="navability.entities.Variable">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp=datetime.datetime(2023</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">21</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">31</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">29</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">796712)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstime='0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppes=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobEntries=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solverData=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.Variable" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp=datetime.datetime(2023</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">26</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">36</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">586941)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstime='0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppes=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobEntries=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solverData=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.Variable" title="Permalink to this definition">#</a></dt>
 <dd><p>A factor graph variable node as well as data carrying object that can serialized and distributed across computing nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>

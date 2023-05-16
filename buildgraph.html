@@ -192,8 +192,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bigexample.html">Full Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notes and FAQ</span></p>
 <ul class="nav bd-sidenav">
@@ -441,32 +441,6 @@ document.write(`
 <p><a class="reference external" href="http://SDK.py">SDK.py</a>&#64;v0.6.0 currently does not support creating new sessions from “guest”, but variables and factors can be added to an existing session.</p>
 </div>
 <p>Let’s start with <code class="docutils literal notranslate"><span class="pre">addVariable</span></code></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.addVariable">
-<span class="sig-name descname"><span class="pre">addVariable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variable_or_label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varType</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addVariable" title="Permalink to this definition">#</a></dt>
-<dd><p>Add a variable to the graph.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>client</strong> (<em>NavAbilityClient</em>) – client connection to API server</p></li>
-<li><p><strong>context</strong> (<em>Client</em>) – Unique context with (user, robot, session)</p></li>
-<li><p><strong>variable_or_label</strong> (<a class="reference internal" href="variables.html#navability.entities.Variable" title="navability.entities.Variable"><em>Variable</em></a><em> or </em><em>string</em>) – The variable to add.</p></li>
-<li><p><strong>varType</strong> (<em>VariableType</em><em>, </em><em>optional</em>) – Pose2, Pose3, etc. Defaults to None.</p></li>
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><em>DFGClient</em></a>) – </p></li>
-</ul>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>NotImplementedError</strong> – _description_</p>
-</dd>
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>_description_</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>_type_</p>
-</dd>
-</dl>
-</dd></dl>
-
 <p>by adding a randomly named variable an existing graph.  Here we call <code class="docutils literal notranslate"><span class="pre">addVariable</span></code> as type <code class="docutils literal notranslate"><span class="pre">VariableTypes.Pose2</span></code>.  Pose2 here refers to position an orientation on a flat 2D plane – i.e. the variable represents the estimation problem to find the state of variable with freedoms <code class="docutils literal notranslate"><span class="pre">[x,y,theta]</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># generate a random variable label</span>
 <span class="n">vlabel</span> <span class="o">=</span> <span class="s1">&#39;x_&#39;</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">choices</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span>
@@ -484,16 +458,6 @@ document.write(`
 <section id="adding-factors">
 <h2>Adding Factors<a class="headerlink" href="#adding-factors" title="Permalink to this heading">#</a></h2>
 <p>Next, we can also add a factor.  Have a look at the <code class="docutils literal notranslate"><span class="pre">addFactor</span></code> function followed by how a user defines the factor measurement and observation model in the next section.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.addFactor">
-<span class="sig-name descname"><span class="pre">addFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor_or_labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fnc</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multihypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nullhypo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.addFactor" title="Permalink to this definition">#</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.dfgclient.DFGClient"><em>DFGClient</em></a>) – </p>
-</dd>
-</dl>
-</dd></dl>
-
 <section id="a-zero-prior">
 <h3>A Zero-Prior<a class="headerlink" href="#a-zero-prior" title="Permalink to this heading">#</a></h3>
 <p>Let’s first add a Prior.  Priors are absolute information about variables.</p>
@@ -507,7 +471,7 @@ Since factors represent a probabilistic interaction between variables, we need t
 <p>Let’s create a <code class="docutils literal notranslate"><span class="pre">PriorPose2</span></code> unary factor with zero mean and a covariance matrix of (<code class="docutils literal notranslate"><span class="pre">diagm([0.05,0.05,0.01].^2)</span></code>):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">prior_distribution</span> <span class="o">=</span> <span class="n">FullNormal</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
 <span class="n">result_f0</span> <span class="o">=</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="n">PriorPose2</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="n">prior_distribution</span><span class="p">))</span> 
-<span class="n">result_f0</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addFactorAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span> <span class="n">PriorPose2</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="n">prior_distribution</span><span class="p">))</span> 
+<span class="c1"># result_f0 = await addFactorAsync(fgclient, [&quot;x0&quot;], PriorPose2(Z=prior_distribution)) </span>
 </pre></div>
 </div>
 </section>
@@ -515,49 +479,37 @@ Since factors represent a probabilistic interaction between variables, we need t
 <section id="odometry-factor">
 <h2>Odometry Factor<a class="headerlink" href="#odometry-factor" title="Permalink to this heading">#</a></h2>
 <p>An odometry factor connects two consecutive robot poses <code class="docutils literal notranslate"><span class="pre">x0</span></code> and <code class="docutils literal notranslate"><span class="pre">x1</span></code> together to form a chain.  Here we use a relative factor of type <code class="docutils literal notranslate"><span class="pre">Pose2Pose2</span></code> with a measurement from pose <code class="docutils literal notranslate"><span class="pre">x0</span></code> to <code class="docutils literal notranslate"><span class="pre">x1</span></code> of <code class="docutils literal notranslate"><span class="pre">(x=1.0,y=0.0,θ=pi/2)</span></code>; the robot drove 1 unit forward (in the x direction).  Similarly to the prior we added above, we use a <code class="docutils literal notranslate"><span class="pre">FullNormal</span></code> distribution to represent the odometry with mean and covariance:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result_v</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result_v</span> <span class="o">=</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added x1 with result ID </span><span class="si">{</span><span class="n">result_v</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">odo_distribution</span> <span class="o">=</span> <span class="n">FullNormal</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
-<span class="n">result_fac_1</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="n">odo_distribution</span><span class="p">))</span> 
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added factor with result ID </span><span class="si">{</span><span class="n">result_fac_1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-<span class="c1"># Wait for it to be loaded.</span>
-<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">[</span><span class="n">result_v</span><span class="p">,</span> <span class="n">result_fac_1</span><span class="p">])</span>
+<span class="n">odo_distribution</span> <span class="o">=</span> <span class="n">FullNormal</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">]),</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">result_fac_1</span> <span class="o">=</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">Z</span><span class="o">=</span><span class="n">odo_distribution</span><span class="p">))</span> 
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Added factor with result ID </span><span class="si">{</span><span class="n">result_fac_1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="adding-different-sensors">
 <h2>Adding Different Sensors<a class="headerlink" href="#adding-different-sensors" title="Permalink to this heading">#</a></h2>
 <p>So far we worked with the <code class="docutils literal notranslate"><span class="pre">Pose2</span></code> factor type.  Among others, <code class="docutils literal notranslate"><span class="pre">NavAbilitySDK</span></code> also provides the <code class="docutils literal notranslate"><span class="pre">Point2</span></code> variable and <code class="docutils literal notranslate"><span class="pre">Pose2Point2BearingRange</span></code> factor types, which we will use to represent a landmark sighting in our factor graph.  We will add a landmark <code class="docutils literal notranslate"><span class="pre">l1</span></code> with bearing range measurement of bearing=<code class="docutils literal notranslate"><span class="pre">(mu=0,sigma=0.03)</span></code> <code class="docutils literal notranslate"><span class="pre">range=(mu=0.5,sigma=0.1)</span></code> and continue our robot trajectory by driving around in a square.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results_variables</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Point2</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">),</span>
-  <span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="s2">&quot;x4&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)]</span>
-<span class="n">results_variables</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">addVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Point2</span><span class="p">)</span>
+<span class="n">addVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)</span>
+<span class="n">addVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)</span>
+<span class="n">addVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x4&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="p">)</span>
 
-<span class="n">results_factors</span> <span class="o">=</span> <span class="p">[</span>
-  <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">],</span> <span class="n">Pose2Point2BearingRange</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.03</span><span class="p">),</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">))),</span>
-  <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">)),</span>
-  <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;x3&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">)),</span>
-  <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="s2">&quot;x4&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">)),</span>
-<span class="p">]</span>
-<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">results_variables</span> <span class="o">+</span> <span class="n">results_factors</span><span class="p">)</span>
+<span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">],</span> <span class="n">Pose2Point2BearingRange</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.03</span><span class="p">),</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)))</span>
+<span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">))</span>
+<span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="s2">&quot;x3&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">))</span>
+<span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x3&quot;</span><span class="p">,</span> <span class="s2">&quot;x4&quot;</span><span class="p">],</span> <span class="n">Pose2Pose2</span><span class="p">(</span><span class="n">odo_distribution</span><span class="p">))</span>
 </pre></div>
 </div>
 </section>
 <section id="one-loop-closure-example">
 <h2>One Loop-Closure Example<a class="headerlink" href="#one-loop-closure-example" title="Permalink to this heading">#</a></h2>
 <p>The robot continued its square trajectory to end off where it started.  To illustrate a loop closure, we add another bearing range sighting to from pose <code class="docutils literal notranslate"><span class="pre">x4</span></code> to landmark <code class="docutils literal notranslate"><span class="pre">l1</span></code>, solve the graph and plot the new results:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result_factor</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">context</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x4&quot;</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">],</span> <span class="n">Pose2Point2BearingRange</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.03</span><span class="p">),</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)))</span>
-
-<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="p">[</span><span class="n">result_factor</span><span class="p">])</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">result_factor</span> <span class="o">=</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;x4&quot;</span><span class="p">,</span> <span class="s2">&quot;l1&quot;</span><span class="p">],</span> <span class="n">Pose2Point2BearingRange</span><span class="p">(</span><span class="n">Normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.03</span><span class="p">),</span> <span class="n">Normal</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span><span class="mf">0.1</span><span class="p">)))</span>
 </pre></div>
 </div>
-<!-- ```@docs
-waitForCompletion
-NvaSDK.waitForCompletion2
-``` --></section>
+</section>
 </section>
 
     <script type="text/x-thebe-config">

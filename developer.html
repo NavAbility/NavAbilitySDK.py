@@ -191,8 +191,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bigexample.html">Full Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notes and FAQ</span></p>
 <ul class="nav bd-sidenav">
@@ -400,6 +400,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-install">Developer install:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docs-dependencies">Docs Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#release-to-pypi">Release to PyPi</a></li>
 </ul>
             </nav>
         </div>
@@ -431,6 +432,15 @@ document.write(`
 </pre></div>
 </div>
 <p>The latter also builds the docs.</p>
+</section>
+<section id="release-to-pypi">
+<h2>Release to PyPi<a class="headerlink" href="#release-to-pypi" title="Permalink to this heading">#</a></h2>
+<p>Have login credentials and push access to <a class="reference external" href="http://pypi.org">pypi.org</a>.</p>
+<p>Run</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">release</span>
+</pre></div>
+</div>
+<p>Do manual release tag on <a class="reference external" href="http://Github.com/NavAbility/NavAbilitySDK.py">Github.com/NavAbility/NavAbilitySDK.py</a>.</p>
 </section>
 </section>
 
@@ -494,6 +504,7 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-install">Developer install:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#docs-dependencies">Docs Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#release-to-pypi">Release to PyPi</a></li>
 </ul>
   </nav></div>
 

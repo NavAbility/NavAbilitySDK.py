@@ -192,8 +192,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="bigexample.html">Full Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notes and FAQ</span></p>
 <ul class="nav bd-sidenav">
@@ -439,36 +439,6 @@ document.write(`
 <span class="c1"># e.g. [&#39;LEFTCAM_1002&#39;, &#39;LEFTCAM_1003&#39;, &#39;UserCalib&#39;, &#39;GPS&#39;, &#39;JoystickCmds&#39;]</span>
 </pre></div>
 </div>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.listBlobEntries">
-<span class="sig-name descname"><span class="pre">listBlobEntries</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableLabel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listBlobEntries" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a list of <cite>BlobEntry</cite> labels (synchronous version).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server
-with unique context (user, robot, session)</p></li>
-<li><p><strong>variableLabel</strong> (<em>string</em>) – list data entries connected to which variable</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.services.listBlobEntriesAsync">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">listBlobEntriesAsync</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fgclient</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableLabel</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.services.listBlobEntriesAsync" title="Permalink to this definition">#</a></dt>
-<dd><p>Return a list of <cite>BlobEntry</cite> labels (asynchronous version).</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>fgclient</strong> (<a class="reference internal" href="variables.html#navability.entities.DFGClient" title="navability.entities.DFGClient"><em>DFGClient</em></a>) – client connection to API server
-with unique context (user, robot, session)</p></li>
-<li><p><strong>variableLabel</strong> (<em>string</em>) – list data entries connected to which variable</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="getting-a-blobentry">
 <h3>Getting a <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code><a class="headerlink" href="#getting-a-blobentry" title="Permalink to this heading">#</a></h3>
@@ -556,29 +526,10 @@ globally unique except for stochastic <cite>uuid4</cite> collisions that cannot 
 <p>Adding <code class="docutils literal notranslate"><span class="pre">Blob</span></code> or <code class="docutils literal notranslate"><span class="pre">BlobEntry</span></code>s from the Python SDK are under construction and <a class="reference external" href="https://github.com/NavAbility/NavAbilitySDK.py/milestone/6">expected to be part of the v0.6.1 release</a>.  This functionality has already been released with the JuliaLang SDK.</p>
 </div>
 <p>It is also possible to push data blobs:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span>
-<span class="n">blobId</span> <span class="o">=</span> <span class="k">await</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">blobId</span> <span class="o">=</span> <span class="n">addBlob</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;testimage.png&quot;</span><span class="p">,</span> <span class="n">imgblob</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Remember to add at least one BlobEntry somewhere in your session so that you might find it again in the future, see <code class="docutils literal notranslate"><span class="pre">addBlobEntry</span></code> above.</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="navability.entities.NavAbilityHttpsClient">
-<span class="sig-name descname"><span class="pre">NavAbilityHttpsClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://api.navability.io'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.NavAbilityHttpsClient" title="Permalink to this definition">#</a></dt>
-<dd><p>Connection object for queries and mutations to API server.  Note, this is used but higher level objects such as DFGClient.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>NavAbilityClient</strong> – the connection object to a server (cloud our deployed).</p></li>
-<li><p><strong>url</strong> (<em>str</em>) – Network path to the API (cloud or deployed).</p></li>
-<li><p><strong>auth_token</strong> (<em>str</em>) – Token for auth, likely provided by NavAbility App Connect page.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
 <p>See <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-5-marineexample.html" title="(in Python)"><span class="xref myst">Tutorial 5 from ICRA 2022 for a more in-depth example of working with data blobs</span></a>.</p>

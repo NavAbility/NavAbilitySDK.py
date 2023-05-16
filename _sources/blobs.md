@@ -83,15 +83,11 @@ Adding `Blob` or `BlobEntry`s from the Python SDK are under construction and [ex
 
 It is also possible to push data blobs:
 ```python
-client = NavAbilityHttpsClient()
-blobId = await addBlob(fgclient.client, "testimage.png", imgblob)
+blobId = addBlob(fgclient, "testimage.png", imgblob)
 ```
 
 Remember to add at least one BlobEntry somewhere in your session so that you might find it again in the future, see `addBlobEntry` above.
 
-:::{eval-rst}
-.. autofunction:: navability.entities.NavAbilityHttpsClient
-:::
 
 :::{seealso}
 See [Tutorial 5 from ICRA 2022 for a more in-depth example of working with data blobs](sdkpynb:python/navability-sdk/icra-5-marineexample).

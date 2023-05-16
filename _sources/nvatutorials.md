@@ -1,6 +1,6 @@
 # NavAbility Tutorials
 
-These Tutorials can be read as static pages or be run live via Binder.  Either of the options below should work.
+These Tutorials can be read as static pages, be run live via Binder / locally, or watched through via the YouTube walkthrough videos.
 <!-- ## Run Via NavAbility App
 
 A free tier access to NavAbility servers is provided through the user `guest@navability.io`.  To learn more about using the guest user, consider trying the [NavAbility Tutorials](https://app.navability.io/get-started/tutorials).
@@ -20,3 +20,7 @@ On the notebook pages, use the Rocket icon in the top right menu bar to launch a
 - [Tutorial 3: Insufficient Data (3D Range-only)](sdkpynb:python/navability-sdk/icra-3-rangeonly)
 - [Tutorial 4: Leveraging (Contradictory) Prior Data](sdkpynb:python/navability-sdk/icra-4-contradictorydata)
 - [Tutorial 5: Marine Data: Entries and Blobs](sdkpynb:python/navability-sdk/icra-5-marineexample)
+
+:::{tip}
+These notebooks are kept in the {NavAbility/Notebooks repo](https://github.com/NavAbility/BinderNotebooks).
+:::

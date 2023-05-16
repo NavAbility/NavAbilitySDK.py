@@ -81,8 +81,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'bigexample';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Notes and FAQ" href="notesfaq.html" />
-    <link rel="prev" title="NavAbility Tutorials" href="nvatutorials.html" />
+    <link rel="next" title="NavAbility Tutorials" href="nvatutorials.html" />
+    <link rel="prev" title="Graph Solvers" href="solvers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -192,8 +192,8 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Full Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nvatutorials.html">NavAbility Tutorials</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Notes and FAQ</span></p>
 <ul class="nav bd-sidenav">
@@ -400,7 +400,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdk-py-v0-6-example">SDK.py v0.6 Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legacy-example">Legacy Example</a></li>
 </ul>
             </nav>
         </div>
@@ -418,136 +417,48 @@ document.write(`
 <h2><a class="reference external" href="http://SDK.py">SDK.py</a> v0.6 Example<a class="headerlink" href="#sdk-py-v0-6-example" title="Permalink to this heading">#</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">navability.entities</span> <span class="kn">import</span> <span class="o">*</span>
 <span class="kn">from</span> <span class="nn">navability.services</span> <span class="kn">import</span> <span class="o">*</span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1"># import asyncio</span>
 
 
 <span class="n">userLabel</span> <span class="o">=</span> <span class="s2">&quot;guest@navability.io&quot;</span>
 <span class="n">robotLabel</span> <span class="o">=</span> <span class="s2">&quot;TestRobot&quot;</span>
 <span class="n">sessionLabel</span> <span class="o">=</span> <span class="s2">&quot;TestHex&quot;</span>
-<span class="n">fgclient</span> <span class="o">=</span> <span class="n">DFGClient</span><span class="p">(</span><span class="n">userLabel</span><span class="p">,</span> <span class="n">robotLabel</span><span class="p">,</span> <span class="n">sessionLabel</span><span class="p">)</span>
 
-<span class="n">variables</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listVariablesAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
+<span class="c1"># for private (non-guest) use, get a token after login at app.navability.io, Connect page.</span>
+<span class="n">auth_token</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
 
-<span class="n">entries</span> <span class="o">=</span> <span class="k">await</span> <span class="n">listBlobEntriesAsync</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="n">fgclient</span> <span class="o">=</span> <span class="n">DFGClient</span><span class="p">(</span><span class="n">userLabel</span><span class="p">,</span> <span class="n">robotLabel</span><span class="p">,</span> <span class="n">sessionLabel</span><span class="p">,</span> <span class="n">auth_token</span><span class="o">=</span><span class="n">auth_token</span><span class="p">)</span>
 
-</pre></div>
-</div>
-</section>
-<section id="legacy-example">
-<h2>Legacy Example<a class="headerlink" href="#legacy-example" title="Permalink to this heading">#</a></h2>
-<p>This script will create variables and factors, list the graph, and solve the session for SLAM estimates.</p>
-<blockquote>
-<div><p>NOTES:</p>
-<ul class="simple">
-<li><p>You’ll need to start Python using <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">asyncio</span></code> to support the <code class="docutils literal notranslate"><span class="pre">await</span></code> command.</p></li>
-<li><p>You’ll need numpy to run the example.</p></li>
-</ul>
-</div></blockquote>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">json</span>
-<span class="kn">from</span> <span class="nn">navability.entities</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">Client</span><span class="p">,</span>
-    <span class="n">Factor</span><span class="p">,</span>
-    <span class="n">FactorData</span><span class="p">,</span>
-    <span class="n">FullNormal</span><span class="p">,</span>
-    <span class="n">NavAbilityHttpsClient</span><span class="p">,</span>
-    <span class="n">Pose2Pose2</span><span class="p">,</span>
-    <span class="n">PriorPose2</span><span class="p">,</span>
-    <span class="n">Variable</span><span class="p">,</span>
-    <span class="n">VariableType</span><span class="p">,</span>
-<span class="p">)</span>
-<span class="kn">from</span> <span class="nn">navability.services</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">addFactor</span><span class="p">,</span>
-    <span class="n">addVariable</span><span class="p">,</span>
-    <span class="n">solveSession</span><span class="p">,</span>
-    <span class="n">ls</span><span class="p">,</span>
-    <span class="n">lsf</span><span class="p">,</span>
-    <span class="n">waitForCompletion</span><span class="p">,</span>
-    <span class="n">getVariable</span>
-<span class="p">)</span>
+<span class="n">variables</span> <span class="o">=</span> <span class="n">listVariables</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
+<span class="c1"># variables = await listVariablesAsync(fgclient)</span>
 
-<span class="n">navability_client</span> <span class="o">=</span> <span class="n">NavAbilityHttpsClient</span><span class="p">()</span>
-<span class="n">client</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s2">&quot;Guest&quot;</span><span class="p">,</span> <span class="s2">&quot;MyUser&quot;</span><span class="p">,</span> <span class="s2">&quot;Session_&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid4</span><span class="p">())[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+<span class="c1"># get one of the variables from the graph</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x1&#39;</span><span class="p">)</span>
+<span class="c1"># xl1 = await getVariableAsync(fgclient, &#39;x1&#39;)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">x1</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
 
-<span class="c1"># Create variables x0, x1, and x2</span>
-<span class="n">variables</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
-    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
-    <span class="n">Variable</span><span class="p">(</span><span class="s2">&quot;x2&quot;</span><span class="p">,</span> <span class="n">VariableType</span><span class="o">.</span><span class="n">Pose2</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
-<span class="p">]</span>
+<span class="c1"># which blob entries (list of labels) are there on this variable</span>
+<span class="n">be_labels</span> <span class="o">=</span> <span class="n">listBlobEntries</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">)</span>
+<span class="c1"># be_labels = await listBlobEntriesAsync(fgclient, &quot;x1&quot;)</span>
 
-<span class="c1"># Create factors between them</span>
-<span class="n">factors</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">Factor</span><span class="p">(</span>
-            <span class="s2">&quot;x0f1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;PriorPose2&quot;</span><span class="p">,</span>
-            <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">],</span>
-            <span class="n">FactorData</span><span class="p">(</span>
-                <span class="n">fnc</span><span class="o">=</span><span class="n">PriorPose2</span><span class="p">(</span>
-                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span><span class="n">mu</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">]))</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
-            <span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">Factor</span><span class="p">(</span>
-            <span class="s2">&quot;x0x1f1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Pose2Pose2&quot;</span><span class="p">,</span>
-            <span class="p">[</span><span class="s2">&quot;x0&quot;</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">],</span>
-            <span class="n">FactorData</span><span class="p">(</span>
-                <span class="n">fnc</span><span class="o">=</span><span class="n">Pose2Pose2</span><span class="p">(</span>
-                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span>
-                        <span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">3</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
-                    <span class="p">)</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
-            <span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">Factor</span><span class="p">(</span>
-            <span class="s2">&quot;x1x2f1&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Pose2Pose2&quot;</span><span class="p">,</span>
-            <span class="p">[</span><span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="s2">&quot;x2&quot;</span><span class="p">],</span>
-            <span class="n">FactorData</span><span class="p">(</span>
-                <span class="n">fnc</span><span class="o">=</span><span class="n">Pose2Pose2</span><span class="p">(</span>
-                    <span class="n">Z</span><span class="o">=</span><span class="n">FullNormal</span><span class="p">(</span>
-                        <span class="n">mu</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">3</span><span class="p">],</span> <span class="n">cov</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
-                    <span class="p">)</span>
-                <span class="p">)</span><span class="o">.</span><span class="n">dump</span><span class="p">()</span>  <span class="c1"># This is a generator for a PriorPose2</span>
-            <span class="p">),</span>
-        <span class="p">),</span>
-    <span class="p">]</span>
+<span class="c1"># fetch fetch one of the blob entries (note not the blob itself yet)</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">getBlobEntry</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x1&quot;</span><span class="p">,</span> <span class="n">be_labels</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="c1"># Get the result IDs so we can check on their completion</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Adding variables and factors..</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">variable_results</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="n">addVariable</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">]</span>
-<span class="n">factor_results</span> <span class="o">=</span> <span class="p">[</span><span class="k">await</span> <span class="n">addFactor</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">factors</span><span class="p">]</span>
-<span class="n">result_ids</span> <span class="o">=</span> <span class="n">variable_results</span> <span class="o">+</span> <span class="n">factor_results</span>
+<span class="c1">## fetch binary data blob from one of the blobstores</span>
+<span class="n">store</span> <span class="o">=</span> <span class="n">NavAbilityBlobStore</span><span class="p">(</span><span class="n">fgclient</span><span class="o">.</span><span class="n">client</span><span class="p">,</span> <span class="n">userLabel</span><span class="p">)</span>
+<span class="n">blob</span> <span class="o">=</span> <span class="n">getBlob</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">blobId</span><span class="p">))</span>
+<span class="c1"># blob = await getBlobAsync(store, entry.id)</span>
 
-<span class="c1"># Wait for them to be inserted if they havent already</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Waiting for them to be loaded..</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">result_ids</span><span class="p">,</span> <span class="n">maxSeconds</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+<span class="c1">## which neighbors does this variable have</span>
+<span class="n">x1_nei</span> <span class="o">=</span> <span class="n">listNeighbors</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x1&#39;</span><span class="p">)</span>
 
-<span class="c1"># Interrogate the graph</span>
-<span class="c1"># Get the variables</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Listing all the variables and factors in the session:</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">vs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">ls</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Variables: &quot;</span> <span class="o">+</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">vs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="c1"># Get the factors</span>
-<span class="n">fs</span> <span class="o">=</span> <span class="k">await</span> <span class="n">lsf</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Factors: &quot;</span> <span class="o">+</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">fs</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
-<span class="c1"># There&#39;s some pretty neat functionality with searching, but we&#39;ll save that for more comprehensive tutorials</span>
+<span class="c1">## which factors are there</span>
+<span class="n">fcts</span> <span class="o">=</span> <span class="n">listFactors</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
 
-<span class="c1"># Request a SLAM multimodal solve and wait for the response</span>
-<span class="c1"># Note: Guest sessions solve a little slower than usual because they&#39;re using some small hardware we put down for community use. Feel free to reach out if you want faster solving.</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Requesting that the graph be solved to determine the positions of the variables (poses)...&quot;</span><span class="p">)</span>
-<span class="n">request_id</span> <span class="o">=</span> <span class="k">await</span> <span class="n">solveSession</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">)</span>
-<span class="k">await</span> <span class="n">waitForCompletion</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="p">[</span><span class="n">request_id</span><span class="p">],</span> <span class="n">maxSeconds</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
-
-<span class="c1"># Get the solves positions of the variables (these are stores in the PPEs structure)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Getting the estimates of the variables (poses)...&quot;</span><span class="p">)</span>
-<span class="n">estimates</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">:</span> <span class="p">(</span><span class="k">await</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">navability_client</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">v</span><span class="o">.</span><span class="n">label</span><span class="p">))</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">}</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solved estimates for the positions:</span><span class="se">\r\n</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">estimates</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="c1">## get a specific factor</span>
+<span class="n">fc</span> <span class="o">=</span> <span class="n">getFactor</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s1">&#39;x1x2f1&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -585,20 +496,20 @@ document.write(`
     <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
-       href="nvatutorials.html"
+       href="solvers.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">NavAbility Tutorials</p>
+        <p class="prev-next-title">Graph Solvers</p>
       </div>
     </a>
     <a class="right-next"
-       href="notesfaq.html"
+       href="nvatutorials.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Notes and FAQ</p>
+        <p class="prev-next-title">NavAbility Tutorials</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -621,7 +532,6 @@ document.write(`
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sdk-py-v0-6-example">SDK.py v0.6 Example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#legacy-example">Legacy Example</a></li>
 </ul>
   </nav></div>
 

@@ -43,25 +43,32 @@ Installing from within a Python kernel can also be done using:
 
 # Starting a Python REPL and Importing
 
-To use the NavAbility SDK example in a REPL you need to start it with `asyncio`, i.e. run `python -m asyncio`.  Together with a [virtual environment][py-venv], the entire call becomes:
+To use the NavAbility SDK example in a REPL, together with a [virtual environment][py-venv]
 ```python
-python3 -m asyncio venv /path/to/user/venv
+python3 venv /path/to/user/venv
 ```
-
-If you don't, you'll see `SyntaxError: 'await' outside function`. 
 
 Loading the SDK module:
 ```python
 from navability.entities import *
 from navability.services import *
-import asyncio
 from uuid import uuid4
 import numpy as np
+# import asyncio
 ```
 
 :::{seealso}
 The NavAbility and [Caesar.jl][cjl-docs] design promote distributed factor graph workflows for both edge and cloud usage.  The NavAbilitySDK is part of a larger architecture where both client and server side computations are used.  The rest of this page illustrates usage against the server side data and computations.  Reach out to NavAbility via Slack [![](https://img.shields.io/badge/Invite-Slack-green.svg?style=popout)][slack-invite] or <info@navability.io> for more help.
 :::
+
+:::{warning}
+Earlier versions of NavAbilitySDK.py had to be started with  `python -m asyncio`, otherwise you'd see `SyntaxError: 'await' outside function`:
+```python
+# earlier versions of sdk had to be started with asyncio
+python3 -m asyncio venv /path/to/user/venv
+```
+:::
+
 
 [sdk-py]: https://github.com/NavAbility/NavAbilitySDK.py/issues
 [cjl-docs]: https://juliarobotics.org/Caesar.jl/latest/

@@ -2,6 +2,7 @@ from __future__ import annotations
 import os
 import toml
 import re
+import pathlib
 
 from gql import gql  # used to parse GraphQL queries
 from graphql import GraphQLSyntaxError  # used to handle GraphQL errors
@@ -160,4 +161,5 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
 
 
 # Load all GraphQL operations from the "sdkCommonGQL" folder and export them
-GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(".", "sdkCommonGQL"))
+GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(pathlib.Path(__file__).parent.parent.parent.parent,"sdkCommonGQL"))
+#   (os.path.join(".", "sdkCommonGQL"))

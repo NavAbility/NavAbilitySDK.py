@@ -19,8 +19,8 @@ parts:
   - file: solvers
 - caption: Tutorials
   chapters:
-  - file: nvatutorials
   - file: bigexample
+  - file: nvatutorials
 - caption: Notes and FAQ
   chapters:
   - file: notesfaq

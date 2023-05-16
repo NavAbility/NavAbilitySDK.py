@@ -64,7 +64,7 @@ class gitcmd_sdist(sdist):
         sdist.run(self)
 
 
-print("WHAT WHAT", find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]))
+# print("TO COPY", find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]))
 
 setup(
     cmdclass={

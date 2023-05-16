@@ -1,1 +1,1 @@
-include sdkCommonGQL/*.toml
+include src/sdkCommonGQL/*.toml

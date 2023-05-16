@@ -161,5 +161,5 @@ def get_operations(folder_path: str) -> dict[str, Operation]:
 
 
 # Load all GraphQL operations from the "sdkCommonGQL" folder and export them
-GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(pathlib.Path(__file__).parent.parent.parent.parent,"sdkCommonGQL"))
+GQL_FRAGMENTS, GQL_OPERATIONS = get_operations(os.path.join(pathlib.Path(__file__).parent.parent.parent,"sdkCommonGQL"))
 #   (os.path.join(".", "sdkCommonGQL"))

@@ -64,6 +64,8 @@ class gitcmd_sdist(sdist):
         sdist.run(self)
 
 
+# print("TO COPY", find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]))
+
 setup(
     cmdclass={
         'develop': gitcmd_develop,
@@ -75,10 +77,11 @@ setup(
     license="Apache-2.0",
     author="NavAbility",
     author_email="info@navability.io",
-    package_dir={"": "src"},
-    package_data={"navabilitysdk": ["sdkCommonGQL/*.toml",]},
-    include_package_data=True,
     packages=find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
+    package_dir={"": "src"},
+    package_data={"sdkCommonGQL": ["*.toml",],},
+    # data_files=[('sdkCommonGQL',['*.toml',]),],
+    include_package_data=True,
     # entry_points={"console_scripts": ["navability = navability.main:cli"]},
     python_requires=">=3.8",
     download_url=f"https://github.com/NavAbility/NavAbilitySDK.py/archive/refs/tags/v{_version}.tar.gz",  # noqa: E501, B950

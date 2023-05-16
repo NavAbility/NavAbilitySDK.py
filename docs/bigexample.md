@@ -13,13 +13,17 @@ import numpy as np
 userLabel = "guest@navability.io"
 robotLabel = "TestRobot"
 sessionLabel = "TestHex"
-fgclient = DFGClient(userLabel, robotLabel, sessionLabel)
+
+# for private (non-guest) use, get a token after login at app.navability.io, Connect page.
+auth_token = ''
+
+fgclient = DFGClient(userLabel, robotLabel, sessionLabel, auth_token=auth_token)
 
 variables = listVariables(fgclient)
 # variables = await listVariablesAsync(fgclient)
 
 # get one of the variables from the graph
-x1 = getVariable(fgclient, 'xl')
+x1 = getVariable(fgclient, 'x1')
 # xl1 = await getVariableAsync(fgclient, 'x1')
 print('The tags on this variable are', x1.tags)
 
@@ -32,7 +36,7 @@ entry = getBlobEntry(fgclient, "x1", be_labels[0])
 
 ## fetch binary data blob from one of the blobstores
 store = NavAbilityBlobStore(fgclient.client, userLabel)
-blob = getBlob(store, entry.blobId)
+blob = getBlob(store, str(entry.blobId))
 # blob = await getBlobAsync(store, entry.id)
 
 ## which neighbors does this variable have

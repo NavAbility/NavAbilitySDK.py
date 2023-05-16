@@ -64,53 +64,39 @@ Let's create a `PriorPose2` unary factor with zero mean and a covariance matrix 
 ```python
 prior_distribution = FullNormal(mu=np.zeros(3), cov=np.power(np.diag([0.1, 0.1, 0.1]),2))
 result_f0 = addFactor(fgclient, ["x0"], PriorPose2(Z=prior_distribution)) 
-result_f0 = await addFactorAsync(fgclient, ["x0"], PriorPose2(Z=prior_distribution)) 
+# result_f0 = await addFactorAsync(fgclient, ["x0"], PriorPose2(Z=prior_distribution)) 
 ```
 
 ## Odometry Factor
 
 An odometry factor connects two consecutive robot poses `x0` and `x1` together to form a chain.  Here we use a relative factor of type `Pose2Pose2` with a measurement from pose `x0` to `x1` of `(x=1.0,y=0.0,θ=pi/2)`; the robot drove 1 unit forward (in the x direction).  Similarly to the prior we added above, we use a `FullNormal` distribution to represent the odometry with mean and covariance:
 ```python
-result_v = await addVariable(client, context, "x1", VariableType.Pose2)
+result_v = addVariable(fgclient, "x1", VariableType.Pose2)
 print(f"Added x1 with result ID {result_v}")
-odo_distribution = FullNormal(mu=[1.0, 0.0, np.pi/2], cov=np.power(np.diag([0.1, 0.1, 0.01]),2))
-result_fac_1 = await addFactor(client, context, ["x0", "x1"], Pose2Pose2(Z=odo_distribution)) 
-print(f"Added factor with result ID {result_fac_1}")
 
-# Wait for it to be loaded.
-await waitForCompletion(client, [result_v, result_fac_1])
+odo_distribution = FullNormal(mu=[1.0, 0.0, np.pi/2], cov=np.power(np.diag([0.1, 0.1, 0.01]),2))
+result_fac_1 = addFactor(fgclient, ["x0", "x1"], Pose2Pose2(Z=odo_distribution)) 
+print(f"Added factor with result ID {result_fac_1}")
 ```
 
 ## Adding Different Sensors
 
 So far we worked with the `Pose2` factor type.  Among others, `NavAbilitySDK` also provides the `Point2` variable and `Pose2Point2BearingRange` factor types, which we will use to represent a landmark sighting in our factor graph.  We will add a landmark `l1` with bearing range measurement of bearing=`(mu=0,sigma=0.03)` `range=(mu=0.5,sigma=0.1)` and continue our robot trajectory by driving around in a square.
 ```python
-results_variables = [
-  await addVariable(client, context, "l1", VariableType.Point2),
-  await addVariable(client, context, "x2", VariableType.Pose2),
-  await addVariable(client, context, "x3", VariableType.Pose2),
-  await addVariable(client, context, "x4", VariableType.Pose2)]
-results_variables
+addVariable(fgclient, "l1", VariableType.Point2)
+addVariable(fgclient, "x2", VariableType.Pose2)
+addVariable(fgclient, "x3", VariableType.Pose2)
+addVariable(fgclient, "x4", VariableType.Pose2)
 
-results_factors = [
-  await addFactor(client, context, ["x0", "l1"], Pose2Point2BearingRange(Normal(0.0,0.03), Normal(0.5,0.1))),
-  await addFactor(client, context, ["x1", "x2"], Pose2Pose2(odo_distribution)),
-  await addFactor(client, context, ["x2", "x3"], Pose2Pose2(odo_distribution)),
-  await addFactor(client, context, ["x3", "x4"], Pose2Pose2(odo_distribution)),
-]
-await waitForCompletion(client, results_variables + results_factors)
+addFactor(fgclient, ["x0", "l1"], Pose2Point2BearingRange(Normal(0.0,0.03), Normal(0.5,0.1)))
+addFactor(fgclient, ["x1", "x2"], Pose2Pose2(odo_distribution))
+addFactor(fgclient, ["x2", "x3"], Pose2Pose2(odo_distribution))
+addFactor(fgclient, ["x3", "x4"], Pose2Pose2(odo_distribution))
 ```
 
 ## One Loop-Closure Example
 
 The robot continued its square trajectory to end off where it started.  To illustrate a loop closure, we add another bearing range sighting to from pose `x4` to landmark `l1`, solve the graph and plot the new results: 
 ```python
-result_factor = await addFactor(client, context, ["x4", "l1"], Pose2Point2BearingRange(Normal(0.0,0.03), Normal(0.5,0.1)))
-
-await waitForCompletion(client, [result_factor])
+result_factor = addFactor(fgclient, ["x4", "l1"], Pose2Point2BearingRange(Normal(0.0,0.03), Normal(0.5,0.1)))
 ```
-
-<!-- ```@docs
-waitForCompletion
-NvaSDK.waitForCompletion2
-``` -->

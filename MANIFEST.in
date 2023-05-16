@@ -1,1 +1,1 @@
-recursive-include sdkCommonGQL *
+include sdkCommonGQL/*.toml

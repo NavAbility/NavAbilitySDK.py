@@ -7,6 +7,7 @@ import pathlib
 from gql import gql  # used to parse GraphQL queries
 from graphql import GraphQLSyntaxError  # used to handle GraphQL errors
 
+
 # Define a class to represent a GraphQL fragment with a name and data
 class Fragment:
     def __init__(self, name: str, data: str):

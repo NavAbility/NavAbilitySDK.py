@@ -43,7 +43,7 @@ class SessionSchema(Schema):
     id = fields.UUID(allow_none=True)
     label = fields.String(required=True)
 
-    metadata = fields.Method("get_metadata", "set_metadata")
+    metadata = fields.Method("get_metadata", "set_metadata", allow_none=True)
     originLatitude = fields.String(allow_none=True)
     originLongitude = fields.String(allow_none=True)
     createdTimestamp = fields.DateTime(required=True)
@@ -63,7 +63,7 @@ class SessionSchema(Schema):
     @post_load
     def make_session(self, data, **kwargs):
         return Session(**data)
-    
+
     def get_metadata(self, obj):
         return base64.b64encode(json.dumps(obj).encode())
 

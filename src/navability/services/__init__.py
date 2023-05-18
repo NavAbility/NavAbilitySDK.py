@@ -10,6 +10,7 @@ from .blobstore import *
 from .blobentry import *
 from .loader import *
 from .graph import *
+from .session import *
 
 # Maps
 from .map import *

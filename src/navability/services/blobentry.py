@@ -119,6 +119,7 @@ async def listBlobEntriesAsync(
         entry['label'] for entry in entries
     ]
 
+
 def listBlobEntries(
     fgclient: DFGClient,
     variableLabel: str,

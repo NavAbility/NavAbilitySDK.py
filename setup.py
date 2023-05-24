@@ -63,7 +63,9 @@ class gitcmd_sdist(sdist):
         gitcmd_update_submodules()
         sdist.run(self)
 
-
+## INSTALLING ADDITIONAL FILES
+# https://docs.python.org/3/distutils/setupscript.html#installing-package-data
+# https://python-packaging.readthedocs.io/en/latest/non-code-files.html
 # print("TO COPY", find_packages("src", exclude=["*.tests", "*.tests.*", "tests.*", "tests"]))
 
 setup(

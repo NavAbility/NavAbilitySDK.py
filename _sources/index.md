@@ -7,6 +7,7 @@ Welcome to the NavAbilitySDK documentation.  Various NavAbilitySDKs exist for di
 Convenient links to other language NavAbilitySDKs:
 - [NavAbilitySDK.jl][sdk-jl]
 - [NavAbilitySDK.js][sdk-js]
+- NavAbilitySDK.rs (24Q3, Coming soon!)
 
 Next, see the [Getting Started](/getting-started) page.
 

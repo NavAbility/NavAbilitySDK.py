@@ -15,12 +15,16 @@ Including SDK.jl version of Tutorial 5 not yet available in JupyterBook links be
 
 On the notebook pages, use the Rocket icon in the top right menu bar to launch a Binder instance to run the code live.
 
+- [Docs for Tutorial 1 through 5: Gaussian and non-Gaussian](https://wherewhenai.github.io/BinderNotebooks/)
+
+<!--
 - [Tutorial 1: Creating and Solving Factor Graphs](sdkpynb:python/navability-sdk/icra-1-simple)
 - [Tutorial 2: Non-Gaussian Measurements](sdkpynb:python/navability-sdk/icra-2-nongaussian)
 - [Tutorial 3: Insufficient Data (3D Range-only)](sdkpynb:python/navability-sdk/icra-3-rangeonly)
 - [Tutorial 4: Leveraging (Contradictory) Prior Data](sdkpynb:python/navability-sdk/icra-4-contradictorydata)
 - [Tutorial 5: Marine Data: Entries and Blobs](sdkpynb:python/navability-sdk/icra-5-marineexample)
+-->
 
 :::{tip}
-These notebooks are kept in the {NavAbility/Notebooks repo](https://github.com/WhereWhenAI/BinderNotebooks).
+Source for these notebooks are kept in the {WhereWhenAI/BinderNotebooks repo](https://github.com/WhereWhenAI/BinderNotebooks).
 :::

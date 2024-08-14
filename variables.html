@@ -1,13 +1,12 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" >
+<html lang="en" data-content_root="./" >
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Working with Variables &#8212; NavAbilitySDK.py Documentation</title>
   
@@ -15,29 +14,29 @@
   
   <script data-cfasync="false">
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
-    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
 
   
-  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/tabs.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/tabs.css?v=4c969af8" />
     <link rel="stylesheet" type="text/css" href="_static/proof.css" />
-    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-examples.css" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-examples.css?v=e236af4b" />
     <link rel="stylesheet" type="text/css" href="_static/css/tooltipster.custom.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/tooltipster.bundle.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-shadow.min.css" />
@@ -46,36 +45,35 @@
     <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-light.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/tooltipster-sideTip-borderless.min.css" />
     <link rel="stylesheet" type="text/css" href="_static/css/micromodal.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
-    <script src="_static/tabs.js"></script>
+    <script src="_static/jquery.js?v=5d32c60e"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/tabs.js?v=3ee01567"></script>
     <script src="_static/js/hoverxref.js"></script>
     <script src="_static/js/tooltipster.bundle.min.js"></script>
     <script src="_static/js/micromodal.min.js"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
-    <script src="_static/design-tabs.js"></script>
-    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
-const thebe_selector = ".thebe,.cell"
-const thebe_selector_input = "pre"
-const thebe_selector_output = ".output, .cell_output"
-</script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script>window.MathJax = {"tex": {"macros": {"N": "\\mathbb{N}", "floor": ["\\lfloor#1\\rfloor", 1], "bmat": ["\\left[\\begin{array}"], "emat": ["\\end{array}\\right]"]}}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'variables';</script>
@@ -92,19 +90,23 @@ const thebe_selector_output = ".output, .cell_output"
 
   
   
-  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -126,12 +128,20 @@ const thebe_selector_output = ".output, .cell_output"
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
-    </nav>
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
   
+
   <div class="bd-container">
     <div class="bd-container__inner bd-page-width">
+      
+      
       
       <div class="bd-sidebar-primary bd-sidebar">
         
@@ -146,9 +156,13 @@ const thebe_selector_output = ".output, .cell_output"
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
         <div class="sidebar-primary-item">
+
+  
+    
   
 
 <a class="navbar-brand logo" href="index.html">
+  
   
   
   
@@ -158,12 +172,23 @@ const thebe_selector_output = ".output, .cell_output"
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt="Logo image"/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+    <img src="_static/logo.png" class="logo__image only-light" alt="NavAbilitySDK.py Documentation - Home"/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt="NavAbilitySDK.py Documentation - Home"/>`);</script>
   
   
 </a></div>
-        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
@@ -221,7 +246,7 @@ const thebe_selector_output = ".output, .cell_output"
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
 
@@ -230,14 +255,14 @@ const thebe_selector_output = ".output, .cell_output"
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
       
-        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
   <span class="fa-solid fa-bars"></span>
-</label></div>
+</button></div>
       
     </div>
   
@@ -359,26 +384,28 @@ const thebe_selector_output = ".output, .cell_output"
 </button>
 
 
+
 <script>
 document.write(`
-  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
-    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
-    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
   </button>
 `);
 </script>
 
+
 <script>
 document.write(`
-  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
   </button>
 `);
 </script>
-<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
-</label>
+</button>
 </div></div>
       
     </div>
@@ -399,10 +426,16 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#navability.entities.DFGClient"><code class="docutils literal notranslate"><span class="pre">DFGClient</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-variable">Getting a Variable</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#navability.entities.Variable"><code class="docutils literal notranslate"><span class="pre">Variable</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametric-point-estimates-ppes">Parametric Point Estimates (PPEs)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
 </ul>
@@ -417,12 +450,12 @@ document.write(`
               
                 
 <div id="searchbox"></div>
-                <article class="bd-article" role="main">
+                <article class="bd-article">
                   
   <section class="tex2jax_ignore mathjax_ignore" id="working-with-variables">
-<h1>Working with Variables<a class="headerlink" href="#working-with-variables" title="Permalink to this heading">#</a></h1>
+<h1>Working with Variables<a class="headerlink" href="#working-with-variables" title="Link to this heading">#</a></h1>
 <section id="inspect-an-existing-graph">
-<h2>Inspect an Existing Graph<a class="headerlink" href="#inspect-an-existing-graph" title="Permalink to this heading">#</a></h2>
+<h2>Inspect an Existing Graph<a class="headerlink" href="#inspect-an-existing-graph" title="Link to this heading">#</a></h2>
 <p>Most use cases will involve retrieving information from a factor graph session already available on the server.  Setup the API server connection, and if not <code class="docutils literal notranslate"><span class="pre">guest</span></code> use an <a class="reference external" href="https://app.navability.io/edge/connect">auth token</a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define user, robot, session</span>
 <span class="n">userLabel</span> <span class="o">=</span> <span class="s2">&quot;guest@navability.io&quot;</span>
@@ -440,7 +473,7 @@ document.write(`
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="navability.entities.DFGClient">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DFGClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.DFGClient" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DFGClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">robotLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sessionLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auth_token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.DFGClient" title="Link to this definition">#</a></dt>
 <dd><p>DFGClient is used to make requests to the system and internally holds a <cite>context</cite>
 which is used to describe a specific session graph according to the <cite>userLabel</cite>, <cite>robotLabel</cite>,
 and <cite>sessionLabel</cite>.</p>
@@ -458,7 +491,7 @@ and <cite>sessionLabel</cite>.</p>
 
 </section>
 <section id="variables">
-<h2>Variables<a class="headerlink" href="#variables" title="Permalink to this heading">#</a></h2>
+<h2>Variables<a class="headerlink" href="#variables" title="Link to this heading">#</a></h2>
 <p>Variables represent state variables of interest such as vehicle or landmark positions, sensor calibration parameters, and more. Variables are likely hidden values that are not directly observed, but we want to estimate them from observed data.  Let’s start by listing all the variables in the session:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">varLbls</span> <span class="o">=</span> <span class="n">listVariables</span><span class="p">(</span><span class="n">fgclient</span><span class="p">)</span>
 <span class="c1"># varLbls = await listVariablesAsync(fgclient)</span>
@@ -470,7 +503,7 @@ and <cite>sessionLabel</cite>.</p>
 <p>There is a handy alias familiar to Linux, <code class="docutils literal notranslate"><span class="pre">ls</span> <span class="pre">=</span> <span class="pre">listVariables</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">ls(fgclient)</span></code> returns all the variables in the graph.</p>
 </div>
 <section id="getting-a-variable">
-<h3>Getting a Variable<a class="headerlink" href="#getting-a-variable" title="Permalink to this heading">#</a></h3>
+<h3>Getting a Variable<a class="headerlink" href="#getting-a-variable" title="Link to this heading">#</a></h3>
 <p>The main purpose of using a factor graph is not only as data index but also to deeply connect with the mapping and localization problem.  Variables in the factor graph represent the states to be estimated from the relevant measurement data.  The numerical values for each variable are computed by any number of solver operations.  The numerical results are primarily stored in a variables <code class="docutils literal notranslate"><span class="pre">solverData</span></code> field, such that either parametric or non-parametric inference results can be used:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span> <span class="o">=</span> <span class="n">getVariable</span><span class="p">(</span><span class="n">fgclient</span><span class="p">,</span> <span class="s2">&quot;x0&quot;</span><span class="p">)</span>
 <span class="c1"># v0 = await getVariableAsync(fgclient, &quot;x0&quot;)</span>
@@ -478,7 +511,7 @@ and <cite>sessionLabel</cite>.</p>
 </div>
 </section>
 <section id="e-g-variable-node-tags">
-<h3>E.g. Variable (Node) Tags<a class="headerlink" href="#e-g-variable-node-tags" title="Permalink to this heading">#</a></h3>
+<h3>E.g. Variable (Node) Tags<a class="headerlink" href="#e-g-variable-node-tags" title="Link to this heading">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">getVariable</span></code> call returns a <code class="docutils literal notranslate"><span class="pre">Variable</span></code> object containing many fields.  For example, one can readily check which tags have been added to this variable with:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;The tags on this variable are&#39;</span><span class="p">,</span> <span class="n">v0</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
 </pre></div>
@@ -489,7 +522,7 @@ and <cite>sessionLabel</cite>.</p>
 </div>
 <dl class="py class">
 <dt class="sig sig-object py" id="navability.entities.Variable">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp=datetime.datetime(2023</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">24</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">52</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">703423)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstime='0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppes=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobEntries=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solverData=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.Variable" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Variable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variableType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp=datetime.datetime(2024</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">14</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">33</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">807106)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nstime='0'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solvable=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ppes=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">blobEntries=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solverData=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata=&lt;factory&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_version='0.21.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id=None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#navability.entities.Variable" title="Link to this definition">#</a></dt>
 <dd><p>A factor graph variable node as well as data carrying object that can serialized and distributed across computing nodes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -505,7 +538,7 @@ and <cite>sessionLabel</cite>.</p>
 <li><p><strong>solverData</strong> (<em>Dict</em><em>[</em><em>str</em><em>, </em><em>VariableNodeData</em><em>]</em>) – In depth solver information used for numerical solutions of the factor graph, including non-Gaussian and multiple <cite>solveKeys</cite>.</p></li>
 <li><p><strong>metadata</strong> (<em>dict</em>) – To store opportunistic “small data” that migth be useful to keep.  Use BlobEntries and Blobs as main mechanism for storing heavy lift data.</p></li>
 <li><p><strong>_version</strong> (<em>str</em>) – Serialization support of Variable objects benefit from knowing the library version used for this object.</p></li>
-<li><p><strong>id</strong> (<em>Optional</em><em>[</em><em>UUID</em><em>]</em>) – Autogenerated uuid4 for use in a distributed system, do not self assign.</p></li>
+<li><p><strong>id</strong> (<em>UUID</em><em> | </em><em>None</em>) – Autogenerated uuid4 for use in a distributed system, do not self assign.</p></li>
 </ul>
 </dd>
 </dl>
@@ -513,7 +546,7 @@ and <cite>sessionLabel</cite>.</p>
 
 </section>
 <section id="parametric-point-estimates-ppes">
-<h3>Parametric Point Estimates (PPEs)<a class="headerlink" href="#parametric-point-estimates-ppes" title="Permalink to this heading">#</a></h3>
+<h3>Parametric Point Estimates (PPEs)<a class="headerlink" href="#parametric-point-estimates-ppes" title="Link to this heading">#</a></h3>
 <p>To better bridge the gap between non-Gaussian and Gaussian solutions, variables also store a convenience numerical solution (or summary) called the parametric point estimate (<code class="docutils literal notranslate"><span class="pre">PPE</span></code>) for each of the <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s.  While various forms of <code class="docutils literal notranslate"><span class="pre">PPE</span></code>s can exists—such as mean, max, modes, etc.—a common <code class="docutils literal notranslate"><span class="pre">suggested</span></code> field exists for basic usage.  For example, the suggested parametric equivalent solution from the nonparametric solver (<code class="docutils literal notranslate"><span class="pre">default</span></code>) can be obtained by:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">xyr</span> <span class="o">=</span> <span class="n">v0</span><span class="o">.</span><span class="n">ppes</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">suggested</span>
 <span class="c1"># [-0.00, 0.00, 0.00]</span>
@@ -521,7 +554,7 @@ and <cite>sessionLabel</cite>.</p>
 </div>
 <div class="admonition seealso">
 <p class="admonition-title">See also</p>
-<p>The <a class="reference external" href="https://navability.github.io/BinderNotebooks/python/navability-sdk/icra-4-contradictorydata.html" title="(in Python)"><span class="xref myst">tutorial on leveraging (contradictory) prior data</span></a> is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.</p>
+<p>The <a class="reference internal" href="#sdkpynb:python/navability-sdk/icra-4-contradictorydata"><span class="xref myst">tutorial on leveraging (contradictory) prior data</span></a> is a good example of the on when oversimplified parametric estimates (from a non-Gaussian posterior) break down.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -529,7 +562,7 @@ and <cite>sessionLabel</cite>.</p>
 </div>
 </section>
 <section id="numerical-values-solvekeys">
-<h3>Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#numerical-values-solvekeys" title="Permalink to this heading">#</a></h3>
+<h3>Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s<a class="headerlink" href="#numerical-values-solvekeys" title="Link to this heading">#</a></h3>
 <p>Since various numerical solutions may exists for the same factor graph, we introduce the idea of a <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>.  Different numerical values for different <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s can exists for any number of reasons.  For example, we may find a different situation in each of three <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s, <code class="docutils literal notranslate"><span class="pre">('default',</span> <span class="pre">'parametric',</span> <span class="pre">'graphinit')</span></code>, where we can explore some of the properties:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">v0</span><span class="o">.</span><span class="n">solverData</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">variableType</span>
 <span class="c1"># &#39;RoME.Pose3&#39;</span>
@@ -548,7 +581,7 @@ and <cite>sessionLabel</cite>.</p>
 </section>
 </section>
 <section id="sdk-supported-variables">
-<h2>SDK Supported Variables<a class="headerlink" href="#sdk-supported-variables" title="Permalink to this heading">#</a></h2>
+<h2>SDK Supported Variables<a class="headerlink" href="#sdk-supported-variables" title="Link to this heading">#</a></h2>
 <p>The list of variable types currently supported by the SDK are:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">Position1</span></code> / <code class="docutils literal notranslate"><span class="pre">ContinuousScalar</span></code></p></li>
@@ -589,11 +622,10 @@ and <cite>sessionLabel</cite>.</p>
 
               
               
-                <footer class="bd-footer-article">
+              
+              
+                <footer class="prev-next-footer d-print-none">
                   
-<div class="footer-article-items footer-article__inner">
-  
-    <div class="footer-article-item"><!-- Previous / next buttons -->
 <div class="prev-next-area">
     <a class="left-prev"
        href="overview.html"
@@ -613,10 +645,7 @@ and <cite>sessionLabel</cite>.</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
-</div></div>
-  
 </div>
-
                 </footer>
               
             </div>
@@ -625,16 +654,23 @@ and <cite>sessionLabel</cite>.</p>
               
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
   <div class="sidebar-secondary-item">
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-an-existing-graph">Inspect an Existing Graph</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#navability.entities.DFGClient"><code class="docutils literal notranslate"><span class="pre">DFGClient</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#variables">Variables</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-a-variable">Getting a Variable</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#e-g-variable-node-tags">E.g. Variable (Node) Tags</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#navability.entities.Variable"><code class="docutils literal notranslate"><span class="pre">Variable</span></code></a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#parametric-point-estimates-ppes">Parametric Point Estimates (PPEs)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#numerical-values-solvekeys">Numerical values, &amp; <code class="docutils literal notranslate"><span class="pre">solveKey</span></code>s</a></li>
 </ul>
@@ -661,9 +697,10 @@ By NavAbility Inc.
   
   <div class="footer-item">
     
+
   <p class="copyright">
     
-      © Copyright 2022.
+      © Copyright 2023.
       <br/>
     
   </p>
@@ -687,8 +724,8 @@ By NavAbility Inc.
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
   </footer>

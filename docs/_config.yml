@@ -37,7 +37,7 @@ sphinx:
   config:
     intersphinx_mapping:
       sdkpynb:
-        - "https://navability.github.io/BinderNotebooks/"
+        - "https://wherewhenai.github.io/BinderNotebooks/"
         - null
       ebp:
         - "https://executablebooks.org/en/latest/"

@@ -22,5 +22,5 @@ On the notebook pages, use the Rocket icon in the top right menu bar to launch a
 - [Tutorial 5: Marine Data: Entries and Blobs](sdkpynb:python/navability-sdk/icra-5-marineexample)
 
 :::{tip}
-These notebooks are kept in the {NavAbility/Notebooks repo](https://github.com/NavAbility/BinderNotebooks).
+These notebooks are kept in the {NavAbility/Notebooks repo](https://github.com/WhereWhenAI/BinderNotebooks).
 :::
